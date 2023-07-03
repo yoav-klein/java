@@ -99,8 +99,10 @@ public class Card {
         }
     }
 
-    public static void Main() {
-        Card c = new Card(1, 1);
-        
+    public static void main(String[] args) {
+        Card c = new Card(2, 1);
+
+        System.out.println(Card.rankToString(c.getRank()));
+        System.out.println(Card.suitToString(c.getSuit()));
     }
 }
