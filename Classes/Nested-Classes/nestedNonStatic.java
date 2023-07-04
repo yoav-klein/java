@@ -14,7 +14,18 @@ class Outer {
         System.out.println(outerField);
     }
 
+
     class Inner {
+        int innerField;
+        // static int staticInnerField; -> compiler error - you can't have
+        // static members in non-static nested classes.
+
+        public void changeOutterValue(int val) {
+            outerField = val;
+        }
+    }
+
+    private class PrivateInner {
         int innerField;
         public void changeOutterValue(int val) {
             outerField = val;
@@ -33,6 +44,9 @@ class Outer {
         o.print();
         i2.changeOutterValue(20);
         o.print();
+
+        Outer.PrivateInner pi = o.new PrivateInner(); // note that you can instantiate
+        // this here because it's the enclosing class. In "External.java" you can't
         
     }
 }
