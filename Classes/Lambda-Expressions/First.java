@@ -9,30 +9,6 @@
  * within a specific range of ages, not only older than?
  */
 
-class Person {
-    String name;
-    public enum Sex {
-        MALE, FEMALE
-    }
-
-    String name;
-    LocalDate birthday;
-    Sex gender;
-    String emailAddress;
-
-    public int getAge() {
-        // imagine us implementing this
-        return 19;
-    }
-
-    public void printPerson() {
-        System.out.println(name + " and some other stuff");
-    }
-
-
-    // imagine having some more search methods, like based on sex.
-}
-
 class RosterTest {
     List<Person> = new ArrayList<Person>;
 
@@ -46,6 +22,8 @@ class RosterTest {
     }
 
     public static void main(String[] args) {
-        printPersonsWithinAgeRange(roster, 18, 25);
+        List<Person> roster = Person.createRoster();
+
+        printPersonsOlderThan(roster, 50);
     }
 }
