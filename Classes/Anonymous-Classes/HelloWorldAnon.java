@@ -40,6 +40,7 @@ public class HelloWorldAnon {
         };
         
         HelloWorld spanishGreeting = new HelloWorld() {
+            static int x = 1;
             String name = "mundo";
             public void greet() {
                 greetSomeone("mundo");
