@@ -57,8 +57,7 @@ public class HelloWorldAnon {
     }
 
     public static void main(String... args) {
-        HelloWorldAnon myApp =
-            new HelloWorldAnon();
+        HelloWorldAnon myApp = new HelloWorldAnon();
         myApp.sayHello();
     }            
 }

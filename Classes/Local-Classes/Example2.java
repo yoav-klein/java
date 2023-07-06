@@ -11,6 +11,10 @@ class StatusKeeper {
         this.status = status;
     }
 
+    /*void isLocalClassVisibleHere(StatusPrinter sp) { // local classes are only visible in the scope they're declared
+        System.out.println("Status printer: " + sp);
+    }*/
+
     void printStatus() {
         class StatusPrinter {
             int status = 111;
