@@ -1,4 +1,10 @@
 
+/**
+ * Since B<T> extends A<T>, B<String> extends A<String>
+ * and B<Integer> extends A<Integer>
+ * 
+ */
+
 class A<T> {
     private T t;
 

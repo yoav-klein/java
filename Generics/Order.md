@@ -4,3 +4,4 @@
 04 - Methods
 05 - Bounded
 06 - Inheritance
+07 - Subtyping

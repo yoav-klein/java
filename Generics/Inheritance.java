@@ -1,5 +1,10 @@
 
-
+/**
+ * Just like you can pass an Integer to a method that accepts a Number,
+ * you can also do this with generics.
+ * 
+ * You can create an instance of Box<Number>, and then call set with Integers
+ */
 
 class Box<T> {
     T obj;
