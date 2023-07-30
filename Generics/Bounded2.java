@@ -2,6 +2,8 @@
 /**
  * This example shows the real power of bounded type parameters in generic methods
  * 
+ * We want a compare method that will take an array and a compare object. The array and the compare 
+ * object must implement a generic inteface Comparable<T>
  */
 
 interface Comparable<T> {
@@ -27,16 +29,6 @@ class Person implements Comparable<Person> {
     }
 }
 
-class African extends Person {
-    public African(int height) {
-        super(height);
-    }
-}
-class American extends Person {
-    public American(int height) {
-        super(height);
-    }
-}
 
 class Algo {
     public static <T extends Comparable<T>> int countGreaterThan(T[] anArray, T elem) {
