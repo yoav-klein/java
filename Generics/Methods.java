@@ -43,6 +43,10 @@ class Methods {
         Pair<Integer, String> p1 = new Pair<>(1, "One");
         Pair<Integer, String> p2 = new Pair<>(1, "One");
 
+        // the most official way to call a generic method is:
+        System.out.format("compare(p1, p2): %b", Utils.<Integer, String>compare(p1, p2));
+
+        // but you can also
         System.out.format("compare(p1, p2): %b", Utils.compare(p1, p2));
 
         /** 

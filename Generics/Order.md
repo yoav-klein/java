@@ -3,3 +3,4 @@
 03 - Raw
 04 - Methods
 05 - Bounded
+06 - Inheritance
