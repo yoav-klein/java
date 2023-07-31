@@ -1,10 +1,14 @@
-
+/**
+ * Upper-bounded wildcards
+ * 
+ */
 import java.util.ArrayList;
+import java.util.List;
 
 class Test {
     static void printNumberList(List<? extends Number> list) {
-        for item : list {
-            println item
+        for (Number item : list) {
+            System.out.println(item);
         }
     }
 
@@ -15,5 +19,18 @@ class Test {
         intList.add(10);
 
         printNumberList(intList);
+
+        ArrayList<Double> doubleList = new ArrayList<>();
+        doubleList.add(1.23);
+        doubleList.add(2.33);
+        doubleList.add(1.66);
+
+        printNumberList(doubleList);
+
+        ArrayList<String> strList = new ArrayList<>();
+        strList.add("Yossi");
+        strList.add("Yoni");
+        strList.add("Eli");
+        //printNumberList(strList); // will not compile
     }
 }

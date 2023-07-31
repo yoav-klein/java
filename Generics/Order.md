@@ -6,3 +6,5 @@
 06 - Inheritance
 07 - Subtyping
 08 - UpperWildcard
+09 - UnboundWildcard
+10 - LowerWildcard

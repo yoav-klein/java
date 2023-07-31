@@ -1,32 +1,47 @@
+/*class Node {
 
-interface Comparable<T> {
-    public int compareTo(T other);
+    public Object data;
+
+    public Node(Object data) { this.data = data; }
+
+    public void setData(Object data) {
+        System.out.println("Node.setData");
+        this.data = data;
+    }
+}*/
+
+class Node<T> {
+
+    public T data;
+
+    public Node(T data) { this.data = data; }
+
+    public void setData(T data) {
+        System.out.println("Node.setData");
+        this.data = data;
+    }
 }
 
-class Person implements Comparable<Person> {
-    private int height;
 
-    public Person(int height) {
-        this.height = height;
-    }
+class MyNode extends Node<Integer> {
 
-    public int getHeight() {
-        return this.height;
-    }
+    public MyNode(Integer data) { super(data); }
 
-    public int compareTo(Person other) {
-        if(other.getHeight() > this.height) {
-            return 1;
-        }
-        return 0;
+    public void setData(Integer data) {
+        System.out.println("MyNode.setData");
+        super.setData(data);
     }
 }
 
 class Test {
     public static void main(String[] args) {
-        Person tall = new Person(10);
-        Person small = new Person(5);
+        //MyNode mn = new MyNode(4);
+        //Node n = mn;
+        //mn.setData("hello");
+        //n.setData("Hello");
+        //mn.setData(10);
 
-        System.out.println(small.compareTo(tall));
+        String s = "Hello";
+        Integer i = (Integer)s;
     }
 }
