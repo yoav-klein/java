@@ -5,3 +5,4 @@
 05 - Bounded
 06 - Inheritance
 07 - Subtyping
+08 - UpperWildcard
