@@ -19,5 +19,10 @@ class Test {
        System.out.println("s.getNumber(): " + s.getNumber());
 
        assert Singleton.getInstance() == s;
+
+       FooBar fb = new FooBar();
+       System.out.println("fb.getA(): " + fb.getA());
+       System.out.println("fb.getC(): " + fb.getC());
+       
     }
 }
