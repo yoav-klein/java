@@ -91,6 +91,8 @@ public class DataStructure {
         // subquestion 1
         DataStructure.EvenIterator ei = ds.new EvenIterator();
         ds.print(ei);
+        // ds.print(new EvenIterator()); // this won't compile, since the EvenIterator is 
+        // a non-static nested class, and you can't instantiate is from a static context
 
         // subquestion 2 - call the print() method so it prints odd numbers
         // using anonymous class
@@ -104,6 +106,8 @@ public class DataStructure {
                     return (nextIndex <= ds.size() - 1);
                 }
                 public Integer next() {
+                    // int retValue = arrayOfInts[nextIndex]; // this won't work:
+                    // non-static variable arrayOfInts cannot be referenced from a static context
                     int retValue = ds.get(nextIndex);
                     nextIndex += 2;
                     return retValue;
@@ -116,14 +120,19 @@ public class DataStructure {
         // use Labmda functions to have it print all the odd numbers, and then the even numbers
 
         // print even
-        ds.print(index -> {
+        ds.print((Integer index) -> {
             if (index % 2 == 0) return Boolean.TRUE;
             return Boolean.FALSE;
         });
         // print odd
-        ds.print(index -> {
+        ds.print((Integer index) -> {
             if (index % 2 == 0) return Boolean.FALSE;
             return Boolean.TRUE;
+        });
+
+        // can be shorter:
+        ds.print((Integer index) -> {
+            return index % 2 == 1;
         });
         
     }
