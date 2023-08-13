@@ -1,4 +1,4 @@
-public class HelloWorldAnon {
+public class HelloWorldAnonymousClass {
   
     interface HelloWorld {
         public void greet();
