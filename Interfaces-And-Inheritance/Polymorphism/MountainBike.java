@@ -5,7 +5,7 @@ public class MountainBike extends Bicycle {
                int startCadence,
                int startSpeed,
                int startGear,
-               String suspensionType){
+               String suspensionType) {
         super(startCadence,
               startSpeed,
               startGear);
