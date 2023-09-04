@@ -8,4 +8,5 @@
 08 - ObjectStreams (Object streams)
 
 Appendixes:
-* Playground/Lab1 - Object streams - reading 
+* Playground/Lab1 - Object streams
+* Playground/Lab2 - Character streams, encodings
