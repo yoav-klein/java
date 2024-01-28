@@ -1,9 +1,7 @@
 
 package bar;
 
-//import foo.Foo;
-
-public class Bar {
+public class Bar { // public class, so that it's visible by foo.Foo class
     public int a;
     int b;
     protected int c;
@@ -14,5 +12,7 @@ public class Bar {
         b = 2;
         c = 3;
         d = 4;
+        Zen z = new Zen();
     }
+
 }

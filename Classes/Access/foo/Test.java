@@ -15,11 +15,6 @@ class Test {
         System.out.println("f.b: " + f.b); // can access since it's package-private
         // System.out.println(f.c); // can't access since it's private
         
-       Singleton s = Singleton.getInstance();
-       System.out.println("s.getNumber(): " + s.getNumber());
-
-       assert Singleton.getInstance() == s;
-
        FooBar fb = new FooBar();
        System.out.println("fb.getA(): " + fb.getA());
        System.out.println("fb.getC(): " + fb.getC());
