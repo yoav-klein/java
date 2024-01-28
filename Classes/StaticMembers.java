@@ -25,6 +25,7 @@ class StaticMembers {
         sm1.changeStatic(12); // you can access static members from instances
         sm2.changeNonStatic(21);
         StaticMembers.changeStatic(10); // you can access static members without instances
+        System.out.println("Value of a: " + StaticMembers.a);
 
         System.out.println("sm1.getA() " + sm1.getA());
         System.out.println("sm2.getA() " + sm2.getA());
