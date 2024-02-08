@@ -16,7 +16,7 @@ class PathOperations {
         System.out.format("getRoot: %s%n", path.getRoot());
 
         
-        // absolute path
+        // relative path
         Path file = Paths.get("non-existing-file.txt");
 
         // the file doesn't have to exist
