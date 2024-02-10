@@ -10,8 +10,8 @@ public class Hebrew {
         OutputStreamWriter out = null;
         try {
             out = new OutputStreamWriter(new FileOutputStream("hebrew-out.txt"), "UTF-8");
-            char vav = '\u05d5';
-            out.write(vav);
+            String word = "שלום עולם";
+            out.write(word, 0, word.length());
         } 
         catch(IOException e) {
             System.out.println("Failed: " + e);

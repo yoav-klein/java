@@ -13,7 +13,7 @@ public class CopyHebrewChars {
 
         try {
             out = new OutputStreamWriter(new FileOutputStream("little-johnathan.txt"));
-            in = new InputStreamReader(new FileInputStream("hebrew.txt"));
+            in = new InputStreamReader(new FileInputStream("little-johnathan-copy.txt"));
 
             int c;
             while ((c = in.read()) != -1) {
