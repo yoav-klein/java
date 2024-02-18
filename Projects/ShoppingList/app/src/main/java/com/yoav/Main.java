@@ -36,16 +36,12 @@ public class Main {
 
     }
 
-    static public void load(ShoppingList sl) {
+    static public void load(ShoppingList sl) throws FileNotFoundException, IOException {
         ObjectInputStream ois = null;
-        try {
-            ois = new ObjectInputStream(new FileInputStream(fileName));
-            sl.load(ois);
-        } catch(IOException e) { 
-            System.out.println(e);
-            throw new RuntimeException();
-        }
-
+        
+        ois = new ObjectInputStream(new FileInputStream(fileName));
+        sl.load(ois);
+        
     }
 
     static void addItem(ShoppingList sl) {
@@ -76,7 +72,13 @@ public class Main {
         ShoppingList sl = new ShoppingList();
 
         ConsoleMenu start = new ConsoleMenu("What shopping list to work on?");
-        start.addMenuItem("Load from a file", () -> load(sl));
+        start.addMenuItem("Load from a file", () ->  { try {
+            load(sl);
+        } catch(FileNotFoundException e) {
+            System.out.println("File not found, defaulting to new list");
+        } catch(IOException e) {
+            System.out.println(e);
+        }});
         start.addMenuItem("New shopping list", () -> {});
 
         start.getUserChoice();
@@ -114,9 +116,14 @@ public class Main {
         });
         mainMenu.addMenuItem("Save the list", () -> save(sl));
         mainMenu.addMenuItem("Exit", () -> stop() );
+        
         do {
             mainMenu.displayMenu();
-            mainMenu.getUserChoice();
+            try {
+                mainMenu.getUserChoice();
+            } catch(Exception e) {
+                System.out.println("Exception: " + e);
+            }
         }
         while(shouldRun);
             
