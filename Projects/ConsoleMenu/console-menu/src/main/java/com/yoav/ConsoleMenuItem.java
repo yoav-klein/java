@@ -5,15 +5,15 @@ import java.lang.Runnable;
 
 class ConsoleMenuItem {
     private String description;
-    private Runnable function;
+    private Command command;
 
-    ConsoleMenuItem(String description, Runnable function) {
+    ConsoleMenuItem(String description, Command command) {
         this.description = description;
-        this.function = function;
+        this.command = command;
     }
 
     void execute() {
-        this.function.run();
+        this.command.execute();
     }
 
     String getDescription() {

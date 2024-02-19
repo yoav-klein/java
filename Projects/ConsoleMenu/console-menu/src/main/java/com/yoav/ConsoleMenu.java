@@ -16,8 +16,8 @@ public class ConsoleMenu {
         this.menuTitle = menuTitle;
     }
 
-    public void addMenuItem(String description, Runnable function) {
-        menuItems.add(new ConsoleMenuItem(description, function));
+    public void addMenuItem(String description, Command command) {
+        menuItems.add(new ConsoleMenuItem(description, command));
     }
 
     public void displayMenu() {
