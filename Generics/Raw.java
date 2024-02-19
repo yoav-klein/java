@@ -18,10 +18,10 @@ class Box<T> {
 
     static public void main(String[] args) {
         
-        Box<Integer> intBox = new Box<Integer>(); // raw type
-        Box rawBox = intBox; // assigning a parameterized type to a raw type is fine
+        Box<Integer> intBox = new Box<Integer>(); // parameterized type
+        Box rawBox = intBox; // assigning a parameterized type to a variable of raw type is fine
 
-        Box anotherRaw = new Box();
+        Box anotherRaw = new Box(); // raw type
         Box<Integer> anotherIntBox = anotherRaw; // assigning a raw type to a parameterized type gives you a warning.
         
         // also, use a raw type to invoke generic methods defined in the generic type
