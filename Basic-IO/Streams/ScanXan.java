@@ -1,3 +1,11 @@
+
+/**
+ * by default, Scanner objects use white space to separate tokens. To use a
+ * different delimiter, invoke the useDelimiter(String delim) method.
+ * 
+ * 
+ */
+
 import java.io.*;
 import java.util.Scanner;
 

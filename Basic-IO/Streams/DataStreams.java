@@ -19,8 +19,6 @@ public class DataStreams {
             "Java Key Chain" };
 
     public static void main(String[] args) throws IOException {
-
- 
         DataOutputStream out = null;
         
         try {

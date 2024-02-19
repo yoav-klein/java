@@ -1,3 +1,10 @@
+
+/**
+ * By default, scanner scans tokens as strings. But it can also scan tokens as any other data type in Java.
+ * 
+ * In this example, it reads the "usnumbers.txt" file and reads each line as a double
+ */
+
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.IOException;
