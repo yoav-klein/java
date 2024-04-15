@@ -27,5 +27,28 @@ public class Aggregate {
         // another pipeline
         Integer sumOfOdd = l.stream().filter(i -> i % 2 == 1).mapToInt(Integer::intValue).sum();
         System.out.println(sumOfOdd);
+
+        System.out.println("/* *************************** */");
+
+        List<Person> roster = new ArrayList<>();
+        roster.add(new Person("Shimon", 22));
+        roster.add(new Person("Yehuda", 30));
+        roster.add(new Person("Sara", 50));
+        roster.add(new Person("Ilya", 40));
+        roster.add(new Person("Benny", 23));
+        roster.add(new Person("Avi", 70));
+        roster.add(new Person("Yulia", 27));
+        roster.add(new Person("Moti", 22));
+
+        System.out.println("Print all names in roster");
+        roster.stream().forEach(p -> System.out.println(p.getName()));
+
+        System.out.println("Print all persons in age above 30");
+        roster.stream().filter(p -> p.getAge() > 30).forEach(p -> System.out.println(p.getName()));
+
+        System.out.println("Average age of roster");
+        double average = roster.stream().mapToInt(Person::getAge).average().getAsDouble();
+        System.out.println(average);
+
     }
 }
