@@ -13,10 +13,13 @@ public class Client  {
             BufferedReader in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
             BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
         ) {
-            String userInput;
-            while((userInput = stdIn.readLine()) != null) {
-                out.println(userInput);
-                System.out.println("echo: " + in.readLine());
+            String serverLine;
+            String userLine;
+            while(true) {
+                serverLine = in.readLine();
+                System.out.println("server: " + serverLine);
+                userLine = stdIn.readLine();
+                out.println(userLine);
             }
 
         } catch(UnknownHostException e) {
