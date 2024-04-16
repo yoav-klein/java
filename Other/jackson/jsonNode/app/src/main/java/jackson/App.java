@@ -10,11 +10,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode;
 
 
-
 public class App {
 
     public static void main(String[] args) throws IOException {
-        
         
         ObjectMapper mapper = new ObjectMapper();
 
@@ -24,8 +22,16 @@ public class App {
         JsonNode actualObj = mapper.readTree(jsonString);
 
         JsonNode jsonNode1 = actualObj.get("type");
-        System.out.println(jsonNode1.textValue());
+        String textValue = jsonNode1.textValue();
+        
+        CommandType type = CommandType.valueOf(textValue);
 
+        switch(type) {
+            case SEND_MESSAGE_TO_USER:
+                SendMessageCommand command = mapper.readValue(jsonString, SendMessageCommand.class);
+                System.out.println(command.getToUser() + " " + command.getMessage());
+                break;
+        }
         
     }
 }

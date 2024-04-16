@@ -2,9 +2,13 @@
 package jackson;
 
 public class SendMessageCommand {
-    private final CommandType type = CommandType.SEND_MESSAGE_TO_USER;
+    private CommandType type = CommandType.SEND_MESSAGE_TO_USER;
     private String toUser;
     private String message;
+    
+    public SendMessageCommand() {} // In order for jackson to build an instance of SendMessageCommand, you must have a 
+    // no-argument constructor
+
 
     public SendMessageCommand(String toUser, String message) {
         this.toUser = toUser;
@@ -19,6 +23,9 @@ public class SendMessageCommand {
         this.toUser = toUser;
     }
 
+    void setType(CommandType type) {
+        this.type = type;
+    }
 
     public String getToUser() {
         return this.toUser;
