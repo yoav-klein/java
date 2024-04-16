@@ -1,6 +1,7 @@
 
 import java.io.*;
 import java.net.*;
+import java.util.*;
 
 public class Client  {
     public static void main(String[] args) throws IOException {
@@ -9,17 +10,19 @@ public class Client  {
 
         try(
             Socket sock = new Socket(hostName, portNumber);
-            PrintWriter out = new PrintWriter(new OutputStreamWriter(sock.getOutputStream(), ), true);
-            BufferedReader in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+            ObjectOutputStream out = new ObjectOutputStream(sock.getOutputStream());
+            ObjectInputStream in = new ObjectInputStream(sock.getInputStream());
             BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
         ) {
-            String serverLine;
-            String userLine;
-            while(true) {
-                serverLine = in.readLine();
-                System.out.println("server: " + serverLine);
-                userLine = stdIn.readLine();
-                out.println(userLine);
+            String userInput;
+            while((userInput = stdIn.readLine()) != null) {
+                List<Integer> list = new ArrayList<Integer>();
+                list.add(3);
+                list.add(50);
+                list.add(12);
+
+                out.writeObject(list);
+                
             }
 
         } catch(UnknownHostException e) {

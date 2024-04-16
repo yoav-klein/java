@@ -17,10 +17,11 @@ public class Server {
             String serverLine;
             String userLine;
             while(true) {
-                userLine = stdIn.readLine();
-                out.println(userLine);
-                serverLine = in.readLine();
-                System.out.println("client: " + serverLine);
+                userLine = stdIn.readLine(); // read from user
+                // out.println(userLine); // write to socket
+                out.print("sometextwithoutlineend");
+                serverLine = in.readLine(); // read from socket
+                System.out.println("client: " + serverLine); // write to user
             }
 
             /* while((inputLine = in.readLine()) != null) {
