@@ -1,4 +1,13 @@
 
+/**
+ * Stream.collect method allows you to reduce your collection into a new collection
+ * unlike Stream.reduce, Stream.collect doesn't create a new value when it processes an element,
+ * but rather mutates an existing value
+ * 
+
+ */
+
+
 import java.util.*;
 import java.util.function.*;
 
@@ -17,7 +26,7 @@ class Averager implements IntConsumer
         count++; 
         System.out.println("accept called"); 
     }
-    
+
     public void combine(Averager other) {
         System.out.println("Combine called");
         total += other.total;
@@ -34,15 +43,23 @@ public class CollectExample {
         roster.add(new Person("Ilya", 40));
         roster.add(new Person("Benny", 23));
         roster.add(new Person("Avi", 70));
-        roster.add(new Person("Yulia", 27));
+        roster.add(new Person("Yulia", 27));+
         roster.add(new Person("Moti", 22));
         
         Averager averageCollect = roster.stream()
-            /* .filter(p -> p.getGender() == Person.Sex.MALE) */
+            .filter(p -> p.getAge() > 30)
             .map(Person::getAge)
             .collect(Averager::new, Averager::accept, Averager::combine);
                         
         System.out.println("Average age of male members: " +
             averageCollect.average());
+
+
+        /* Example of creating a new list of only person instances older than 30 years old  */
+        List<Person> elderly = roster.stream()
+            .filter(p -> p.getAge() > 30)
+            .collect(ArrayList<Person>::new, ArrayList<Person>::add, ArrayList<Person>::addAll);
+
+        elderly.stream().forEach(p -> System.out.println(p.getName()));
     }
 }
