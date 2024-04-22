@@ -1,5 +1,5 @@
 
-package com.yoav;
+package com.yoav.consolemenu;
 
 import java.lang.Runnable;
 

@@ -1,5 +1,5 @@
 
-package com.yoav;
+package com.yoav.consolemenu;
 
 import java.util.Scanner;
 import java.util.InputMismatchException;
