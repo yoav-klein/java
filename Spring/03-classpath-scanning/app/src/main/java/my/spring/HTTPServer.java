@@ -1,8 +1,8 @@
 package my.spring;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component("myHttp")
+@Service("myHttp")
 public class HTTPServer {
    TCP tcp;
    int version;
