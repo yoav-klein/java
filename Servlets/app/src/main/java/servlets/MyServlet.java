@@ -10,7 +10,16 @@ public class MyServlet extends HttpServlet {
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 		out.println("<html><body>");
-		out.println("<h1>Hello Readers</h1>");
+		out.println("<h1>Got GET</h1>");
+		out.println("</body></html>");
+	}
+
+	public void doPost(HttpServletRequest request,HttpServletResponse response) 
+	                     throws ServletException, IOException {
+		response.setContentType("text/html");
+		PrintWriter out = response.getWriter();
+		out.println("<html><body>");
+		out.println("<h1>Got POST</h1>");
 		out.println("</body></html>");
 	}
 }
