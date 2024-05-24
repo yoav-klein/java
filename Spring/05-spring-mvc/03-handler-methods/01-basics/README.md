@@ -21,3 +21,9 @@ Usage:
 ```
 $ curl -H "X-My-Header: somevalue" localhost:8080/app/header
 ```
+
+## @PathVariable
+Usage:
+```
+$ curl localhost:8080/app/hello/yoav
+```
