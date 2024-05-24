@@ -19,3 +19,11 @@ This is translated into a `User` object.
 The `@ResponseBody` annotation is a method-level annotation, and it's used to cause that the return value of the method
 will be translated using a `HttpMessageConverter`.
 
+## Usage
+```
+# use the @RequestBody
+$ curl -X POST http://localhost:8080/app/api/users/create -H "Content-Type: application/json" -d '{"name": "John Doe", "age": 30}'
+
+# use the @ResponseBody
+$ curl http://localhost:8080/app/api/users/john
+```
