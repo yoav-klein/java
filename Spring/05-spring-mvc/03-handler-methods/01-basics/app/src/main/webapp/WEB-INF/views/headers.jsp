@@ -5,6 +5,6 @@
 </head>
 <body>
     <h2>Headers</h2>
-    <p>The header you gave is ${customHeader}</p>
+    <p>The header you gave is ${myHeader}</p>
 </body>
 </html>

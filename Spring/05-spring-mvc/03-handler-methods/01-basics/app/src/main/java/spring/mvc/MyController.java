@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 @Controller
 public class MyController {
@@ -15,5 +16,11 @@ public class MyController {
     public String sayHello(Model model, @RequestParam("name") String name) {
         model.addAttribute("name", name);
         return "hellopage"; // This corresponds to the view name
+    }
+
+    @RequestMapping("/header")
+    public String customHeader(Model model, @RequestHeader("X-My-Header") String header) {
+        model.addAttribute("myHeader", header);
+        return "headers";
     }
 }
