@@ -19,9 +19,6 @@ import org.springframework.ui.Model;
 @Controller
 public class PersonController {
 
-    @Autowired
-    Validator validator;
-
     @GetMapping("/person") 
     public String showForm(Model model) {
         model.addAttribute("personForm", new Person());

@@ -5,7 +5,9 @@
 </head>
 <body>
     <h2>Success!</h2>
-    <p>Your email has been successfully submitted.</p>
+    <p>Your Person has been successfully submitted.</p>
+    <p>Name: ${person.name}</p>
+    <p>Age: ${person.age}</p>
     <a href="person.jsp">Go back to Person Form</a>
 </body>
 </html>
