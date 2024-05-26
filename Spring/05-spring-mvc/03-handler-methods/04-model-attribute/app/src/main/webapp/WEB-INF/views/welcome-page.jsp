@@ -6,7 +6,7 @@
 <body>
 
 	<hr />
-
+	<h1>${greet}</h1>
 	<form:form action="process-homepage" method="get" modelAttribute="nameInfo">
 
 		<div align="center">
