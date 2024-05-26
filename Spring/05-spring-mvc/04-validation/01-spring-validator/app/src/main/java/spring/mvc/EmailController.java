@@ -10,6 +10,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.validation.annotation.Validated;
+
+import jakarta.validation.Valid;
 
 @Controller
 public class EmailController {
@@ -17,18 +22,39 @@ public class EmailController {
     @Autowired
     private EmailFormValidator emailFormValidator;
 
+    @InitBinder
+	private void initBinder(WebDataBinder binder) {
+		binder.setValidator(emailFormValidator);
+	}
+
     @GetMapping("/email")
     public String showForm(Model model) {
         model.addAttribute("emailForm", new EmailForm());
         return "emailForm";
     }
 
+    /*
+     * validation will take place thanks to the @Validated annotation
+     * 
+     * in this case, unlike the commended one below, an error will be thrown if validation doesn't pass
+     * in the commented code below, we check for validation errors in the method
+     */
     @PostMapping("/email")
+    public String submitForm(@Validated @ModelAttribute("emailForm") EmailForm emailForm) {
+        return "success";
+    }
+
+    
+    /*
+     * in the following example we use a BindingResult argument to handle validation errors in the method
+     */
+
+    /*@PostMapping("/email")
     public String submitForm(@ModelAttribute("emailForm") EmailForm emailForm, BindingResult bindingResult) {
         emailFormValidator.validate(emailForm, bindingResult);
         if (bindingResult.hasErrors()) {
             return "emailForm";
         }
         return "success";
-    }
+    } */
 }
