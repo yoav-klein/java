@@ -1,9 +1,9 @@
-# View Resolvers
+# Validating using Spring's Validator Interface
 ---
 
-Spring MVC uses _View Resolvers_ in order to map between logical view names returned by `@RequestMapping` methods (as String)
-to actual View objects.
+This example demonstrates the use of `org.springframework.validation.Validator` to perform validation on user input.
 
-The default one used in Spring MVC is `InternalResourceViewResolver`. In this example, we configure this resolver
-in the MVC Config (MyWebConfig.java) to add a prefix and suffix so that when a method returns a name (e.g. `hellopage`), 
-a prefix and suffix will be added to this String and this will be the actual resource that the request will be forwarded to.
+We create a `EmailFormValidator` that implements this interaface and provied our custom validation logic.
+We then register this validator using the `@InitBinder` annotated method.
+
+Annotating a @ModelAttribute with @Validated will make the Framework validate the input using the Validator we've registered.
