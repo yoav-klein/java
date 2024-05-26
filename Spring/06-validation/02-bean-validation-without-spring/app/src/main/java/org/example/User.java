@@ -55,7 +55,7 @@ public class User {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(@Min(value = 0) int age) {
         this.age = age;
     }
 
@@ -66,6 +66,8 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    
 
     // standard setters and getters 
 }
