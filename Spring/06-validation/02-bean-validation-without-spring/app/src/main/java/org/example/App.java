@@ -13,15 +13,12 @@ import jakarta.validation.ValidatorFactory;
 import jakarta.validation.executable.ExecutableValidator;
 
 public class App {
-    public String getGreeting() {
-        return "Hello World!";
-    }
-
-    
 
     public static void main(String[] args) {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
+
+        /*** Bean validation of class properties */
 
         User user = new User();
         user.setWorking(true);
@@ -35,6 +32,8 @@ public class App {
             System.out.println(violation.getMessage());
         }
 
+
+        /*** Bean validation - method validation */
         ExecutableValidator executableValidator = factory.getValidator().forExecutables();
         HotelRoom object = new HotelRoom();
         
