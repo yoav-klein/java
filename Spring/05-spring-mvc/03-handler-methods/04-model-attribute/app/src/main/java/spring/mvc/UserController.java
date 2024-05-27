@@ -43,7 +43,8 @@ public class UserController {
                 
         }
         @RequestMapping("/process-homepage")
-        public String showResultPage(@ModelAttribute("nameInfo") NameInfoDTO nameInfoDTO) {
+        public String showResultPage(@ModelAttribute("nameInfo") NameInfoDTO nameInfo, Model model) {
+                model.addAttribute("nameInfo", nameInfo);
                 return "result-page";
                 
         }

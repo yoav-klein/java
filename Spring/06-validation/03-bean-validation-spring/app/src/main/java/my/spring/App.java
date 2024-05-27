@@ -10,21 +10,40 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.validation.Validator;
 import org.springframework.validation.SimpleErrors;
+import org.springframework.validation.annotation.Validated;
 //import jakarta.validation.Validator;
 import jakarta.validation.ConstraintViolation;
 
+
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
+
+@Validated
 public class App {
+
+    public static @NotNull Object myValidMethod(@NotNull String arg1, @Max(10) int arg2) {
+
+        System.out.println(arg1 + arg2);
+
+        return "kuku";
+    }
     
     public static void main(String[] args) {
         
         ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 
 	    Validator validator = (Validator)context.getBean("validator");
+
+        myValidMethod("Hello", 20);
         
         Person yoav = new Person();
         yoav.setAge(-3);
         yoav.setName("Yoav");
         
+        // ALTERNATIVE 1 - using the jakarta.validation.Validator API
         /* Set<ConstraintViolation<Person>> violations = validator.validate(yoav);
         
         for (ConstraintViolation<Person> violation : violations) {
@@ -32,6 +51,7 @@ public class App {
         }
         */
         
+        // ALTERNATIVE 2 - using the org.springframework.validation.Validator API
         SimpleErrors errors = new SimpleErrors(yoav);
         validator.validate(yoav, errors);
         
