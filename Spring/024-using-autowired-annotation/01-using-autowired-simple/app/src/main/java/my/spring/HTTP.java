@@ -7,7 +7,11 @@ import my.spring.JsonParser;
 
 public class HTTP {
     @Autowired
-    TCP[] tcp;
+    TCP tcp; 
+
+    @Autowired
+    Gremlin[] gremlins;
+
     JsonParser parser;
     Validator validator;
 
@@ -17,9 +21,11 @@ public class HTTP {
     }
 
     void sendMessage(String message) {
+        System.out.println("Number of Gremlins I have: " + gremlins.length);
         System.out.println("Using JsonParser: " + parser.parserCode);
-        tcp[0].sendMessage(message);
-        tcp[1].sendMessage(message);
+        //tcp[0].sendMessage(message);
+        //tcp[1].sendMessage(message);
+        tcp.sendMessage(message);
     }
 
     @Autowired

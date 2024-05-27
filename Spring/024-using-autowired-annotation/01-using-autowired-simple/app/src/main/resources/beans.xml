@@ -10,9 +10,18 @@
 	<context:annotation-config/>
 
    <bean id="http" class="my.spring.HTTP"/>
-   <bean id="tcp" class="my.spring.TCP"/>
-   <bean id="tcp1" class="my.spring.TCP"/>
+   
+   <bean id="tcp" class="my.spring.TCP">
+      <constructor-arg name="serial" value="1" />
+   </bean>
+   <bean id="tcp2" class="my.spring.TCP" primary="true">
+      <constructor-arg name="serial" value="2" />
+   </bean>
    <bean id="jsonparser" class="my.spring.JsonParser"/>
    <bean id="validator" class="my.spring.Validator"/>
+
+   <bean id="gremlin1" class="my.spring.Gremlin" />
+   <bean id="gremlin2" class="my.spring.Gremlin" />
+   <bean id="gremlin3" class="my.spring.Gremlin" />
 
 </beans>
