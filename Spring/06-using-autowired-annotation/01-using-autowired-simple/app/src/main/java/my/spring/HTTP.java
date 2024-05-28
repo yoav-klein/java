@@ -15,7 +15,7 @@ public class HTTP {
     JsonParser parser;
     Validator validator;
 
-    @Autowired
+    @Autowired // actually, Spring will provide the JsonParser bean even without the @Autowired
     HTTP(JsonParser parser) {
         this.parser = parser;
     }
