@@ -42,11 +42,11 @@ public class UserController {
                 return "welcome-page";
                 
         }
+
         @RequestMapping("/process-homepage")
         public String showResultPage(@ModelAttribute("nameInfo") NameInfoDTO nameInfo, Model model) {
-                model.addAttribute("nameInfo", nameInfo);
+                // model.addAttribute("nameInfo", nameInfo); // we don't need this
                 return "result-page";
-                
         }
 
         /* EQUIVALENT TO */
