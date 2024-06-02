@@ -67,6 +67,8 @@ public class UserController {
 
         // ANOTHER EXAMPLE
 
+        // this demonstrates that you can take more than one @ModelAttribute argument in a handler method
+
         @PostMapping("/submitDetails")
         public String submitDetails(@ModelAttribute("person") Person person,
                                     @ModelAttribute("address") Address address,
