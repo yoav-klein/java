@@ -1,0 +1,13 @@
+<web-app>  
+  
+<servlet>  
+<servlet-name>yoav</servlet-name>  
+<servlet-class>servlets.SessionExampleServlet</servlet-class>  
+</servlet>  
+  
+<servlet-mapping>  
+<servlet-name>yoav</servlet-name>  
+<url-pattern>/hello</url-pattern>  
+</servlet-mapping>  
+  
+</web-app>  
