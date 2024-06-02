@@ -65,4 +65,21 @@ public class UserController {
         }
         */
 
+        // ANOTHER EXAMPLE
+
+        @PostMapping("/submitDetails")
+        public String submitDetails(@ModelAttribute("person") Person person,
+                                    @ModelAttribute("address") Address address,
+                                    Model model) {
+            // Process the data (e.g., save to database)
+    
+            
+            return "person-result"; // Return the view name
+        }
+
+        @GetMapping("/person")
+        public String addPerson() {
+                return "person-form";
+        }
+
 }
