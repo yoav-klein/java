@@ -1,0 +1,29 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<beans xmlns = "http://www.springframework.org/schema/beans"
+   xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation = "http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+   <bean id = "helloWorld" class = "my.spring.HelloWorld">
+      <property name = "message" value = "Hello World!"/>
+   </bean>
+
+   <bean id = "foo" class = "my.spring.Foo">
+      <property name = "bar" value = "BigBar" />
+      <property name = "baz" value = "SmallBaz" />
+      <property name = "clazz" value = "my.spring.Baz" />
+   </bean>
+
+
+   <!-- note that my.spring.BarEditor doesn't need to be registered, as it's named BarEditor, it's automatically discovered -->
+   <bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+      <property name="customEditors">
+         <map>
+            <!-- <entry key="my.spring.Baz" value="my.spring.AnotherBazEditor"/> you can register multiple editors for the same type, only the last will be used -->
+            <entry key="my.spring.Baz" value="my.spring.SomeBazEditor"/>
+         </map>
+      </property>
+   </bean>
+
+</beans>
