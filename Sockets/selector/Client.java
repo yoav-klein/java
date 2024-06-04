@@ -2,7 +2,21 @@
 import java.io.*;
 import java.net.*;
 
-public class Client  {
+class StopThread extends Thread {
+    private Socket serverSocket;
+    PrintWriter out;
+    StopThread(Socket serverSocket) throws IOException {
+        this.serverSocket = serverSocket;
+        out = new PrintWriter(serverSocket.getOutputStream(), true);
+    }
+
+    public void run()  {
+        System.out.println("Stopping");
+        out.println("POISON_PILL");
+    }
+}
+
+public class Client {
     public static void main(String[] args) throws IOException {
         String hostName = "localhost";
         int portNumber = 8080;
@@ -15,6 +29,10 @@ public class Client  {
         ) {
             String userInput;
             while((userInput = stdIn.readLine()) != null) {
+                if(userInput.equals("stop")) {
+                    Runtime.getRuntime().addShutdownHook(new StopThread(sock)); 
+                    return;
+                }
                 out.println(userInput);
                 System.out.println("echo: " + in.readLine());
             }

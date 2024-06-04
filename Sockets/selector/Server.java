@@ -32,10 +32,11 @@ public class Server {
 
         // register the channel with the selector. our interest is "accept", as 
         // this socket will accept connections
-        serverSocket.register(selector, SelectionKey.OP_ACCEPT); 
+        serverSocket.register(selector, SelectionKey.OP_ACCEPT);
 
         // now we block on "select()" until a channel is ready for communication
         while(true) {
+            System.out.println("Number of connected clients: " + selector.keys().size());
             selector.select();
             // we get the list of SelectionKeys that are ready for communication
             Set<SelectionKey> selectedKeys = selector.selectedKeys(); // returns a Set<SelectionKey>
@@ -51,13 +52,12 @@ public class Server {
                 }
 
                 if(curr.isReadable()) { // one of the client sockets want to talk
-                    answerWithEcho((SocketChannel) curr.channel());
+                    answerWithEcho(curr);
                 }
             }
 
 
         }
-
 
     }
 
@@ -67,11 +67,15 @@ public class Server {
         client.register(selector, SelectionKey.OP_READ); // register, this time with OP_READ because this socket is for reading, not receiving connections
     }
 
-    private static void answerWithEcho(SocketChannel client) throws IOException {
+    private static void answerWithEcho(SelectionKey key) throws IOException {
+        SocketChannel client = (SocketChannel)key.channel();
+
         buffer.clear();
         int readBytes = client.read(buffer);
         if(-1 == readBytes ||  new String(buffer.array()).trim().equals("POISON_PILL")) {
+            System.out.println("Got Poison Pill");
             client.close();
+            key.cancel();
             return;
         }
         buffer.flip();
