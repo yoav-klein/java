@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import jakarta.validation.Valid;
 
@@ -44,6 +46,10 @@ public class EmailController {
         return "success";
     }
 
+    @ExceptionHandler
+    String badEmail(MethodArgumentNotValidException e) {
+        return "error";
+    }
     
     /*
      * in the following example we use a BindingResult argument to handle validation errors in the method
