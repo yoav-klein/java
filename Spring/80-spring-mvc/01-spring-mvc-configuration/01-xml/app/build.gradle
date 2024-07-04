@@ -39,3 +39,10 @@ tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
 }
+
+
+tasks.register('deploy', Copy) {
+    dependsOn war
+    from war.archiveFile.get()
+    into "C:\\apache-tomcat-10.1.24-windows-x64\\webapps"
+}

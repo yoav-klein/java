@@ -22,16 +22,5 @@ public class App {
 
         System.out.println(PropertyEditorManager.findEditor(Integer.class));
         
-        
-        System.out.println("Search path");
-        for(String searchPath : PropertyEditorManager.getEditorSearchPath()) {
-            System.out.println(searchPath);
-        }
-
-        System.out.println("---- list of all beans");
-        for (String beanName : context.getBeanDefinitionNames()) {
-            System.out.println(beanName);
-
-        }
     }
 }
