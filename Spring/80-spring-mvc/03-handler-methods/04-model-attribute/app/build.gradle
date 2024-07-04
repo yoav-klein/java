@@ -55,3 +55,10 @@ tasks.named('war') {
 
     }
 }
+
+tasks.register('deploy', Copy) {
+    dependsOn 'war'
+
+    from war.archiveFile
+    into "C:\\apache-tomcat-10.1.24-windows-x64\\webapps"
+}
