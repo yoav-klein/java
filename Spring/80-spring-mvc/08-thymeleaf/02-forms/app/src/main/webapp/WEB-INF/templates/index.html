@@ -5,9 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
     <title>Document</title>
+    <style>
+        .fieldError {
+            border: 1px solid red;
+        }
+    </style>
 </head>
 <body>
     <h1>Hello <span th:text="${name}">David</span></h1>
     
+    <form action="person" method="post" th:object="${person}">
+        <ul th:if="${#fields.hasErrors('*')}">
+            <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>
+          </ul>
+        <label for="firstName">First Name</label>
+        <input type="text" th:field="*{firstName}" th:class="${#fields.hasErrors('firstName')}? fieldError">
+        <br>
+        <label for="lastName">Last Name</label>
+        <input type="text" th:field="*{lastName}" th:class="${#fields.hasErrors('lastName')}? fieldError">
+        <br>
+        <label for="age">Age</label>
+        <input type="text" th:field="*{age}" th:class="${#fields.hasErrors('age')}? fieldError">
+        <br>
+        <button type="submit" name="save">Create</button>
+
+    </form>
 </body>
 </html>
