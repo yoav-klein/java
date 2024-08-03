@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
+    <style>
+        html {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+    </style>
     <title>Document</title>
 </head>
 <body>
     <h1 th:text="#{title}">Welcome</h1>
     <p th:text="#{opening}">You reached the best webpage in the world</p>
-    
+    <h2>שלום</h2>
     <form th:action="@{/hello}">
         <button name="lang" value="he">Hebrew</button>
         <button name="lang" value="en">English</button>

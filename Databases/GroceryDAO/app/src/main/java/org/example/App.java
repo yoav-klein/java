@@ -5,17 +5,19 @@ package org.example;
 
 import java.util.List;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
 
 public class App {
     public static void main(String[] args)  {
         List<Item> items = null;
-
-        String dbUrl = "jdbc:mysql://localhost:3306/users";
-        String dbUser = "yoav";
-        String dbPassword = "yoav";
         
+        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+
+
         // we create the connection using the DriverManager.getConnection
-        ItemDAO itemDao = new ItemDAOJDBCImpl(dbUrl, dbUser, dbPassword);
+        ItemDAO itemDao = (ItemDAO)context.getBean("itemDao");
 
         items = itemDao.getAllItems();
 
@@ -23,7 +25,7 @@ public class App {
             System.out.println("Name: " + item.getName() + " Quantity: " + item.getQuantity());
         }
 
-        Item vodka = new Item("Tomato", 5, ItemCategory.FRUITS, QuantityType.KG);
+        Item vodka = new Item("Vodka", 1, ItemCategory.ALCOHOL, QuantityType.UNIT);
         //itemDao.addItem(vodka);
         itemDao.deleteItem(vodka);
 
