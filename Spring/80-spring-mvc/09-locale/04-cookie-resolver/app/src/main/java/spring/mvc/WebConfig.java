@@ -46,7 +46,7 @@ public class WebConfig implements WebMvcConfigurer, ApplicationContextAware {
 
     @Bean
     public LocaleResolver localeResolver() {
-        CookieLocaleResolver slr = new CookieLocaleResolver("clientlanguage");
+        CookieLocaleResolver slr = new CookieLocaleResolver("lingo");
         slr.setCookieMaxAge(1000000);
         slr.setDefaultLocale(Locale.US);
         return slr;
@@ -68,6 +68,7 @@ public class WebConfig implements WebMvcConfigurer, ApplicationContextAware {
     public ResourceBundleMessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
         messageSource.setBasename("Messages");
+        messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
     }
 
@@ -81,6 +82,7 @@ public class WebConfig implements WebMvcConfigurer, ApplicationContextAware {
         templateResolver.setSuffix(".html");
         // HTML is the default value, added here for the sake of clarity.
         templateResolver.setTemplateMode(TemplateMode.HTML);
+        templateResolver.setCharacterEncoding("UTF-8");
         // Template cache is true by default. Set to false if you want
         // templates to be automatically updated when modified.
         templateResolver.setCacheable(true);
