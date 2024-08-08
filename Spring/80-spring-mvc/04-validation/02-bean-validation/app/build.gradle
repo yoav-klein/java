@@ -28,11 +28,11 @@ dependencies {
 
     implementation 'org.springframework:spring-webmvc:6.1.1'
     implementation 'org.apache.tomcat:tomcat-servlet-api:10.1.24'
+
+    // for the validation
     implementation 'jakarta.validation:jakarta.validation-api:3.1.0'
     implementation 'org.hibernate.validator:hibernate-validator:8.0.0.Final'
-    implementation 'jakarta.el:jakarta.el-api:6.0.0'
-    implementation 'org.glassfish:jakarta.el:4.0.2'
-
+    
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     // This dependency is used by the application.
