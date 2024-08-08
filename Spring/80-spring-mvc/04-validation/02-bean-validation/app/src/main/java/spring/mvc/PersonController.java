@@ -26,6 +26,8 @@ public class PersonController {
         return "personForm";
     }
 
+
+    // this demonstrates using BindingResult to handle the error "manually"
     @PostMapping("/person")
     public String createPerson(@Validated @ModelAttribute Person person, BindingResult result) {
         if (result.hasErrors()) {
@@ -35,6 +37,16 @@ public class PersonController {
             return "personForm";
         }
 
+        // Handle the logic for creating the person
+        // For example, save the person to a database (this part is omitted for simplicity)
+
+        return "success";
+    }
+
+    // this demonstrates not using BindingResult
+    @PostMapping("/person1")
+    public String createPerson(@Validated @ModelAttribute Person person) {
+       
         // Handle the logic for creating the person
         // For example, save the person to a database (this part is omitted for simplicity)
 

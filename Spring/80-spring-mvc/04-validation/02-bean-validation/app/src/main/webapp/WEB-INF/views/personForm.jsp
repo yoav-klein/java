@@ -15,5 +15,14 @@
         <input type="text" id="age" name="age" required>
         <button type="submit">Submit</button>
     </form>
+    <hr>
+    <form action="person1" method="post">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <br>
+        <label for="age">Age:</label>
+        <input type="text" id="age" name="age" required>
+        <button type="submit">Submit</button>
+    </form>
 </body>
 </html>
