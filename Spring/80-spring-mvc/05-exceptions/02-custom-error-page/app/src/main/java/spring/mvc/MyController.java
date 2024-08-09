@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
 public class MyController {
@@ -31,10 +32,10 @@ public class MyController {
         return "hellopage"; // This corresponds to the view name
     }
 
-    /* this doesn't dispatch to the 404 for some reason */
+
+    // for some reason, although this returns a 404, our custom page is not shown..
     @RequestMapping("/notfound")
     public ResponseEntity<String> notFound() {
-        // model.addAttribute("message", "Hello, Spring MVC!");
         
         return new ResponseEntity<String>("Not found!", HttpStatus.NOT_FOUND); // This corresponds to the view name
     }
@@ -45,6 +46,12 @@ public class MyController {
         if(1 == 1) { throw new CustomException(); }
 
         return "hellopage"; // This corresponds to the view name
+    }
+
+    // endpoint for custom page for 400
+    @RequestMapping("/error400")
+    public String error400() {
+        return "error400";
     }
 
     // endpoint for error 404
