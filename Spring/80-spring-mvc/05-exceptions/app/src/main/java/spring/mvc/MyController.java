@@ -44,9 +44,11 @@ public class MyController {
 
     @ExceptionHandler
     public ModelAndView bananaHandler(MyCustomException e) {
-        Map<String,String> model = new HashMap<>();
-        model.put("color", "Yellow");
-        model.put("size", "Large");
-        return new ModelAndView("banana", model);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("color", "Yellow");
+        modelAndView.addObject("size", "Large");
+        modelAndView.setViewName("banana");
+        return modelAndView;
+
     }
 }
