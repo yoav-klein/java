@@ -42,6 +42,9 @@ public class MyController {
         throw new MyCustomException();
     }
 
+    // note that if not this exception handler method, the status  code would be 404 NOT FOUND
+    // because that's what we defined for this MyCustomException. But once you catch this exception
+    // and return a ModelAndView, the status code will be 200
     @ExceptionHandler
     public ModelAndView bananaHandler(MyCustomException e) {
         ModelAndView modelAndView = new ModelAndView();
