@@ -10,9 +10,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
-import org.springframework.validation.Validator;
+
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import org.springframework.ui.Model;
 
@@ -51,5 +59,42 @@ public class PersonController {
         // For example, save the person to a database (this part is omitted for simplicity)
 
         return "success";
+    }
+
+
+    /**
+     * 
+     * Here I tried to understand the Spring MVC docs in Validation page.
+     * It seemed from there that when method validation is in play (there is a @Constraint annotation on a parameter directly)
+     * then it supersedes argument-level validation (@Validated), and then HandlerMethodValidationException is thrown
+     * 
+     * The JSP that sends requests to this endpoint is sending id as a request parameter (hardcoded in the JSP) 
+     * and the Person form. when the id is not valid, it throws a HandlerMethodValidationException
+     * but when the Person is not valid, it throws a MethodArgumentNotValidException
+     * 
+     * So I don't quite understand the docs
+     * 
+     */
+    @PostMapping("/person2")
+    public String createPerson(@RequestParam("id") @Min(20) @Max(40) int id, @Validated @ModelAttribute Person person) {
+        System.out.println("GOT A PERSON");
+        System.out.println(id);
+        return "success";
+    }
+
+
+    // HandlerMethodValidationException is thrown when 
+    @ExceptionHandler
+    public String methodValidation(HandlerMethodValidationException e) {
+        System.out.println("HandlerMethodValidationException");
+
+        return "handlerMethodValidation";
+    }
+
+    @ExceptionHandler
+    public String argumentValidation(MethodArgumentNotValidException e) {
+        System.out.println("HandlerMethodValidationException");
+
+        return "methodArgumentValidation";
     }
 }
