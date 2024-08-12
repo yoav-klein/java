@@ -54,7 +54,6 @@ tasks.named('war') {
     }
 }
 
-
 tasks.register('deploy', Copy) {
     dependsOn 'war'
 
