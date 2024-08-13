@@ -10,4 +10,4 @@ By default, this is the `DefaultMessageCodesResolver`. This object takes an erro
 use the `DataBinder.validate()`, the `BindingResults` object (which inherits from `Errors`) contains errors that their
 error codes are already added with the additional error codes.
 
-Each Error instance is a MessageSourceResolvable, so we can pass it to a `MessageSource.getMessage` 
+Each Error instance is a `MessageSourceResolvable`, so we can pass it to a `MessageSource.getMessage` to get the localized message.

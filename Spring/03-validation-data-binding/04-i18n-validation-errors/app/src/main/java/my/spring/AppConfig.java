@@ -17,7 +17,6 @@ public class AppConfig  {
 	public MethodValidationPostProcessor validationPostProcessor() {
 		return new MethodValidationPostProcessor();
 	}
-
 	
     @Bean
     public ResourceBundleMessageSource messageSource() {

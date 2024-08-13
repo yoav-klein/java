@@ -41,11 +41,13 @@ public class App {
         propertyValues.put("name", "John Doe");
         propertyValues.put("age", "-5");
 
+        // add the validator to the databinder
         dataBinder.addValidators(validator);
 
         dataBinder.bind(new MutablePropertyValues(propertyValues));
+
+        // yes, validation after the binding
         dataBinder.validate();
-        // Bind the map values to the person object
 
         BindingResult result = dataBinder.getBindingResult();
         if(result.hasErrors()) {
