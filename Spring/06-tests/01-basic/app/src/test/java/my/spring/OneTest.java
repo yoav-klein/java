@@ -8,7 +8,7 @@ import org.testng.annotations.*;
 import static org.testng.Assert.*;
 
 @ContextConfiguration(classes = {AppConfig.class})
-public class AppTest extends AbstractTestNGSpringContextTests  {
+public class OneTest extends AbstractTestNGSpringContextTests  {
     private Foo foo;
     private Bar bar;
 
