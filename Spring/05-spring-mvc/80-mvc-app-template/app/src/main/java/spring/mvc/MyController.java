@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class MyController {
-
     @RequestMapping("/hello")
     public String sayHello(Model model) {
-        model.addAttribute("message", "Hello, Spring MVC!");
-        return "hellopage"; // This corresponds to the view name
+        model.addAttribute("name", "Yaffa");
+        return "index"; // This corresponds to the view name
     }
+   
 }

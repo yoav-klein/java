@@ -28,6 +28,7 @@ dependencies {
 
     implementation 'org.springframework:spring-webmvc:6.1.1'
     implementation 'org.apache.tomcat:tomcat-servlet-api:10.1.24'
+    implementation group: 'org.thymeleaf', name: 'thymeleaf-spring6', version: '3.1.2.RELEASE'
 
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
@@ -47,9 +48,9 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-tasks.named('war') {
-    doLast {
-        println "After war"
+tasks.register('deploy', Copy) {
+    dependsOn 'war'
 
-    }
+    from war.archiveFile
+    into "C:\\apache-tomcat-10.1.24-windows-x64\\webapps"
 }
