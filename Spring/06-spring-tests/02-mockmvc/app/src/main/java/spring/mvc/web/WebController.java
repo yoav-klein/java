@@ -6,17 +6,26 @@ package spring.mvc.web;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import spring.mvc.business.UserService;
 
 @Controller
 public class WebController {
+    @Autowired
+    private UserService userService;
+
     @RequestMapping("/hello")
     public String sayHello(Model model) {
         model.addAttribute("name", "Yaffa");
         return "index"; // This corresponds to the view name
     }
 
-    @RequestMapping("/allUsers")
+    
+    @RequestMapping("/users")
     public String getAllUsers(Model model) {
-        model.addAttribute()
+        model.addAttribute("users", userService.getAllUsers());
+        return "users"; // This corresponds to the view name
     }
+
 }
