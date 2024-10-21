@@ -15,8 +15,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 
+import spring.mvc.web.WebConfig;
+
 @WebAppConfiguration
-@ContextConfiguration(classes = {MyWebConfig.class})
+@ContextConfiguration(classes = { WebConfig.class })
 public class MyTest extends AbstractTestNGSpringContextTests {
     private MockMvc mockMvc;
 

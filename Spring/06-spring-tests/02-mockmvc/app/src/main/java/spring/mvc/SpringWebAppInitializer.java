@@ -1,18 +1,21 @@
 
 package spring.mvc;
 
+import spring.mvc.web.WebConfig;
+import spring.mvc.business.BusinessConfig;
+
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-public class MyWebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+public class SpringWebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
-		return null;
+		return new Class<?>[] { BusinessConfig.class };
 	}
 
 	@Override
 	protected Class<?>[] getServletConfigClasses() {
-		return new Class<?>[] { MyWebConfig.class };
+		return new Class<?>[] { WebConfig.class };
 	}
 
 	@Override

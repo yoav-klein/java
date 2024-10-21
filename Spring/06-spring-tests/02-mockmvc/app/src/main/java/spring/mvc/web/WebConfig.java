@@ -1,5 +1,5 @@
 
-package spring.mvc;
+package spring.mvc.web;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.beans.BeansException;
@@ -22,8 +22,8 @@ import org.thymeleaf.spring6.view.ThymeleafViewResolver;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan("spring.mvc")
-public class MyWebConfig implements WebMvcConfigurer, ApplicationContextAware  {
+@ComponentScan
+public class WebConfig implements WebMvcConfigurer, ApplicationContextAware  {
     private ApplicationContext applicationContext;
 
     public void setApplicationContext(final ApplicationContext applicationContext)
