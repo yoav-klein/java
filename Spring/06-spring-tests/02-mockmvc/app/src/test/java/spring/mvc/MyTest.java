@@ -16,9 +16,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 
 import spring.mvc.web.WebConfig;
+import spring.mvc.test.BusinessConfig;
 
 @WebAppConfiguration
-@ContextConfiguration(classes = { WebConfig.class })
+@ContextConfiguration(classes = { WebConfig.class, BusinessConfig.class })
 public class MyTest extends AbstractTestNGSpringContextTests {
     private MockMvc mockMvc;
 
@@ -31,9 +32,15 @@ public class MyTest extends AbstractTestNGSpringContextTests {
 	}
 
     @Test
-    void foo() throws Exception {
+    void testHello() throws Exception {
         mockMvc.perform(get("/hello")).andExpect(status().isOk())
         .andExpect(model().attributeExists("name"));
+    }
+
+    @Test
+    void testUsers() throws Exception {
+        mockMvc.perform(get("/users")).andExpect(status().isOk())
+        .andExpect(model().attributeExists("users"));
     }
 
     
