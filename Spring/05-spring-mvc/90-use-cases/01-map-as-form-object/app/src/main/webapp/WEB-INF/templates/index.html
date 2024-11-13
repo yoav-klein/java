@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Hello <span th:text="${name}">David</span></h1>
+    
+    <form th:object="${fullList}" method="post" th:action="@{/update}">
+        <article th:each="category : *{list}">
+            <div th:each="item,itemStat : ${category.value}">
+                <!-- <p th:text="${item}"></p> -->
+                 <p th:text="*{list[__${category.key}__][__${itemStat.index}__]}"></p>
+                 <input type="text" th:field="*{list[__${category.key}__][__${itemStat.index}__]}">
+                 
+            </div>
+        </article>
+        <input type="submit">
+    </form>
+</body>
+</html>
