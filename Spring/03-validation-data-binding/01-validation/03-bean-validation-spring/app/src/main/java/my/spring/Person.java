@@ -3,6 +3,7 @@ package my.spring;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.Valid;
 
 public class Person {
 
@@ -12,6 +13,18 @@ public class Person {
 
 	@Min(0)
 	private int age;
+
+	@Valid
+	private Address address;
+	
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
 
 	public String getName() {
 		return name;

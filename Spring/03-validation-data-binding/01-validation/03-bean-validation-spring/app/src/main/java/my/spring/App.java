@@ -10,6 +10,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.validation.Validator;
 import org.springframework.validation.SimpleErrors;
+import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.annotation.Validated;
 //import jakarta.validation.Validator;
 import jakarta.validation.ConstraintViolation;
@@ -19,6 +20,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
 
 
 @Validated
@@ -42,6 +44,8 @@ public class App {
         Person yoav = new Person();
         yoav.setAge(-3);
         yoav.setName("Yoav");
+
+        yoav.setAddress(new Address("Karmiel", "Marva", -1));
         
         // ALTERNATIVE 1 - using the jakarta.validation.Validator API
         /* Set<ConstraintViolation<Person>> violations = validator.validate(yoav);
@@ -52,7 +56,9 @@ public class App {
         */
         
         // ALTERNATIVE 2 - using the org.springframework.validation.Validator API
-        SimpleErrors errors = new SimpleErrors(yoav);
+        
+        // SimpleErrors errors = new SimpleErrors(yoav);  SimpleErrors doesn't support nested properties, so we'll use:
+        BeanPropertyBindingResult errors = new BeanPropertyBindingResult(yoav, "yoav");
         validator.validate(yoav, errors);
         
         if (errors.hasErrors()) {
