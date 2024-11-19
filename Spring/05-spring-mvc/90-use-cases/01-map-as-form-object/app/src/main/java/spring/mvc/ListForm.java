@@ -8,8 +8,6 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
 
-
-/* 
 public class ListForm {
     
     private Map<Category, List<String>> list;
@@ -47,10 +45,10 @@ public class ListForm {
         }
 
     }
-} */
+}
 
 
-public class ListForm {
+/* public class ListForm {
     
     private Map<Category, List<ListItem>> list;
 
@@ -88,4 +86,4 @@ public class ListForm {
         }
 
     }
-}
+} */
