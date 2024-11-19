@@ -3,29 +3,74 @@
  */
 package spring.mvc;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 @Controller
 public class MyController {
 
-    @ModelAttribute("fullList")
+    /* full list for Map<Category, List<ListItem>> */
+    /* @ModelAttribute("fullList")
     public ListForm fullList() {
-        return new ListForm();
-    }
+        ListForm form = new ListForm();
+
+        Map<Category, List<ListItem>> map = new HashMap<>();
+
+        List<ListItem> vegetables = new ArrayList<>();
+        vegetables.add(new ListItem("Cucumber"));
+        vegetables.add(new ListItem("Tomato"));
+        map.put(Category.VEGETABLES, vegetables);
+
+        List<ListItem> fruit = new ArrayList<>();
+        fruit.add(new ListItem("Orange"));
+        fruit.add(new ListItem("Strawberry"));
+        map.put(Category.FRUITS, fruit);
+
+        form.setList(map);
+        return form;
+    } */
+
+    /* full list for Map<Category, List<String>> */
+    /* @ModelAttribute("fullList")
+    public ListForm fullList() {
+        System.out.println("ModelAttribute method");
+        ListForm form = new ListForm();
+
+        Map<Category, List<String>> map = new HashMap<>();
+
+        List<String> vegetables = new ArrayList<>();
+        vegetables.add("Cucumber");
+        vegetables.add("Tomato");
+        map.put(Category.VEGETABLES, vegetables);
+
+        List<String> fruit = new ArrayList<>();
+        fruit.add("Orange");
+        fruit.add("Strawberry");
+        map.put(Category.FRUITS, fruit);
+
+        form.setList(map);
+        return form;
+    } */
 
     @RequestMapping("/")
-    public String sayHello(Model model) {
+    public String home(@ModelAttribute("fullList") ListForm fullList) {
         return "index"; // This corresponds to the view name
     }
 
     @PostMapping("/update")
-    public String update(ListForm form) {
+    public String update(@ModelAttribute("fullList") ListForm form) {
         form.print();
-        return "redirect:/";
+        return "index";
     }
-   
+
 }

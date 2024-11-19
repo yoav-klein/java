@@ -13,8 +13,8 @@
         <article th:each="category : *{list}">
             <div th:each="item,itemStat : ${category.value}">
                 <!-- <p th:text="${item}"></p> -->
-                 <p th:text="*{list[__${category.key}__][__${itemStat.index}__]}"></p>
-                 <input type="text" th:field="*{list[__${category.key}__][__${itemStat.index}__]}">
+                 <input type="text" th:field="*{list[__${category.key}__][__${itemStat.index}__].name}">
+                 <!-- <input type="text" th:field="*{list[__${category.key}__][__${itemStat.index}__]}"> -->
                  
             </div>
         </article>
