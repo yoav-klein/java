@@ -14,4 +14,9 @@ Then, we configure `FilterChainProxy` with a `SecurityFilterChain` (`security:fi
 The SecurityFilterChain is configured to intercept all requests by the uri-pattern, and apply 2 Filters: `firstFilter` and `secondFilter`. These
 are simple filters that just add some text to the response.
 
+## Important note
+---
+This is not the way we'll work with `FilterChainProxy` in the everyday. In the next example, we'll see how `FilterChainProxy` is automatically
+created as a bean and configured with `SecurityFilterChain` when including the appropriate elements in the `app-context.xml` file.
+
 
