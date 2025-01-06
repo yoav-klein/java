@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:security="http://www.springframework.org/schema/security"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.springframework.org/schema/beans
+		https://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/security
+		https://www.springframework.org/schema/security/spring-security.xsd">
+    
+    <security:http>
+    <security:intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')" />
+    <security:form-login />
+    <security:logout />
+    </security:http>
+
+    <security:authentication-manager>
+        <security:authentication-provider>
+            <security:user-service>
+            <!-- Password is prefixed with {noop} to indicate to DelegatingPasswordEncoder that
+            NoOpPasswordEncoder should be used. This is not safe for production, but makes reading
+            in samples easier. Normally passwords should be hashed using BCrypt -->
+            <security:user name="jimi" password="{noop}jimispassword" authorities="ROLE_USER, ROLE_ADMIN" />
+            <security:user name="bob" password="{noop}bobspassword" authorities="ROLE_USER" />
+            </security:user-service>
+        </security:authentication-provider>
+    </security:authentication-manager>
+    
+   
+</beans>
