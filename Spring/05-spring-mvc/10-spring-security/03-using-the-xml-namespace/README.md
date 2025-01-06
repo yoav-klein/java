@@ -1,4 +1,4 @@
-# Using the security XML Namespace
+# Configuring Spring Security - Using the XML Namespace
 ---
 
 In this project we use the `<security:*>` XML namespace in the ApplicationContext configuration. This allows us to easily
