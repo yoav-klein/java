@@ -8,9 +8,9 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
 		https://www.springframework.org/schema/security/spring-security.xsd">
     
     <security:http>
-    <security:intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')" />
-    <security:form-login />
-    <security:logout />
+        <security:intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')" />
+        <security:form-login />
+        <security:logout />
     </security:http>
 
     <security:authentication-manager>

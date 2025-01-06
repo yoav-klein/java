@@ -1,18 +1,11 @@
-# DeletagingFilterProxy
+# Using the security XML Namespace
 ---
 
-This project is just to get to know the `DelegatingFilterProxy`. What we have here is a regular Servlet application (no Spring MVC).
-We can use Spring Security with this since it's not dependent on Spring MVC - Spring Security works on the level of Filters, which 
-is before the MVC's `DispatcherServlet`.
+In this project we use the `<security:*>` XML namespace in the ApplicationContext configuration. This allows us to easily
+configure security for our application, as the Spring Security module will automatically read these elements and create the
+required beans alone.
 
-The `DelegatingFilterProxy` is an implementation of `Filter` that bridges between the Servlet conatiner and an `ApplicationContext`.
+Note that in this example, we don't manually configure the `FilterChainProxy`. When we include the `<security:http />` element,
+the framework creates the `FilterChainProxy`, wiring it to the `DelegatingFilterProxy` for us.
 
-In the `web.xml` file we define the `ContextLoaderListener` and pass in the location of our Spring configuration file (`app-context.xml`). This is to 
-spin up the ApplicationContext.
-
-Then, we define a `<filter>` section which points to `DelegatingFilterProxy` class. We pass in the Bean name that `DelegatingFilterProxy`
- will delegate work to. In this case, we're implementing a small `MyFilterBean` which only adds some content to the returned response.
-
- The `MyFilterBean` is a bean that's registered against the ApplicationContext using the `app-context.xml` file.
-
-In reality, we'll be delegating work to `FilterChainProxy`.
+There are many thing in the XML that we haven't talked about yet, but we'll be discussed later.
