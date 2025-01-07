@@ -18,6 +18,30 @@
         <servlet-name>myservlet</servlet-name>  
         <url-pattern>/</url-pattern>  
     </servlet-mapping>
+
+    
+    <servlet>  
+        <servlet-name>login</servlet-name>  
+        <servlet-class>servlets.LoginServlet</servlet-class>  
+    </servlet>  
+    
+    <servlet-mapping>  
+        <servlet-name>login</servlet-name>  
+        <url-pattern>/myloginpage</url-pattern>  
+    </servlet-mapping>
+
+
+    <servlet>  
+        <servlet-name>logout</servlet-name>  
+        <servlet-class>servlets.LogoutServlet</servlet-class>  
+    </servlet>  
+    
+    <servlet-mapping>  
+        <servlet-name>logout</servlet-name>  
+        <url-pattern>/mylogoutpage</url-pattern>  
+    </servlet-mapping>
+
+
     <filter>
         <filter-name>springSecurityFilterChain</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
