@@ -17,4 +17,8 @@ What we're saying here is:
 2. Requests to the homepage `/` are allowed to both authenticated AND unauthenticated users
 3. All other urls are only allowed to authenticated users (nevermind their role)
 
+We have 3 pages:
+1. Homepage `/` - accessible for anonymous and authenticated users
+2. Management `/management` - accessible for `ADMIN`s only
+3. Some page `/usersonly` - accessible only for authenticated users.
 
