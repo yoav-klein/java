@@ -10,35 +10,33 @@
     </context-param>  
 
     <servlet>  
-        <servlet-name>myservlet</servlet-name>  
-        <servlet-class>servlets.MyServlet</servlet-class>  
+        <servlet-name>management</servlet-name>  
+        <servlet-class>servlets.Management</servlet-class>  
     </servlet>  
     
     <servlet-mapping>  
-        <servlet-name>myservlet</servlet-name>  
+        <servlet-name>management</servlet-name>  
+        <url-pattern>/management</url-pattern>  
+    </servlet-mapping>
+
+    <servlet>  
+        <servlet-name>homepage</servlet-name>  
+        <servlet-class>servlets.Homepage</servlet-class>  
+    </servlet>  
+    
+    <servlet-mapping>  
+        <servlet-name>homepage</servlet-name>  
         <url-pattern>/</url-pattern>  
     </servlet-mapping>
 
-    
     <servlet>  
-        <servlet-name>login</servlet-name>  
-        <servlet-class>servlets.LoginServlet</servlet-class>  
+        <servlet-name>usersonly</servlet-name>  
+        <servlet-class>servlets.UsersOnly</servlet-class>  
     </servlet>  
     
     <servlet-mapping>  
-        <servlet-name>login</servlet-name>  
-        <url-pattern>/myloginpage</url-pattern>  
-    </servlet-mapping>
-
-
-    <servlet>  
-        <servlet-name>logout</servlet-name>  
-        <servlet-class>servlets.LogoutServlet</servlet-class>  
-    </servlet>  
-    
-    <servlet-mapping>  
-        <servlet-name>logout</servlet-name>  
-        <url-pattern>/mylogoutpage</url-pattern>  
+        <servlet-name>usersonly</servlet-name>  
+        <url-pattern>/usersonly</url-pattern>  
     </servlet-mapping>
 
 

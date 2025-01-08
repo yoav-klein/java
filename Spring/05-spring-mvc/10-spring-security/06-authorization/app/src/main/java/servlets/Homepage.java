@@ -14,7 +14,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.WebApplicationTemplateResolver;
 
 
-public class LoginServlet extends HttpServlet {
+public class Homepage extends HttpServlet {
     private static ITemplateEngine buildTemplateEngine(JakartaServletWebApplication application) {
 		
         final WebApplicationTemplateResolver templateResolver = new WebApplicationTemplateResolver(application);
@@ -53,7 +53,7 @@ public class LoginServlet extends HttpServlet {
 
 		final WebContext ctx = new WebContext(webExchange, webExchange.getLocale());
 
-		engine.process("login", ctx, writer);
+		engine.process("homepage", ctx, writer);
 	}
 
 }

@@ -23,16 +23,11 @@ public class SpringConfig {
                 configurer.ignoringRequestMatchers("/**");
             })
             .httpBasic(Customizer.withDefaults())
-            .formLogin(configurer -> {
-                configurer.loginPage("/myloginpage").permitAll();
-            })
-            .logout(configurer -> {
-                configurer.logoutUrl("/mylogoutpage").permitAll();
-            })
+            .formLogin(Customizer.withDefaults())
             .authorizeHttpRequests(authorize -> authorize
-                .anyRequest().authenticated()
-                .requestMatchers("/public/**").anonymous()
                 .requestMatchers("/management").hasRole("ADMIN")
+                .requestMatchers("/").permitAll()
+                .anyRequest().authenticated()
             );
 
         SecurityFilterChain chain = http.build();
