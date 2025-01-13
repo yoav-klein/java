@@ -86,6 +86,7 @@ public class MyAccessTokenResponseClient implements OAuth2AccessTokenResponseCli
                 accessTokenResponse = responseSpec.body(OAuth2AccessTokenResponse.class);
             } catch(Exception e) { 
                 System.out.println("========= TTHHHIISS is there ERRRORR =========");
+				System.out.println(e);
                 throw(e);
             }
 			// @formatter:on

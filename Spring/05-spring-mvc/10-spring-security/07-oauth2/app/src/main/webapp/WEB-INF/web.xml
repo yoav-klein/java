@@ -10,16 +10,6 @@
     </context-param>  
 
     <servlet>  
-        <servlet-name>management</servlet-name>  
-        <servlet-class>servlets.Management</servlet-class>  
-    </servlet>  
-    
-    <servlet-mapping>  
-        <servlet-name>management</servlet-name>  
-        <url-pattern>/management</url-pattern>  
-    </servlet-mapping>
-
-    <servlet>  
         <servlet-name>homepage</servlet-name>  
         <servlet-class>servlets.Homepage</servlet-class>  
     </servlet>  
@@ -30,13 +20,13 @@
     </servlet-mapping>
 
     <servlet>  
-        <servlet-name>usersonly</servlet-name>  
-        <servlet-class>servlets.UsersOnly</servlet-class>  
+        <servlet-name>login</servlet-name>  
+        <servlet-class>servlets.Login</servlet-class>  
     </servlet>  
     
     <servlet-mapping>  
-        <servlet-name>usersonly</servlet-name>  
-        <url-pattern>/usersonly</url-pattern>  
+        <servlet-name>login</servlet-name>  
+        <url-pattern>/myloginpage</url-pattern>  
     </servlet-mapping>
 
 
