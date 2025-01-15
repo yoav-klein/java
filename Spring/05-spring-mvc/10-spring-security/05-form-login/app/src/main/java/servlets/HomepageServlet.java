@@ -14,7 +14,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.WebApplicationTemplateResolver;
 
 
-public class Homepage extends HttpServlet {
+public class HomepageServlet extends HttpServlet {
     private static ITemplateEngine buildTemplateEngine(JakartaServletWebApplication application) {
 		
         final WebApplicationTemplateResolver templateResolver = new WebApplicationTemplateResolver(application);
@@ -52,9 +52,7 @@ public class Homepage extends HttpServlet {
 		final Writer writer = response.getWriter();
 
 		final WebContext ctx = new WebContext(webExchange, webExchange.getLocale());
-        String name = request.getUserPrincipal().getName();            
-        
-        ctx.setVariable("name", name);
+        ctx.setVariable("name", request.getUserPrincipal().getName());
 
 		engine.process("homepage", ctx, writer);
 	}

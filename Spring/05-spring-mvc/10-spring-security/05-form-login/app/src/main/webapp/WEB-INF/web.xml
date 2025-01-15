@@ -10,12 +10,12 @@
     </context-param>  
 
     <servlet>  
-        <servlet-name>myservlet</servlet-name>  
-        <servlet-class>servlets.MyServlet</servlet-class>  
+        <servlet-name>home</servlet-name>  
+        <servlet-class>servlets.HomepageServlet</servlet-class>  
     </servlet>  
     
     <servlet-mapping>  
-        <servlet-name>myservlet</servlet-name>  
+        <servlet-name>home</servlet-name>  
         <url-pattern>/</url-pattern>  
     </servlet-mapping>
 
