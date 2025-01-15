@@ -73,3 +73,4 @@ private ClientRegistration googleClientRegistration() {
 	}
 ```
 
+In the next project, we'll see how we integrate this with Spring MVC to get data about the authenticated user in our application.
