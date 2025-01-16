@@ -6,12 +6,21 @@ package com.example.web.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import  org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+
 
 @Controller
 public class HomeController {
     @RequestMapping("/")
-    public String sayHello(Model model) {
-        model.addAttribute("name", "Yaffa");
+    public String sayHello(Model model, @AuthenticationPrincipal OAuth2User user) {
+        
+        for(String key : user.getAttributes().keySet()) {
+            System.out.println(key + ": " + user.getAttributes().get(key));
+        }
+
+        model.addAttribute("name", user.getAttribute("name"));
+        model.addAttribute("pictureUrl", user.getAttribute("picture"));
         return "index"; // This corresponds to the view name
     }
    

@@ -6,13 +6,14 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 import jakarta.servlet.Filter;
 import com.example.business.SpringBusinessConfig;
 import com.example.web.SpringWebConfig;
+import com.example.web.SpringSecurityConfig;
 import org.springframework.web.filter.DelegatingFilterProxy;
 
 public class SpringAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
-		return new Class<?>[] { SpringBusinessConfig.class };
+		return new Class<?>[] { SpringBusinessConfig.class, SpringSecurityConfig.class };
 	}
 
 	@Override
@@ -27,9 +28,9 @@ public class SpringAppInitializer extends AbstractAnnotationConfigDispatcherServ
 
 	@Override
 	public Filter[] getServletFilters() {
-		DelegatingFilterProxy delegatingFilterProxy = new DelegatingFilterProxy("springSecurityFilterChain");
+		DelegatingFilterProxy delegatingFilterProxy = new DelegatingFilterProxy();
 		delegatingFilterProxy.setTargetBeanName("springSecurityFilterChain");
-		delegatingFilterProxy.setTargetFilterLifecycle(true); // Enable lazy initialization
+		/* delegatingFilterProxy.setTargetFilterLifecycle(true); // Enable lazy initialization */
 		return new Filter[] { delegatingFilterProxy };
 	}
 }

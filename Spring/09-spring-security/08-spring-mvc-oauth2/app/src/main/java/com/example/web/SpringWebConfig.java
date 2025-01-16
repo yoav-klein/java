@@ -10,22 +10,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Bean;
-import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.beans.BeansException;
 
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.ViewResolver;
-
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
-import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring6.SpringTemplateEngine;
@@ -35,46 +26,13 @@ import org.thymeleaf.spring6.view.ThymeleafViewResolver;
 @Configuration
 @EnableWebMvc
 @ComponentScan
-@PropertySource("file:/C:/Users/yoavk/.secrets/google-openid-credentials.properties")
-@EnableWebSecurity(debug=true)
 public class SpringWebConfig implements WebMvcConfigurer, ApplicationContextAware  {
     private ApplicationContext applicationContext;
-
-    @Value("${googleClientId}")
-    private String googleClientId;
-
-    @Value("${googleClientSecret}")
-    private String googleClientSecret;
 
     public void setApplicationContext(final ApplicationContext applicationContext)
             throws BeansException {
         this.applicationContext = applicationContext;
     }
-
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http)  throws Exception {
-        return http.oauth2Login(Customizer.withDefaults())
-            .authorizeHttpRequests(authorize -> authorize
-                .anyRequest().denyAll()
-            )
-            .build();
-    }
-
-    private ClientRegistration googleClientRegistration() {
-		return CommonOAuth2Provider.GOOGLE.getBuilder("google")
-			.clientId(googleClientId)
-			.clientSecret(googleClientSecret)
-			.build();
-	}
-
-    @Bean
-	public ClientRegistrationRepository clientRegistrationRepository() {
-		return new InMemoryClientRegistrationRepository(this.googleClientRegistration());
-	}
-
-
-
-
 
     @Bean    
     public SpringResourceTemplateResolver templateResolver(){
