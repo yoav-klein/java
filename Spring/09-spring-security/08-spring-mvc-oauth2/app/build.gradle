@@ -5,31 +5,42 @@
  * For more details on building Java & JVM projects, please refer to https://docs.gradle.org/8.5/userguide/building_java_projects.html in the Gradle documentation.
  */
 
+
+
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'war'
+    // id "org.gretty" version "4.1.4"
+    // id("online.colaba.ssh") version "1.9.6"
 }
+
+
 
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
 }
 
-dependencies {
-    implementation 'org.apache.tomcat:tomcat-servlet-api:10.1.24'
 
+dependencies {
+    // Use JUnit Jupiter for testing.
+    testImplementation libs.junit.jupiter
+
+    implementation 'org.springframework:spring-webmvc:6.1.1'
+    implementation 'org.apache.tomcat:tomcat-servlet-api:10.1.24'
     implementation group: 'org.springframework.security', name: 'spring-security-web', version: '6.4.2'
     implementation group: 'org.springframework.security', name: 'spring-security-core', version: '6.4.2'
     implementation group: 'org.springframework.security', name: 'spring-security-config', version: '6.4.2'
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: '6.4.2'
-    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-jose', version: '6.4.2'
-    implementation group: 'org.springframework', name: 'spring-context', version: '6.2.1'
-    implementation group: 'org.springframework', name: 'spring-core', version: '6.2.1'
+
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.4.11'
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.18.2'
-    implementation 'org.thymeleaf:thymeleaf:3.1.0.RELEASE'
+    implementation group: 'org.thymeleaf', name: 'thymeleaf-spring6', version: '3.1.2.RELEASE'
+
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // This dependency is used by the application.
+    implementation libs.guava
 }
-    
 
 // Apply a specific Java toolchain to ease working on different environments.
 java {
@@ -37,7 +48,6 @@ java {
         languageVersion = JavaLanguageVersion.of(17)
     }
 }
-
 
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
