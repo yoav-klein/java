@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Document</title>
+    <style>
+        .fieldError {
+            border: 1px solid red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hello Yoav</span></h1>
+    
+    <form action="person" method="post" th:object="${dto}">
+        <div th:each="person, personStat : *{persons}">
+            <label for="firstName">First Name</label>
+            <input type="text" th:field="*{persons[__${personStat.index}__].firstName}">
+            <br>
+            <label for="lastName">Last Name</label>
+            <input type="text" th:field="*{persons[__${personStat.index}__].lastName}">
+            <br>
+            <label for="age">Age</label>
+            <input type="text" th:field="*{persons[__${personStat.index}__].age}">
+        </div>
+        
+        <br>
+        <button type="submit" name="save">Create</button>
+
+    </form>
+</body>
+</html>
