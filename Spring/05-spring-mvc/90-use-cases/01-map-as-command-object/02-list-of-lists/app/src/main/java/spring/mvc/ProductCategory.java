@@ -7,6 +7,11 @@ public class ProductCategory {
     private Category category;
     private List<Product> products = new ArrayList<>();
 
+    public ProductCategory(Category category, List<Product> products) {
+        this.category = category;
+        this.products = products;
+    }
+
     public Category getCategory() {
         return category;
     }

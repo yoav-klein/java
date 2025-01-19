@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,32 +30,16 @@ public class WebController {
     @Autowired
     ProductService productService;
 
-    private ProductCategoryDto init() {
-        ProductCategoryDto dto = new ProductCategoryDto();
-        List<ProductCategory> list = dto.getProductCategories();
-        for(Category category : Category.values()) {
-            ProductCategory pc = new ProductCategory();
-            pc.setCategory(category);
-            list.add(pc);
-        }
-
-        return dto;
-    }
-
     @RequestMapping("/")
     public String home(Model model) {
-
         List<Product> allProducts = productService.getAllProducts();
-        ProductCategoryDto productCategoryDto = init();
-        List<ProductCategory> list = productCategoryDto.getProductCategories();
-        for(Product p : allProducts) {
-            for(ProductCategory pc : list) {
-                if(pc.getCategory() == p.getCategory()) {
-                    pc.getProducts().add(p);
-                }
-            }
-        }
+        ProductCategoryDto productCategoryDto = new ProductCategoryDto();
+        List<ProductCategory> productCategoryList = productCategoryDto.getProductCategories();
 
+        allProducts.stream()
+            .collect(Collectors.groupingBy(Product::getCategory))
+                .forEach((k, v) -> { productCategoryList.add(new ProductCategory(k, v)); });
+        
         model.addAttribute("productCategoryDto", productCategoryDto);
         
         ProductQuantityDto productQuantityDto = new ProductQuantityDto();
