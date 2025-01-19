@@ -4,14 +4,14 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class ProductQuantityDto {
-    private List<ProductQuantityCategory> productQuantityCategories = new ArrayList<>();
+    private List<List<ProductQuantity>> productQuantities = new ArrayList<>();
 
-    public List<ProductQuantityCategory> getProductQuantityCategories() {
-        return productQuantityCategories;
+    public List<List<ProductQuantity>> getProductQuantities() {
+        return productQuantities;
     }
 
-    public void getProductQuantityCategories(List<ProductQuantityCategory> productQuantities) {
-        this.productQuantityCategories = productQuantities;
+    public void setProductQuantities(List<List<ProductQuantity>> productQuantities) {
+        this.productQuantities = productQuantities;
     }
 
 }

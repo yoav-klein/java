@@ -70,13 +70,13 @@ public class WebController {
             return "index";
         }
 
-        List<ProductQuantityCategory> pqcList = productQuantityDto.getProductQuantityCategories();
-        for(ProductQuantityCategory pqc : pqcList) {
-            List<ProductQuantity> pqList = pqc.getProductQuantities();
-            for(ProductQuantity pq : pqList) {
-                System.out.println("productId: " + pq.getProductId() + ", quantity: " + pq.getQuantity());
+        List<List<ProductQuantity>> list = productQuantityDto.getProductQuantities();
+        for(List<ProductQuantity> sublist : list) {
+            for(ProductQuantity pc : sublist) {
+                System.out.println("productId: " + pc.getProductId() + ", quantity: " + pc.getQuantity());
             }
         }
+
         return "redirect:/";
     }
 
