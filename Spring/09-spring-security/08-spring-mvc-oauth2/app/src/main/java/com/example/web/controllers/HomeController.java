@@ -8,19 +8,27 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import  org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 
 
 @Controller
 public class HomeController {
     @RequestMapping("/")
-    public String sayHello(Model model, @AuthenticationPrincipal OAuth2User user) {
+    public String sayHello(Model model, @AuthenticationPrincipal Object user) {
         
-        for(String key : user.getAttributes().keySet()) {
-            System.out.println(key + ": " + user.getAttributes().get(key));
+        if(user instanceof OAuth2User) {
+            OAuth2User oauth2user = (OAuth2User)user;
+            for(String key : oauth2user.getAttributes().keySet()) {
+                System.out.println(key + ": " + oauth2user.getAttributes().get(key));
+            }
+    
+            model.addAttribute("name", oauth2user.getAttribute("name"));
+            model.addAttribute("pictureUrl", oauth2user.getAttribute("picture"));
+        } else {
+            User reguser = (User)user;
+            model.addAttribute("name", reguser.getUsername());
         }
-
-        model.addAttribute("name", user.getAttribute("name"));
-        model.addAttribute("pictureUrl", user.getAttribute("picture"));
         return "index"; // This corresponds to the view name
     }
    

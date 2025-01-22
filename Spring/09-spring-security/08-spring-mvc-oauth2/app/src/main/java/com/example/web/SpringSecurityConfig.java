@@ -11,6 +11,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
@@ -28,6 +33,7 @@ public class SpringSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http)  throws Exception {
         return http.oauth2Login(Customizer.withDefaults())
+            .formLogin(Customizer.withDefaults())
             .authorizeHttpRequests(authorize -> authorize
                 .anyRequest().authenticated()
             )
@@ -45,6 +51,21 @@ public class SpringSecurityConfig {
 	public ClientRegistrationRepository clientRegistrationRepository() {
 		return new InMemoryClientRegistrationRepository(this.googleClientRegistration());
 	}
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+            UserDetails user = User.withDefaultPasswordEncoder()
+                    .username("user")
+                    .password("password")
+                    .roles("USER")
+                    .build();
+            UserDetails admin = User.withDefaultPasswordEncoder()
+                    .username("admin")
+                    .password("password")
+                    .roles("ADMIN", "USER")
+                    .build();
+            return new InMemoryUserDetailsManager(user, admin);
+    }
 
 
     
