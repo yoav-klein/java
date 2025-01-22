@@ -3,10 +3,8 @@
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.Headers;
 
 import java.net.InetSocketAddress;
-import java.util.List;
 import java.io.IOException;
 import java.io.OutputStream;
 
