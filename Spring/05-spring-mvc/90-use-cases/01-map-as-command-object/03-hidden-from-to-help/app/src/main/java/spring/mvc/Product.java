@@ -1,6 +1,6 @@
 package spring.mvc;
 
-public class ListItem {
+public class Product {
     private String name;
 
     public String getName() {
@@ -11,9 +11,9 @@ public class ListItem {
         this.name = name;
     }
 
-    public ListItem() {}
+    public Product() {}
 
-    public ListItem(String name) {
+    public Product(String name) {
         this.name =  name;
     }
     

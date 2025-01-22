@@ -54,6 +54,7 @@ public class WebController {
             System.out.println("ERRORRS");
             return "index";
         }
+        System.out.println("==============");
 
         List<List<ProductQuantity>> list = productQuantityDto.getProductQuantities();
         for(List<ProductQuantity> sublist : list) {

@@ -1,4 +1,4 @@
-# MVC Template
+# OAuth2 with Spring MVC
 ---
 
-This directory contains a skeleton of a Spring MVC application. Whenever you need to start, take this as your basis.
+This is a Spring MVC application that uses OAuth2 (more specifically - OpenID Connect) to authenticate users.

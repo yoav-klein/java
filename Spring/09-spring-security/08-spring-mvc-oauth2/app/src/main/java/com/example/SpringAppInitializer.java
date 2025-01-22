@@ -30,7 +30,6 @@ public class SpringAppInitializer extends AbstractAnnotationConfigDispatcherServ
 	public Filter[] getServletFilters() {
 		DelegatingFilterProxy delegatingFilterProxy = new DelegatingFilterProxy();
 		delegatingFilterProxy.setTargetBeanName("springSecurityFilterChain");
-		/* delegatingFilterProxy.setTargetFilterLifecycle(true); // Enable lazy initialization */
 		return new Filter[] { delegatingFilterProxy };
 	}
 }

@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
     <title>Document</title>
 </head>
 <body>
@@ -12,10 +11,7 @@
     <form th:object="${fullList}" method="post" th:action="@{/update}">
         <article th:each="category : *{list}">
             <div th:each="item,itemStat : ${category.value}">
-                <!-- <p th:text="${item}"></p> -->
-                 <!-- <input type="text" th:field="*{list[__${category.key}__][__${itemStat.index}__].name}"> -->
-                 <input type="text" th:field="*{list[__${category.key}__][__${itemStat.index}__]}">
-                 
+                 <input type="text" th:field="*{list[__${category.key}__][__${itemStat.index}__].name}">
             </div>
         </article>
         <input type="submit">
