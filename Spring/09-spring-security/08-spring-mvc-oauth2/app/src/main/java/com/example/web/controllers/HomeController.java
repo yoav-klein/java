@@ -4,24 +4,70 @@
 package com.example.web.controllers;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import  org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 
 
 @Controller
 public class HomeController {
+    @Autowired
+    private OAuth2AuthorizedClientService authorizedClientService;
+
+    @Autowired
+    ApplicationContext context;
+
+    @Autowired
+    String mySuperStrangeBean;
+
+    @Autowired
+    ClientRegistrationRepository repository;
+
     @RequestMapping("/")
-    public String sayHello(Model model, @AuthenticationPrincipal Object user) {
+    public String sayHello(Model model, @AuthenticationPrincipal Object user, Authentication authentication) {
         
         if(user instanceof OAuth2User) {
             OAuth2User oauth2user = (OAuth2User)user;
             for(String key : oauth2user.getAttributes().keySet()) {
                 System.out.println(key + ": " + oauth2user.getAttributes().get(key));
             }
+
+            // get the AccessToken of the user
+            OAuth2AuthorizedClient authorizedClient =
+            this.authorizedClientService.loadAuthorizedClient("google", authentication.getName());
+
+            OAuth2AccessToken accessToken = authorizedClient.getAccessToken();
+
+            System.out.println("======== SCOPES");
+            for(String key: accessToken.getScopes()) {
+                System.out.println(key);
+            }
+            System.out.println("======== END SCOPES");
+
+            // List all Beans available in the ApplicationContext
+
+            System.out.println ("===== BEANS  START  ========");
+            for(String bean : context.getBeanDefinitionNames()) {
+                System.out.println(bean);
+            }
+            System.out.println ("===== BEANS  END  ========");
+            System.out.println ("===== STRANGE BEAN: " + this.mySuperStrangeBean);
+            
+            System.out.println("CLIENT REGISTRAITON: " + repository.findByRegistrationId("google").getClientName());
+            
+            System.out.println ("===== PARENT BEAN FACTORY  ========");
+            System.out.println (context.getParentBeanFactory());
     
             model.addAttribute("name", oauth2user.getAttribute("name"));
             model.addAttribute("pictureUrl", oauth2user.getAttribute("picture"));

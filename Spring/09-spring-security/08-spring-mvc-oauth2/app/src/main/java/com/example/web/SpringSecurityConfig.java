@@ -5,6 +5,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -29,6 +31,11 @@ public class SpringSecurityConfig {
     @Value("${googleClientSecret}")
     private String googleClientSecret;
 
+    
+    @Bean("mySuperStrangeBean")
+    public String mySuperStrangeBean() {
+        return "Hello";
+    }
     
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http)  throws Exception {
@@ -66,6 +73,14 @@ public class SpringSecurityConfig {
                     .build();
             return new InMemoryUserDetailsManager(user, admin);
     }
+
+    // we create this bean so it'll be available in the Controller class
+    // so we can access the AccessToken
+    @Bean
+	public OAuth2AuthorizedClientService authorizedClientService(
+			ClientRegistrationRepository clientRegistrationRepository) {
+		return new InMemoryOAuth2AuthorizedClientService(clientRegistrationRepository);
+	}
 
 
     
