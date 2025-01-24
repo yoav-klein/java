@@ -16,7 +16,7 @@ import com.mysql.cj.jdbc.MysqlDataSource;
 
 public class App {
 
-    public static DataSource createConnection() {
+    public static DataSource createDataSource() {
         String dbUrl = "jdbc:mysql://localhost:3306/users";
         String dbUser = "yoav";
         String dbPassword = "yoav";
@@ -35,7 +35,7 @@ public class App {
     public static void main(String[] args)  {
         
         // we create the connection using the DriverManager.getConnection
-        try(Connection conn = createConnection().getConnection()) {
+        try(Connection conn = createDataSource().getConnection()) {
 
             // we can check if the connection is good
             System.out.println("isValid: " + conn.isValid(0));
