@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
+
 @Configuration
 @ComponentScan
 public class SpringBusinessConfig implements WebMvcConfigurer {
@@ -17,9 +18,24 @@ public class SpringBusinessConfig implements WebMvcConfigurer {
         super();
     }
 
-    @Bean
+    @Bean("systemDataSource")
     public DataSource systemDataSource() {
         String dbUrl = "jdbc:mysql://localhost:3306/tenant_system";
+        String dbUser = "yoav";
+        String dbPassword = "yoav";
+
+        MysqlDataSource mysqlDS = new MysqlDataSource();
+        mysqlDS.setURL(dbUrl);
+        mysqlDS.setUser(dbUser);
+        mysqlDS.setPassword(dbPassword);
+
+        return mysqlDS;
+        
+    }
+
+    @Bean("generalDataSource")
+    public DataSource generalDataSource() {
+        String dbUrl = "jdbc:mysql://localhost:3306";
         String dbUser = "yoav";
         String dbPassword = "yoav";
 
