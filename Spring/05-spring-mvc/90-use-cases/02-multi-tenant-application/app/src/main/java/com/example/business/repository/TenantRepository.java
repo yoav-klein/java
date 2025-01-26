@@ -46,7 +46,7 @@ public class TenantRepository {
         this.systemJdbcTemplate.update(CREATE_TENANTS, tenantId, tenantName, userName);
         joinToTenant(tenantId, userName);
 
-        generalJdbcTemplate.execute("CREATE DATABASE abc");
+        generalJdbcTemplate.execute("CREATE DATABASE " + tenantId);
         // create tables in database
     }
 

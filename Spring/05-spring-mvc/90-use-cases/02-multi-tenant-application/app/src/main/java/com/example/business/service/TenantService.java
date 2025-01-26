@@ -1,6 +1,7 @@
 package com.example.business.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import com.example.business.repository.TenantRepository;
 
 @Service
 public class TenantService {
-    private static int uid = 0;
 
     @Autowired
     TenantRepository tenantRepository;    
@@ -20,7 +20,7 @@ public class TenantService {
     }
 
     public void createTenant(String tenantName, String owner) {
-        tenantRepository.createTenant(String.valueOf(++uid), tenantName, owner);
+        tenantRepository.createTenant(UUID.randomUUID().toString().replace("-", ""), tenantName, owner);
     }
 
     public Tenant getTenantById(String id) {
