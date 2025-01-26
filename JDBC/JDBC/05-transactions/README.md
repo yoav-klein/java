@@ -1,9 +1,6 @@
-# PreparedStatement
+# Transactions
 ---
 
-`PreparedStatement` is a subtype of `Statement` that adds the following advantages:
-1. Unlike a Statement, it is given an SQL statement when it's created. In most cases, the statement will be sent to the DBMS right away
-and be compiled there, so when it's executed, it's already compiled.
-2. It allows you to parameterize your statements.
-3. It protects you from SQL injections. The inserted arguments are never treated as SQL code, but only as values.
+There are situations in which you need to run several statements as one unit, where either all operations complete successfully, or neither is executed.
 
+For these situations, you use _transactions_. A transaction is a set of SQL operations that are executed as a unit.
