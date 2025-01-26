@@ -9,13 +9,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.example.business.service.TenantService;
 
 @Controller
 public class HomeController {
     
+    @Autowired
+    TenantService tenantService;
+
+
     @RequestMapping("/")
     public String sayHello(Model model, @AuthenticationPrincipal User user) {
         model.addAttribute("name", user.getUsername());
+        model.addAttribute("tenants", tenantService.getAllTenants());
+        
         return "index"; // This corresponds to the view name
     }
    

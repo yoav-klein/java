@@ -32,17 +32,22 @@ public class SpringSecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-            UserDetails user = User.withDefaultPasswordEncoder()
-                    .username("user")
-                    .password("password")
+            UserDetails yoav = User.withDefaultPasswordEncoder()
+                    .username("yoav")
+                    .password("yoav")
                     .roles("USER")
                     .build();
-            UserDetails admin = User.withDefaultPasswordEncoder()
-                    .username("admin")
-                    .password("password")
+            UserDetails dikla = User.withDefaultPasswordEncoder()
+                    .username("dikla")
+                    .password("dikla")
                     .roles("ADMIN", "USER")
                     .build();
-            return new InMemoryUserDetailsManager(user, admin);
+            UserDetails tamar = User.withDefaultPasswordEncoder()
+                    .username("tamar")
+                    .password("tamar")
+                    .roles("ADMIN", "USER")
+                    .build();
+            return new InMemoryUserDetailsManager(yoav, dikla, tamar);
     }
 
 }

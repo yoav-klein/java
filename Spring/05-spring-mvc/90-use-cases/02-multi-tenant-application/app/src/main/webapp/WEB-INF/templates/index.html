@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Hello <span th:text="${name}">David</span></h1>
+
+    <h2>Your Tenants</h2>
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Owner</th>
+        </tr>
+        <tr th:each="tenant: ${tenants}">
+            <td th:text="${tenant.id}"></td>
+            <td th:text="${tenant.name}"></td>
+            <td th:text="${tenant.ownerId}"></td>
+        </tr>
+    </table>
+    
+    <a th:href="@{/tenant/create}">Create new tenant</a>
+    <a th:href="@{/tenant/join}">Join tenant</a>
+    
+</body>
+</html>
