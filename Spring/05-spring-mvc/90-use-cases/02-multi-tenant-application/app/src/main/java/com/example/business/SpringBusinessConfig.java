@@ -18,22 +18,7 @@ public class SpringBusinessConfig implements WebMvcConfigurer {
         super();
     }
 
-    @Bean("systemDataSource")
-    public DataSource systemDataSource() {
-        String dbUrl = "jdbc:mysql://localhost:3306/tenant_system";
-        String dbUser = "yoav";
-        String dbPassword = "yoav";
-
-        MysqlDataSource mysqlDS = new MysqlDataSource();
-        mysqlDS.setURL(dbUrl);
-        mysqlDS.setUser(dbUser);
-        mysqlDS.setPassword(dbPassword);
-
-        return mysqlDS;
-        
-    }
-
-    @Bean("generalDataSource")
+    @Bean
     public DataSource generalDataSource() {
         String dbUrl = "jdbc:mysql://localhost:3306";
         String dbUser = "yoav";

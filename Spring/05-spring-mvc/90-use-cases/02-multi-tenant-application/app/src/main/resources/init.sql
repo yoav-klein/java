@@ -10,6 +10,7 @@ CREATE TABLE tenant (id varchar(50) PRIMARY KEY,
 
 CREATE TABLE tenant_user(tenant_id VARCHAR(50) NOT NULL, user_id INT NOT NULL,
     FOREIGN KEY (tenant_id) REFERENCES tenant(id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+    UNIQUE (tenant_id, user_id)
 );
 
