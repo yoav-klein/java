@@ -49,7 +49,8 @@ public class TenantRepository {
     }
 
     public void createTenant(String tenantId, String tenantName, String userName) {
-        try(Connection conn = this.dataSource.getConnection()) {
+        this.jdbcTemplate.execute((Connection conn) -> {
+            
             conn.setAutoCommit(false);
 
             try(PreparedStatement pstmt1 = conn.prepareStatement(CREATE_TENANT_IN_TENANT_TABLE);
@@ -71,17 +72,10 @@ public class TenantRepository {
                 
                 
                 // CREATE DATABASE causes an implicit commit, so we don't need to call commit
-                stmt.execute("CREATE DATABASE " + tenantId);
-
-            } catch(Exception e) {
-                System.out.println("Caught exception, rollback");
-                conn.rollback();
-                throw e;
+                return stmt.execute("CREATE DATABASE " + tenantId);
             }
+        });
         
-        } catch(SQLException e) {
-            System.out.println("SQL exception" + e);
-        }
     }
 
     public void joinToTenant(String tenantId, String userName) {

@@ -5,7 +5,9 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 
+import com.example.business.exception.UserAlreadyInTenantException;
 import com.example.business.model.Tenant;
 import com.example.business.repository.TenantRepository;
 
@@ -28,6 +30,10 @@ public class TenantService {
     }
 
     public void joinToTenant(String tenantId, String userName) {
-        tenantRepository.joinToTenant(tenantId, userName);
+        try {
+            tenantRepository.joinToTenant(tenantId, userName);
+        } catch(DuplicateKeyException e) {
+            throw new UserAlreadyInTenantException();
+        }
     }
 }

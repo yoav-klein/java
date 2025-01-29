@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.example.business.exception.UserAlreadyInTenantException;
 import com.example.business.service.TenantService;
 
 @Controller
@@ -42,7 +43,12 @@ public class TenantController {
 
     @PostMapping("/join")
     public String joinTenant(@AuthenticationPrincipal User user, @RequestParam("id") String id) {
-        tenantService.joinToTenant(id, user.getUsername());
+
+        try {
+            tenantService.joinToTenant(id, user.getUsername());
+        } catch(UserAlreadyInTenantException e) {
+            return "user-already-in-tenant";
+        }
 
         return "redirect:/";
     }

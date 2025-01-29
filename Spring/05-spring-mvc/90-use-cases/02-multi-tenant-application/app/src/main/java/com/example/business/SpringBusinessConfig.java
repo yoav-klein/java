@@ -8,6 +8,7 @@ import com.mysql.cj.jdbc.MysqlDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 
 
 
@@ -32,4 +33,5 @@ public class SpringBusinessConfig implements WebMvcConfigurer {
         return mysqlDS;
         
     }
+
 }
