@@ -24,6 +24,8 @@ public class TenantRepository {
     private static final String GET_ALL_TENANTS = "SELECT * FROM tenant_system.tenant";
     private static final String CREATE_TENANT_IN_TENANT_TABLE = "INSERT INTO tenant_system.tenant VALUES(?, ?, (SELECT id FROM tenant_system.user WHERE name = ?))";
     private static final String JOIN_USER_TO_TENANT = "INSERT INTO tenant_system.tenant_user VALUES(?, (SELECT id FROM tenant_system.user WHERE name = ?))";
+    private static final String GET_ALL_TENANTS_FOR_USER = "SELECT * FROM tenant_system.tenant WHERE id IN " + 
+        "(SELECT tenant_id FROM tenant_system.tenant_user WHERE user_id = (SELECT id FROM tenant_system.user WHERE name = ?))";
     
     private DataSource dataSource;
     private JdbcTemplate jdbcTemplate;
@@ -46,6 +48,10 @@ public class TenantRepository {
 
     public List<Tenant> getAllTenants() {
         return this.jdbcTemplate.query(GET_ALL_TENANTS, tenantRowMapper);
+    }
+
+    public List<Tenant> getAllTenantsForUser(String userName) {
+        return this.jdbcTemplate.query(GET_ALL_TENANTS_FOR_USER, tenantRowMapper, userName);
     }
 
     public void createTenant(String tenantId, String tenantName, String userName) {

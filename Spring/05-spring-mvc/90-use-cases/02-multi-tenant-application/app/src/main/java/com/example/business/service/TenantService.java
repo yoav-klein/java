@@ -17,8 +17,8 @@ public class TenantService {
     @Autowired
     TenantRepository tenantRepository;    
 
-    public List<Tenant> getAllTenants() {
-        return tenantRepository.getAllTenants();
+    public List<Tenant> getAllTenantsForUser(String userName) {
+        return tenantRepository.getAllTenantsForUser(userName);
     }
 
     public void createTenant(String tenantName, String owner) {

@@ -23,7 +23,7 @@ public class HomeController {
     @RequestMapping("/")
     public String sayHello(Model model, @AuthenticationPrincipal User user) {
         model.addAttribute("name", user.getUsername());
-        model.addAttribute("tenants", tenantService.getAllTenants());
+        model.addAttribute("tenants", tenantService.getAllTenantsForUser(user.getUsername()));
         
         return "index"; // This corresponds to the view name
     }
