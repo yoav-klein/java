@@ -10,6 +10,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 
 import java.util.Collections;
 
@@ -19,6 +20,8 @@ import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.spring6.view.ThymeleafViewResolver;
+
+import com.example.web.interceptor.TenantInterceptor;
 
 
 @Configuration
@@ -59,6 +62,13 @@ public class SpringWebConfig implements WebMvcConfigurer, ApplicationContextAwar
         viewResolver.setTemplateEngine(templateEngine());
         viewResolver.setCharacterEncoding("UTF-8");
         return viewResolver;
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new TenantInterceptor())
+                .addPathPatterns("/**")
+                .excludePathPatterns("/login");
     }
 
     

@@ -11,7 +11,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.example.business.model.Tenant;
 import com.example.business.service.TenantService;
+import com.example.helpers.TenantContext;
 
 @Controller
 public class HomeController {
@@ -24,6 +26,11 @@ public class HomeController {
     public String sayHello(Model model, @AuthenticationPrincipal User user) {
         model.addAttribute("name", user.getUsername());
         model.addAttribute("tenants", tenantService.getAllTenantsForUser(user.getUsername()));
+        
+        if(TenantContext.getCurrentTenantId() != null) {
+            model.addAttribute("currentTenant", TenantContext.getCurrentTenantId());
+
+        }
         
         return "index"; // This corresponds to the view name
     }

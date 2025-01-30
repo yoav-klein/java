@@ -1,12 +1,9 @@
 package com.example.business.repository;
 
 import java.util.List;
-import java.util.ArrayList;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 
 import javax.sql.DataSource;
@@ -14,8 +11,6 @@ import javax.sql.DataSource;
 import org.springframework.stereotype.Repository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.example.business.model.Tenant;
 
@@ -26,7 +21,10 @@ public class TenantRepository {
     private static final String JOIN_USER_TO_TENANT = "INSERT INTO tenant_system.tenant_user VALUES(?, (SELECT id FROM tenant_system.user WHERE name = ?))";
     private static final String GET_ALL_TENANTS_FOR_USER = "SELECT * FROM tenant_system.tenant WHERE id IN " + 
         "(SELECT tenant_id FROM tenant_system.tenant_user WHERE user_id = (SELECT id FROM tenant_system.user WHERE name = ?))";
-    
+    private static final String IS_USER_PART_OF_TENANT = "SELECT COUNT(*) AS COUNT FROM tenant_system.tenant_user WHERE tenant_id = ? AND user_id = (SELECT id FROM tenant_system.user WHERE name = ?)";
+    private static final String INIT_TENANT_TABLES = "CREATE TABLE %s.product(id INT PRIMARY KEY, name VARCHAR(50))";
+
+
     private DataSource dataSource;
     private JdbcTemplate jdbcTemplate;
     
@@ -75,10 +73,11 @@ public class TenantRepository {
     
                 rows = pstmt2.executeUpdate();
                 System.out.println("Rows affected: " + rows);
-                
-                
+
                 // CREATE DATABASE causes an implicit commit, so we don't need to call commit
-                return stmt.execute("CREATE DATABASE " + tenantId);
+                stmt.execute("CREATE DATABASE " + tenantId);
+
+                return stmt.execute(String.format(INIT_TENANT_TABLES, tenantId));
             }
         });
         
@@ -90,5 +89,9 @@ public class TenantRepository {
 
     public Tenant getTenantById(String id) {
         return new Tenant();
+    }
+
+    public boolean isUserPartOfTenant(String userName, String tenantId) {
+        return this.jdbcTemplate.queryForObject(IS_USER_PART_OF_TENANT, Integer.class, tenantId, userName) > 0;
     }
 }

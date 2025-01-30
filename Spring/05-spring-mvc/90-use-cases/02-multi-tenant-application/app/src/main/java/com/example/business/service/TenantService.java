@@ -36,4 +36,8 @@ public class TenantService {
             throw new UserAlreadyInTenantException();
         }
     }
+
+    public boolean isUserPartOfTenant(String userName, String tenantId) {
+        return tenantRepository.isUserPartOfTenant(userName, tenantId);
+    }
 }

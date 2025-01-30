@@ -3,6 +3,9 @@
  */
 package com.example.web.controllers;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.business.exception.UserAlreadyInTenantException;
 import com.example.business.service.TenantService;
+
+import com.example.helpers.Constants;
 
 @Controller
 @RequestMapping("/tenant")
@@ -48,6 +53,24 @@ public class TenantController {
             tenantService.joinToTenant(id, user.getUsername());
         } catch(UserAlreadyInTenantException e) {
             return "user-already-in-tenant";
+        }
+
+        return "redirect:/";
+    }
+
+    @GetMapping("/connect") 
+    public String connectToTenant(@AuthenticationPrincipal User user, 
+        @RequestParam("tenantId") String tenantId, 
+        HttpServletResponse response) {
+
+        if (tenantService.isUserPartOfTenant(user.getUsername(), tenantId)) {
+            System.out.println("SETTING COOKIE");
+            Cookie tenantCookie = new Cookie(Constants.TENANT_COOKIE_NAME, tenantId);
+            tenantCookie.setPath("/");
+            response.addCookie(tenantCookie);
+        } else {
+            System.out.println("NOT GOOD");
+            // return 403
         }
 
         return "redirect:/";

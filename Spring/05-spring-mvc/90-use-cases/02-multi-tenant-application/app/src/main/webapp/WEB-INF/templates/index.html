@@ -9,6 +9,11 @@
 <body>
     <h1>Hello <span th:text="${name}">David</span></h1>
 
+    <p th:if="${currentTenant != null}" th:text="'Your current tenant:' + ${currentTenant}">
+    </p>
+
+    <a th:href="@{/product}" th:if="${currentTenant != null}">Your products</a>
+
     <h2>Your Tenants</h2>
     <table>
         <tr>
@@ -18,7 +23,7 @@
         </tr>
         <tr th:each="tenant: ${tenants}">
             <td th:text="${tenant.id}"></td>
-            <td th:text="${tenant.name}"></td>
+            <td><a th:href="@{/tenant/connect(tenantId=${tenant.id})}" th:text="${tenant.name}"></a></td>
             <td th:text="${tenant.ownerId}"></td>
         </tr>
     </table>

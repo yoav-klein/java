@@ -7,13 +7,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.business.model.Product;
 import com.example.business.repository.ProductRepository;
+import com.example.helpers.TenantContext;
+import com.example.business.exception.NoTenantSelectedException;
 
+
+@Service
 public class ProductService {
 
     @Autowired
     ProductRepository productRepository;
 
     public List<Product> getAllProducts() {
-        return productRepository.getAllProducts();
+        String tenantId = TenantContext.getCurrentTenantId();
+
+        if(tenantId == null) {
+            throw new NoTenantSelectedException();
+        }
+
+        return productRepository.getAllProducts(tenantId);
     }
 }
