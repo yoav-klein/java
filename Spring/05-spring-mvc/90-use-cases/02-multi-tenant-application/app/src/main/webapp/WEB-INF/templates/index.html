@@ -9,11 +9,6 @@
 <body>
     <h1>Hello <span th:text="${name}">David</span></h1>
 
-    <p th:if="${currentTenant != null}" th:text="'Your current tenant:' + ${currentTenant}">
-    </p>
-
-    <a th:href="@{/product}" th:if="${currentTenant != null}">Your products</a>
-
     <h2>Your Tenants</h2>
     <table>
         <tr>

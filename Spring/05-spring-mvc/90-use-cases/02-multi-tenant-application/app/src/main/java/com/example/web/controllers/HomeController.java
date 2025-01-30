@@ -27,12 +27,13 @@ public class HomeController {
         model.addAttribute("name", user.getUsername());
         model.addAttribute("tenants", tenantService.getAllTenantsForUser(user.getUsername()));
         
-        if(TenantContext.getCurrentTenantId() != null) {
-            model.addAttribute("currentTenant", TenantContext.getCurrentTenantId());
-
-        }
-        
         return "index"; // This corresponds to the view name
+    }
+
+    @RequestMapping("/home")
+    public String tenantHome(Model model) {
+        model.addAttribute("currentTenant", TenantContext.getCurrentTenantId());
+        return "home";
     }
    
 }

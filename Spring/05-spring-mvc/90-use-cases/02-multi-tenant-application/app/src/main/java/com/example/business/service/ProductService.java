@@ -20,10 +20,6 @@ public class ProductService {
     public List<Product> getAllProducts() {
         String tenantId = TenantContext.getCurrentTenantId();
 
-        if(tenantId == null) {
-            throw new NoTenantSelectedException();
-        }
-
         return productRepository.getAllProducts(tenantId);
     }
 }

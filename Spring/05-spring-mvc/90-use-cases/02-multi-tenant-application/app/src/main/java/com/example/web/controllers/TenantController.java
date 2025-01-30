@@ -73,7 +73,7 @@ public class TenantController {
             // return 403
         }
 
-        return "redirect:/";
+        return "redirect:/home";
     }
    
 }

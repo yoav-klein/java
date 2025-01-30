@@ -67,7 +67,8 @@ public class SpringWebConfig implements WebMvcConfigurer, ApplicationContextAwar
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new TenantInterceptor())
-                .addPathPatterns("/**")
+                .addPathPatterns("/product/**")
+                .addPathPatterns("/home")
                 .excludePathPatterns("/login");
     }
 
