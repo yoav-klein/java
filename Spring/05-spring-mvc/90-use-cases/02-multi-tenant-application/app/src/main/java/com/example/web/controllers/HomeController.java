@@ -9,17 +9,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.business.model.Tenant;
 import com.example.business.service.TenantService;
 import com.example.helpers.TenantContext;
 
+import com.example.business.model.Product;
+import com.example.business.service.ProductService;
+
 @Controller
 public class HomeController {
     
     @Autowired
     TenantService tenantService;
+
+    @Autowired
+    ProductService productService;
 
 
     @RequestMapping("/")
@@ -32,7 +41,11 @@ public class HomeController {
 
     @RequestMapping("/home")
     public String tenantHome(Model model) {
+        List<Product> allProducts = productService.getAllProducts();
+
+        model.addAttribute("allProducts", allProducts);
         model.addAttribute("currentTenant", TenantContext.getCurrentTenantId());
+        
         return "home";
     }
    

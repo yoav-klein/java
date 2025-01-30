@@ -11,6 +11,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 import java.util.Collections;
 
@@ -34,6 +35,13 @@ public class SpringWebConfig implements WebMvcConfigurer, ApplicationContextAwar
             throws BeansException {
         this.applicationContext = applicationContext;
     }
+
+    @Override
+    public void addResourceHandlers(final ResourceHandlerRegistry registry) {
+        WebMvcConfigurer.super.addResourceHandlers(registry);
+        registry.addResourceHandler("/css/**").addResourceLocations("/css/");
+    }
+
 
 
     @Bean    

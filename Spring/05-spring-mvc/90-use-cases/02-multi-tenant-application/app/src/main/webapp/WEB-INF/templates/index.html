@@ -3,28 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" th:href="@{css/style.css}" href="../../css/style.css">
     <title>Document</title>
 </head>
 <body>
-    <h1>Hello <span th:text="${name}">David</span></h1>
+    <header>
+        <h1>My Multi-Tenant Application</h1>
+    </header>
+    <main>
+        <section th:unless="${tenants} == null" class="main_section">
+            <h2>Your Tenants</h2>
+            
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Owner</th>
+                </tr>
+                <tr th:each="tenant: ${tenants}">
+                    <td th:text="${tenant.id}">025a56b704134bfda753ecac2f323595</td>
+                    <td><a th:href="@{/tenant/connect(tenantId=${tenant.id})}" th:text="${tenant.name}">MyTenant</a></td>
+                    <td th:text="${tenant.ownerId}">Yoav</td>
+                </tr>
+            </table>
+        </section>
+        <section class="add_section">
+            <form method="post" th:action="@{/tenant/create}">
+                <label for="name">Tenant name: </label>
+                <input id="name" name="name" type="text">
+                <input type="submit">
+            </form>
+            <form method="post" th:action="@{/tenant/join}">
+                <label for="name">Tenant ID: </label>
+                <input id="id" name="id" type="text">
+                <input type="submit">
+            </form>
+        </section>
 
-    <h2>Your Tenants</h2>
-    <table>
-        <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Owner</th>
-        </tr>
-        <tr th:each="tenant: ${tenants}">
-            <td th:text="${tenant.id}"></td>
-            <td><a th:href="@{/tenant/connect(tenantId=${tenant.id})}" th:text="${tenant.name}"></a></td>
-            <td th:text="${tenant.ownerId}"></td>
-        </tr>
-    </table>
-    
-    <a th:href="@{/tenant/create}">Create new tenant</a>
-    <a th:href="@{/tenant/join}">Join tenant</a>
+    </main>
     
 </body>
 </html>

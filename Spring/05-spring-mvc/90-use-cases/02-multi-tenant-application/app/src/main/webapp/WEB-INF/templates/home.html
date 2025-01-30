@@ -9,6 +9,10 @@
     <h1>Home</h1>
     <p th:text="'Your current tenant:' + ${currentTenant}"></p>
 
-    <a th:href="@{/product}">Your products</a>
+    <ul>
+        <li th:each="product : ${allProducts}">
+            <p th:text="${product.name}"></p>
+        </li>
+    </ul>
 </body>
 </html>
