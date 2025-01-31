@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <!-- passing fragments of markup as fragment parameters -->
+    <head th:replace="base :: common_header(~{::title},~{::link})">
+
+        <title>Awesome - Main</title>
+      
+        <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+        <link rel="stylesheet" th:href="@{/themes/smoothness/jquery-ui.css}">
+      
+    </head>
+    <body>
+        <h1>Hello <span th:text="${name}">David</span></h1>
+        <h2>שלום</h2>
+
+        <!-- you can reference a fragment using CSS selector -->
+        <div th:insert="~{base :: .someblock}"></div>
+
+        <!-- or using the name given to it in the th:fragment -->
+        <div th:insert="~{base :: copy}"></div>
+
+        <!-- an example of parameterizable fragments -->
+        <div th:insert="~{base :: frag(hello, world)}"></div>
+        
+    </body>
+</html>

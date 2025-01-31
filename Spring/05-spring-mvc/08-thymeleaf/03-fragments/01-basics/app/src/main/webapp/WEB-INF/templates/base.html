@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:fragment="common_header(title,links)">
+
+        <title th:replace="${title}">The awesome application</title>
+      
+        <!-- Common styles and scripts -->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/style.css">
+      
+        <!--/* Per-page placeholder for additional links */-->
+        <th:block th:replace="${links}" />
+      
+      </head>
+    <body>
+        <div class="someblock">Hello world from template</div>
+        
+        <div th:fragment="copy">
+            &copy; 2025 Yoav
+        </div>
+
+        <div th:fragment="frag (onevar,twovar)">
+            <p th:text="${onevar} + ' - ' + ${twovar}">...</p>
+        </div>
+    </body>    
+</body>
+</html>
