@@ -22,7 +22,7 @@ public class TenantRepository {
     private static final String GET_ALL_TENANTS_FOR_USER = "SELECT * FROM tenant_system.tenant WHERE id IN " + 
         "(SELECT tenant_id FROM tenant_system.tenant_user WHERE user_id = (SELECT id FROM tenant_system.user WHERE name = ?))";
     private static final String IS_USER_PART_OF_TENANT = "SELECT COUNT(*) AS COUNT FROM tenant_system.tenant_user WHERE tenant_id = ? AND user_id = (SELECT id FROM tenant_system.user WHERE name = ?)";
-    private static final String INIT_TENANT_TABLES = "CREATE TABLE %s.product(id INT PRIMARY KEY, name VARCHAR(50))";
+    private static final String INIT_TENANT_TABLES = "CREATE TABLE %s.product(id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(50))";
 
 
     private DataSource dataSource;

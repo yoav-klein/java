@@ -2,18 +2,20 @@ package com.example.business.repository;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.sql.DataSource;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
-
 import com.example.business.model.Product;
+import com.example.web.forms.ProductDto;
 
 @Repository
 public class ProductRepository {
     private static final String GET_ALL_PRODUCTS_TEMPLATE = "SELECT * FROM %s.product";
+    private static final String ADD_PRODUCT = "INSERT INTO %s.product(name) VALUES(?)";
     
     private JdbcTemplate jdbcTemplate;
 
@@ -30,4 +32,8 @@ public class ProductRepository {
     public List<Product> getAllProducts(String tenantId) {
         return this.jdbcTemplate.query(String.format(GET_ALL_PRODUCTS_TEMPLATE, tenantId), productMapper);
     }
+
+    public void addProduct(String tenantId, ProductDto p) {
+        this.jdbcTemplate.update(String.format(ADD_PRODUCT, tenantId), p.getName());
+    } 
 }

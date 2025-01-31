@@ -9,7 +9,7 @@ import com.example.business.model.Product;
 import com.example.business.repository.ProductRepository;
 import com.example.helpers.TenantContext;
 import com.example.business.exception.NoTenantSelectedException;
-
+import com.example.web.forms.ProductDto;
 
 @Service
 public class ProductService {
@@ -21,5 +21,11 @@ public class ProductService {
         String tenantId = TenantContext.getCurrentTenantId();
 
         return productRepository.getAllProducts(tenantId);
+    }
+
+    public void addProduct(ProductDto p) {
+        String tenantId = TenantContext.getCurrentTenantId();
+
+        productRepository.addProduct(tenantId, p);
     }
 }

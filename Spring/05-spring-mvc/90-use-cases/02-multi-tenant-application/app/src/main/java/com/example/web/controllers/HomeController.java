@@ -6,19 +6,23 @@ package com.example.web.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.example.business.model.Product;
 import com.example.business.model.Tenant;
 import com.example.business.service.TenantService;
 import com.example.helpers.TenantContext;
 
-import com.example.business.model.Product;
+//import com.example.business.model.Product;
+import com.example.web.forms.ProductDto;
 import com.example.business.service.ProductService;
 
 @Controller
@@ -45,8 +49,16 @@ public class HomeController {
 
         model.addAttribute("allProducts", allProducts);
         model.addAttribute("currentTenant", TenantContext.getCurrentTenantId());
+        model.addAttribute("product", new ProductDto());
         
         return "home";
+    }
+
+    @PostMapping("/product/add")
+    public String addProduct(ProductDto p) {
+        productService.addProduct(p);
+
+        return "redirect:/home";
     }
    
 }

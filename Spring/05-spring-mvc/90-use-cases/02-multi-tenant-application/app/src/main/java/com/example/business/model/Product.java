@@ -8,6 +8,10 @@ public class Product {
         this.id = id;
         this.name = name;
     }
+    
+    public Product() {
+        
+    }
 
     public int getId() {
         return id;

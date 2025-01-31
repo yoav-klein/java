@@ -1,18 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Home</h1>
-    <p th:text="'Your current tenant:' + ${currentTenant}"></p>
 
-    <ul>
-        <li th:each="product : ${allProducts}">
-            <p th:text="${product.name}"></p>
-        </li>
-    </ul>
-</body>
+<!DOCTYPE html>
+<html lang="en" th:replace="~{base :: layout(~{::main})}">
+
+    <body>
+        <main class="main_section">
+            <h1>Home</h1>
+                <p th:text="'Your current tenant:' + ${currentTenant}"></p>
+
+                <ul>
+                    <li th:each="product : ${allProducts}">
+                        <p th:text="${product.name}"></p>
+                    </li>
+                </ul>
+                <form th:action="@{/product/add}" method="post" th:object="${product}">
+                    <label for="name">Name: </label>
+                    <input type="text" id="name" th:field="*{name}">
+                    <input type="submit">
+                </form>
+        </main>
+        
+    </body>
 </html>
