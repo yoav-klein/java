@@ -24,15 +24,10 @@ public class GoogleAuthenticationProvider implements AuthenticationProvider {
     }
 
     @Override
-	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-
-        System.out.println("In AuthenticationProvider");
-        
-        
+	public Authentication authenticate(Authentication authentication) throws AuthenticationException {        
         GoogleAuthenticationIdToken token = (GoogleAuthenticationIdToken)authentication;
         
         String idTokenString = token.getIdToken();
-        System.out.println(idTokenString);
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
             .setAudience(Collections.singletonList(WEB_CLIENT_ID))
             .build();
@@ -63,11 +58,9 @@ public class GoogleAuthenticationProvider implements AuthenticationProvider {
 
             GoogleAuthentication googleAuthentication = new GoogleAuthentication(details, idTokenString);
 
-            System.out.println("in AuthenticationProvider, returning");
             return googleAuthentication;
 
         } else {
-            System.out.println("BAD TOKEN");
             throw new BadCredentialsException("Bad ID token");
         }
 

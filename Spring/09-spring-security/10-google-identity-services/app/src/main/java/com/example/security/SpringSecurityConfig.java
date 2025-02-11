@@ -40,12 +40,6 @@ public class SpringSecurityConfig {
             .exceptionHandling(ex -> ex
                 .authenticationEntryPoint(new GoogleAuthenticationEntryPoint())
             )
-            .securityContext(securityContext -> securityContext
-			    .securityContextRepository(new DelegatingSecurityContextRepository(
-                    new RequestAttributeSecurityContextRepository(),
-                    new HttpSessionSecurityContextRepository()
-                ))
-            )
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/login/google-sign-in").permitAll()
                 .anyRequest().authenticated()

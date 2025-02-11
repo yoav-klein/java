@@ -20,12 +20,12 @@ public class GoogleAuthenticationIdToken extends AbstractAuthenticationToken {
 
     @Override
     public Object getPrincipal() {
-        return this.googleIdToken;
+        return null;
     }
-
+    
     @Override
     public Object getCredentials() {
-        return this.googleIdToken;
+        return null;
     }
 }
 
