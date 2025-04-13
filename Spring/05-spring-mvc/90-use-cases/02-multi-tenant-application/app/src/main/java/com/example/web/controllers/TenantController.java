@@ -28,22 +28,11 @@ public class TenantController {
     @Autowired
     TenantService tenantService;
 
-
-    @GetMapping("/create")
-    public String createTenantForm() {
-        return "new-tenant-form";
-    }
-
     @PostMapping("/create")
     public String createTenant(@AuthenticationPrincipal User user, @RequestParam("name") String tenantName) {
         tenantService.createTenant(tenantName, user.getUsername());
 
         return "redirect:/";
-    }
-
-    @GetMapping("/join")
-    public String joinTenantForm() {
-        return "join-tenant-form";
     }
 
     @PostMapping("/join")

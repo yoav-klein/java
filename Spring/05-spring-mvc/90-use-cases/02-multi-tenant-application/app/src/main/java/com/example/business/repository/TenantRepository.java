@@ -87,6 +87,7 @@ public class TenantRepository {
         this.jdbcTemplate.update(JOIN_USER_TO_TENANT, tenantId, userName);
     }
 
+    // TODO
     public Tenant getTenantById(String id) {
         return new Tenant();
     }
