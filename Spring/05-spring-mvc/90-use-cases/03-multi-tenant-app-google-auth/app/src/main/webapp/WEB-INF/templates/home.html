@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html lang="en" th:replace="~{base :: layout(~{::main})}">
+
+    <body>
+        <main>
+            <section class="main-section">
+                <p th:text="'Your current tenant:' + ${currentTenant}">Your tenant: 12345</p>
+                <h2>Products</h2>
+                <ul>
+                    <li th:each="product : ${allProducts}">
+                        <p th:text="${product.name}">Tomatoes</p>
+                    </li>
+                </ul>
+            </section>
+            <section class="add-section">
+                <div class="form-box">
+                    <h3>Add Product</h3>
+                    <form th:action="@{/product/add}" method="post" th:object="${product}">
+                        <div class="text-input">
+                            <label for="name">Name: </label>
+                            <input type="text" id="name" th:field="*{name}">
+                        </div>
+                        <input type="submit">
+                    </form>
+                </div>
+            </section>
+        </main>
+        
+    </body>
+</html>
