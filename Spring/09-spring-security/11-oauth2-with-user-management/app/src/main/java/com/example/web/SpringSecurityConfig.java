@@ -47,13 +47,13 @@ public class SpringSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http)  throws Exception {
         return http.oauth2Login(oauth2 ->
-                oauth2.userInfoEndpoint(userInfo ->
-                    userInfo.oidcUserService(databaseOidcUserService)
-                )
-            ).authorizeHttpRequests(authorize -> authorize
-                .anyRequest().authenticated()
+            oauth2.userInfoEndpoint(userInfo ->
+                userInfo.oidcUserService(databaseOidcUserService)
             )
-            .build();
+        ).authorizeHttpRequests(authorize -> authorize
+            .anyRequest().authenticated()
+        )
+        .build();
     }
 
     private ClientRegistration googleClientRegistration() {
