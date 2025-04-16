@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 import com.example.web.services.DatabaseOidcUserService;
+import com.example.web.services.RegistrationSuccessHandler;
 
 @ComponentScan
 @PropertySource("file:/C:/Users/yoavk/.secrets/google-openid-credentials.properties")
@@ -47,9 +48,7 @@ public class SpringSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http)  throws Exception {
         return http.oauth2Login(oauth2 ->
-            oauth2.userInfoEndpoint(userInfo ->
-                userInfo.oidcUserService(databaseOidcUserService)
-            )
+            oauth2.successHandler(new RegistrationSuccessHandler())
         ).authorizeHttpRequests(authorize -> authorize
             .anyRequest().authenticated()
         )
