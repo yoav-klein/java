@@ -30,15 +30,15 @@ public class TenantService {
         return tenantRepository.getTenantById(id);
     }
 
-    public void joinToTenant(String tenantId, String userName) {
+    public void joinToTenant(String tenantId, String userId) {
         try {
-            tenantRepository.joinToTenant(tenantId, userName);
+            tenantRepository.joinToTenant(tenantId, userId);
         } catch(DuplicateKeyException e) {
             throw new UserAlreadyInTenantException();
         }
     }
 
-    public boolean isUserPartOfTenant(String userName, String tenantId) {
-        return tenantRepository.isUserPartOfTenant(userName, tenantId);
+    public boolean isUserPartOfTenant(String userId, String tenantId) {
+        return tenantRepository.isUserPartOfTenant(userId, tenantId);
     }
 }

@@ -31,36 +31,34 @@ public class TenantController {
     @PostMapping("/create")
     public String createTenant(@AuthenticationPrincipal Object user, @RequestParam("name") String tenantName) {
         OAuth2User oauth2User = (OAuth2User)user;
-        for(String key : oauth2User.getAttributes().keySet()) {
-            System.out.println(key + ": " + oauth2User.getAttributes().get(key));
-        }
-
         String id = oauth2User.getAttribute("sub");
-
-        System.out.println("======= Creating tenant with user id: " + id);
         tenantService.createTenant(tenantName, id);
 
         return "redirect:/";
     }
 
     @PostMapping("/join")
-    public String joinTenant(@AuthenticationPrincipal Object user, @RequestParam("id") String id) {
-
-        /* try {
-            tenantService.joinToTenant(id, user.getUsername());
+    public String joinTenant(@AuthenticationPrincipal Object user, @RequestParam("id") String tenantId) {
+        OAuth2User oauth2User = (OAuth2User)user;
+        String userId = oauth2User.getAttribute("sub");
+        try {
+            tenantService.joinToTenant(tenantId, userId);
         } catch(UserAlreadyInTenantException e) {
             return "user-already-in-tenant";
-        } */
+        }
 
         return "redirect:/";
     }
 
     @GetMapping("/connect") 
     public String connectToTenant(@AuthenticationPrincipal Object user, 
-        @RequestParam("tenantId") String tenantId, 
-        HttpServletResponse response) {
+            @RequestParam("tenantId") String tenantId, 
+            HttpServletResponse response) {
+        
+        OAuth2User oauth2User = (OAuth2User)user;
+        String userId = oauth2User.getAttribute("sub");
 
-        /* if (tenantService.isUserPartOfTenant(user.getUsername(), tenantId)) {
+        if (tenantService.isUserPartOfTenant(userId, tenantId)) {
             System.out.println("SETTING COOKIE");
             Cookie tenantCookie = new Cookie(Constants.TENANT_COOKIE_NAME, tenantId);
             tenantCookie.setPath("/");
@@ -68,7 +66,7 @@ public class TenantController {
         } else {
             System.out.println("NOT GOOD");
             // return 403
-        } */
+        }
 
         return "redirect:/home";
     }

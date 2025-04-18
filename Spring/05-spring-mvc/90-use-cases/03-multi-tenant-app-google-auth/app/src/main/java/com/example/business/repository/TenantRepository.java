@@ -18,11 +18,10 @@ import com.example.business.model.Tenant;
 public class TenantRepository {
     private static final String GET_ALL_TENANTS = "SELECT * FROM tenant_system.tenant";
     private static final String CREATE_TENANT_IN_TENANT_TABLE = "INSERT INTO tenant_system.tenant VALUES(?, ?, ?)";
-    private static final String JOIN_USER_TO_TENANT_BY_NAME = "INSERT INTO tenant_system.tenant_user VALUES(?, (SELECT id FROM tenant_system.user WHERE name = ?))";
     private static final String JOIN_USER_TO_TENANT_BY_ID = "INSERT INTO tenant_system.tenant_user VALUES(?, ?)";
     private static final String GET_ALL_TENANTS_FOR_USER = "SELECT * FROM tenant_system.tenant WHERE id IN " + 
         "(SELECT tenant_id FROM tenant_system.tenant_user WHERE user_id = (SELECT id FROM tenant_system.user WHERE name = ?))";
-    private static final String IS_USER_PART_OF_TENANT = "SELECT COUNT(*) AS COUNT FROM tenant_system.tenant_user WHERE tenant_id = ? AND user_id = (SELECT id FROM tenant_system.user WHERE name = ?)";
+    private static final String IS_USER_PART_OF_TENANT = "SELECT COUNT(*) AS COUNT FROM tenant_system.tenant_user WHERE tenant_id = ? AND user_id = ?";
     private static final String INIT_TENANT_TABLES = "CREATE TABLE %s.product(id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(50))";
 
 
@@ -90,12 +89,11 @@ public class TenantRepository {
         this.jdbcTemplate.update(JOIN_USER_TO_TENANT_BY_ID, tenantId, userId);
     }
 
-    // TODO
     public Tenant getTenantById(String id) {
         return new Tenant();
     }
 
-    public boolean isUserPartOfTenant(String userName, String tenantId) {
-        return this.jdbcTemplate.queryForObject(IS_USER_PART_OF_TENANT, Integer.class, tenantId, userName) > 0;
+    public boolean isUserPartOfTenant(String userId, String tenantId) {
+        return this.jdbcTemplate.queryForObject(IS_USER_PART_OF_TENANT, Integer.class, tenantId, userId) > 0;
     }
 }

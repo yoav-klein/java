@@ -37,7 +37,13 @@ public class AutoRegistrationSuccessHandler implements AuthenticationSuccessHand
 
         // check if the user already exists in the database
         Optional<User> optionalUser = userService.getUserById(sub);
-        if(optionalUser.isPresent()) return;
+        if(optionalUser.isPresent()) {
+            System.out.println("AutoRegistrationSuccessHandler:: user exists!");
+            response.sendRedirect("/app");
+            return;
+        }
+        
+        System.out.println("AutoRegistrationSuccessHandler:: user does not exist!");
         
         // if not, add them to the database
         User user = new User(sub, name, email);
