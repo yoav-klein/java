@@ -16,9 +16,10 @@ import com.example.business.model.Tenant;
 
 @Repository
 public class TenantRepository {
-    // private static final String GET_ALL_TENANTS = "SELECT * FROM tenant_system.tenant";
-    private static final String CREATE_TENANT_IN_TENANT_TABLE = "INSERT INTO tenant_system.tenant VALUES(?, ?, (SELECT id FROM tenant_system.user WHERE name = ?))";
-    private static final String JOIN_USER_TO_TENANT = "INSERT INTO tenant_system.tenant_user VALUES(?, (SELECT id FROM tenant_system.user WHERE name = ?))";
+    private static final String GET_ALL_TENANTS = "SELECT * FROM tenant_system.tenant";
+    private static final String CREATE_TENANT_IN_TENANT_TABLE = "INSERT INTO tenant_system.tenant VALUES(?, ?, ?)";
+    private static final String JOIN_USER_TO_TENANT_BY_NAME = "INSERT INTO tenant_system.tenant_user VALUES(?, (SELECT id FROM tenant_system.user WHERE name = ?))";
+    private static final String JOIN_USER_TO_TENANT_BY_ID = "INSERT INTO tenant_system.tenant_user VALUES(?, ?)";
     private static final String GET_ALL_TENANTS_FOR_USER = "SELECT * FROM tenant_system.tenant WHERE id IN " + 
         "(SELECT tenant_id FROM tenant_system.tenant_user WHERE user_id = (SELECT id FROM tenant_system.user WHERE name = ?))";
     private static final String IS_USER_PART_OF_TENANT = "SELECT COUNT(*) AS COUNT FROM tenant_system.tenant_user WHERE tenant_id = ? AND user_id = (SELECT id FROM tenant_system.user WHERE name = ?)";
@@ -53,24 +54,25 @@ public class TenantRepository {
         return this.jdbcTemplate.query(GET_ALL_TENANTS_FOR_USER, tenantRowMapper, userName);
     }
 
-    public void createTenant(String tenantId, String tenantName, String userName) {
+    public void createTenant(String tenantId, String tenantName, String userId) {
+        System.out.println("==== tenant repository:: creating tenant: " + tenantName + " user: " + userId);
         this.jdbcTemplate.execute((Connection conn) -> {
             
             conn.setAutoCommit(false);
 
             try(PreparedStatement pstmt1 = conn.prepareStatement(CREATE_TENANT_IN_TENANT_TABLE);
-                PreparedStatement pstmt2 = conn.prepareStatement(JOIN_USER_TO_TENANT);
+                PreparedStatement pstmt2 = conn.prepareStatement(JOIN_USER_TO_TENANT_BY_ID);
                 Statement stmt = conn.createStatement()) {
 
                 pstmt1.setString(1, tenantId);
                 pstmt1.setString(2, tenantName);
-                pstmt1.setString(3, userName);
+                pstmt1.setString(3, userId);
                 
                 int rows = pstmt1.executeUpdate();
-                System.out.println("Rows affected: " + rows);            
+                System.out.println("Rows affected: " + rows);
                 
                 pstmt2.setString(1, tenantId);
-                pstmt2.setString(2, userName);
+                pstmt2.setString(2, userId);
     
                 rows = pstmt2.executeUpdate();
                 System.out.println("Rows affected: " + rows);
@@ -84,8 +86,8 @@ public class TenantRepository {
         
     }
 
-    public void joinToTenant(String tenantId, String userName) {
-        this.jdbcTemplate.update(JOIN_USER_TO_TENANT, tenantId, userName);
+    public void joinToTenant(String tenantId, String userId) {
+        this.jdbcTemplate.update(JOIN_USER_TO_TENANT_BY_ID, tenantId, userId);
     }
 
     // TODO

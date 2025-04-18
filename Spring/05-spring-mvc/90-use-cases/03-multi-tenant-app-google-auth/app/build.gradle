@@ -30,6 +30,8 @@ dependencies {
     implementation group: 'org.springframework.security', name: 'spring-security-web', version: '6.4.2'
     implementation group: 'org.springframework.security', name: 'spring-security-core', version: '6.4.2'
     implementation group: 'org.springframework.security', name: 'spring-security-config', version: '6.4.2'
+    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: '6.4.2'
+    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-jose', version: '6.4.2'
     implementation group: 'org.springframework', name: 'spring-jdbc', version: '6.1.11'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.18.2'
     implementation 'org.apache.tomcat:tomcat-servlet-api:10.1.24'

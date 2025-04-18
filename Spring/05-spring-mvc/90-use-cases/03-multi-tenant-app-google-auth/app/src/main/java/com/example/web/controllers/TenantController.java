@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -29,30 +29,38 @@ public class TenantController {
     TenantService tenantService;
 
     @PostMapping("/create")
-    public String createTenant(@AuthenticationPrincipal User user, @RequestParam("name") String tenantName) {
-        tenantService.createTenant(tenantName, user.getUsername());
+    public String createTenant(@AuthenticationPrincipal Object user, @RequestParam("name") String tenantName) {
+        OAuth2User oauth2User = (OAuth2User)user;
+        for(String key : oauth2User.getAttributes().keySet()) {
+            System.out.println(key + ": " + oauth2User.getAttributes().get(key));
+        }
+
+        String id = oauth2User.getAttribute("sub");
+
+        System.out.println("======= Creating tenant with user id: " + id);
+        tenantService.createTenant(tenantName, id);
 
         return "redirect:/";
     }
 
     @PostMapping("/join")
-    public String joinTenant(@AuthenticationPrincipal User user, @RequestParam("id") String id) {
+    public String joinTenant(@AuthenticationPrincipal Object user, @RequestParam("id") String id) {
 
-        try {
+        /* try {
             tenantService.joinToTenant(id, user.getUsername());
         } catch(UserAlreadyInTenantException e) {
             return "user-already-in-tenant";
-        }
+        } */
 
         return "redirect:/";
     }
 
     @GetMapping("/connect") 
-    public String connectToTenant(@AuthenticationPrincipal User user, 
+    public String connectToTenant(@AuthenticationPrincipal Object user, 
         @RequestParam("tenantId") String tenantId, 
         HttpServletResponse response) {
 
-        if (tenantService.isUserPartOfTenant(user.getUsername(), tenantId)) {
+        /* if (tenantService.isUserPartOfTenant(user.getUsername(), tenantId)) {
             System.out.println("SETTING COOKIE");
             Cookie tenantCookie = new Cookie(Constants.TENANT_COOKIE_NAME, tenantId);
             tenantCookie.setPath("/");
@@ -60,7 +68,7 @@ public class TenantController {
         } else {
             System.out.println("NOT GOOD");
             // return 403
-        }
+        } */
 
         return "redirect:/home";
     }

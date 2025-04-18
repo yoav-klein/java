@@ -10,8 +10,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 
-
-
 @Configuration
 @ComponentScan
 public class SpringBusinessConfig implements WebMvcConfigurer {

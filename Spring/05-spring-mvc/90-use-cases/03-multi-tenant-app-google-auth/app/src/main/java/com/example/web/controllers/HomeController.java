@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.List;
 
@@ -36,9 +36,10 @@ public class HomeController {
 
 
     @RequestMapping("/")
-    public String sayHello(Model model, @AuthenticationPrincipal User user) {
-        model.addAttribute("name", user.getUsername());
-        model.addAttribute("tenants", tenantService.getAllTenantsForUser(user.getUsername()));
+    public String sayHello(Model model, @AuthenticationPrincipal Object user) {
+        OAuth2User oauth2user = (OAuth2User)user;
+        model.addAttribute("name", oauth2user.getAttribute("name"));
+        model.addAttribute("tenants", tenantService.getAllTenantsForUser(oauth2user.getAttribute("name")));
         
         return "index"; // This corresponds to the view name
     }

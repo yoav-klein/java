@@ -21,8 +21,9 @@ public class TenantService {
         return tenantRepository.getAllTenantsForUser(userName);
     }
 
-    public void createTenant(String tenantName, String owner) {
-        tenantRepository.createTenant(UUID.randomUUID().toString().replace("-", ""), tenantName, owner);
+    public void createTenant(String tenantName, String ownerId) {
+        System.out.println("==== tenant service:: creating tenant: " + tenantName + " user: " + ownerId);
+        tenantRepository.createTenant(UUID.randomUUID().toString().replace("-", ""), tenantName, ownerId);
     }
 
     public Tenant getTenantById(String id) {
