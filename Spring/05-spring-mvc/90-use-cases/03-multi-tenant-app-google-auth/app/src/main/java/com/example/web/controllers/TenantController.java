@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import com.example.business.exception.UserAlreadyInTenantException;
 import com.example.business.service.TenantService;
@@ -48,6 +49,14 @@ public class TenantController {
         }
 
         return "redirect:/";
+    }
+
+    @GetMapping("/my-tenants")
+    public String getTenants(Model model, @AuthenticationPrincipal Object user) {
+        OAuth2User oauth2User = (OAuth2User)user;
+        model.addAttribute("tenants", tenantService.getAllTenantsForUser(oauth2User.getAttribute("sub")));
+
+        return "my-tenants.html";
     }
 
     @GetMapping("/connect") 

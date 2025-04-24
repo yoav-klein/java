@@ -18,9 +18,9 @@ import com.example.business.model.User;
 @Repository
 public class UserRepository {
 
-    private final String GET_USER_BY_EMAIL = "SELECT * FROM tenant_system.user WHERE email = ?";
-    private final String GET_USER_BY_ID = "SELECT * FROM tenant_system.user WHERE id = ?";
-    private final String ADD_USER = "INSERT INTO tenant_system.user VALUES(?, ?, ?)";
+    private final String GET_USER_BY_EMAIL = "SELECT * FROM tenant_system.users WHERE email = ?";
+    private final String GET_USER_BY_ID = "SELECT * FROM tenant_system.users WHERE id = ?";
+    private final String ADD_USER = "INSERT INTO tenant_system.users VALUES(?, ?, ?)";
 
     private DataSource dataSource;
     private JdbcTemplate jdbcTemplate;

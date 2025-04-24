@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{base :: layout(~{::main})}">
+
+    <body>
+        <main>
+            <section th:unless="${tenants} == null" class="main-section">
+                <h2>Your Tenants</h2>
+                
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Management Page</th>
+                    </tr>
+                    <tr th:each="tenant: ${tenants}">
+                        <td th:text="${tenant.id}">025a56b704134bfda753ecac2f323595</td>
+                        <td><a th:href="@{/tenant/connect(tenantId=${tenant.id})}" href="#" th:text="${tenant.name}">MyTenant</a></td>
+                        <td><a th:href="@{/tenant/management(tenantId=${tenant.id})}" href="#">Manage Tenant</a></td>
+                    </tr>
+                </table>
+            </section>
+            <section class="add-section">
+                <div class="form-box">
+                    <h3>Add Tenant</h3>
+                    <form method="post" th:action="@{/tenant/create}">
+                        <div class="text-input">
+                            <label for="name">Tenant name: </label>
+                            <input id="name" name="name" type="text">
+                        </div>
+                        <input type="submit" value="Add">
+                    </form>
+                    
+                </div>
+                
+    
+            </section>
+    
+        </main>
+        
+    </body>
+</html>

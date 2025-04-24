@@ -39,7 +39,6 @@ public class HomeController {
     public String sayHello(Model model, @AuthenticationPrincipal Object user) {
         OAuth2User oauth2user = (OAuth2User)user;
         model.addAttribute("name", oauth2user.getAttribute("name"));
-        model.addAttribute("tenants", tenantService.getAllTenantsForUser(oauth2user.getAttribute("name")));
         
         return "index"; // This corresponds to the view name
     }

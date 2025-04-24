@@ -16,11 +16,11 @@ import com.example.business.model.Tenant;
 
 @Repository
 public class TenantRepository {
-    private static final String GET_ALL_TENANTS = "SELECT * FROM tenant_system.tenant";
-    private static final String CREATE_TENANT_IN_TENANT_TABLE = "INSERT INTO tenant_system.tenant VALUES(?, ?, ?)";
-    private static final String JOIN_USER_TO_TENANT_BY_ID = "INSERT INTO tenant_system.tenant_user VALUES(?, ?)";
-    private static final String GET_ALL_TENANTS_FOR_USER = "SELECT * FROM tenant_system.tenant WHERE id IN " + 
-        "(SELECT tenant_id FROM tenant_system.tenant_user WHERE user_id = (SELECT id FROM tenant_system.user WHERE name = ?))";
+    private static final String GET_ALL_TENANTS = "SELECT * FROM tenant_system.tenants";
+    private static final String CREATE_TENANT_IN_TENANT_TABLE = "INSERT INTO tenant_system.tenants VALUES(?, ?)";
+    private static final String JOIN_USER_TO_TENANT_BY_ID = "INSERT INTO tenant_system.tenant_user(tenant_id, user_id, role) VALUES(?, ?, ?)";
+    private static final String GET_ALL_TENANTS_FOR_USER = "SELECT * FROM tenant_system.tenants WHERE id IN " + 
+        "(SELECT tenant_id FROM tenant_system.tenant_user WHERE user_id = ?)";
     private static final String IS_USER_PART_OF_TENANT = "SELECT COUNT(*) AS COUNT FROM tenant_system.tenant_user WHERE tenant_id = ? AND user_id = ?";
     private static final String INIT_TENANT_TABLES = "CREATE TABLE %s.product(id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(50))";
 
@@ -38,8 +38,7 @@ public class TenantRepository {
         Tenant tenant = new Tenant();
         tenant.setId(resultSet.getString("id"));
         tenant.setName(resultSet.getString("name"));
-        tenant.setOwnerId(resultSet.getString("owner_id"));
-
+        
         return tenant;
     };
 
@@ -49,8 +48,8 @@ public class TenantRepository {
         return this.jdbcTemplate.query(GET_ALL_TENANTS, tenantRowMapper);
     }
 
-    public List<Tenant> getAllTenantsForUser(String userName) {
-        return this.jdbcTemplate.query(GET_ALL_TENANTS_FOR_USER, tenantRowMapper, userName);
+    public List<Tenant> getAllTenantsForUser(String userId) {
+        return this.jdbcTemplate.query(GET_ALL_TENANTS_FOR_USER, tenantRowMapper, userId);
     }
 
     public void createTenant(String tenantId, String tenantName, String userId) {
@@ -65,19 +64,20 @@ public class TenantRepository {
 
                 pstmt1.setString(1, tenantId);
                 pstmt1.setString(2, tenantName);
-                pstmt1.setString(3, userId);
                 
                 int rows = pstmt1.executeUpdate();
                 System.out.println("Rows affected: " + rows);
-                
+                 
                 pstmt2.setString(1, tenantId);
                 pstmt2.setString(2, userId);
+                pstmt2.setString(3, "admin");
     
                 rows = pstmt2.executeUpdate();
                 System.out.println("Rows affected: " + rows);
 
                 // CREATE DATABASE causes an implicit commit, so we don't need to call commit
-                stmt.execute("CREATE DATABASE " + tenantId);
+                
+                stmt.execute("CREATE DATABASE " + tenantId); 
 
                 return stmt.execute(String.format(INIT_TENANT_TABLES, tenantId));
             }

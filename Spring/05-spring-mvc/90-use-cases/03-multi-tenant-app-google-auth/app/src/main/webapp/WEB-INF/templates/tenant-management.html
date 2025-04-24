@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{base :: layout(~{::main})}">
+
+    <body>
+        <main>
+            <h1 th:text="${tenant.name}"></h1>
+            <h2>Members</h2>
+            <ul th:each="member : ${members}">
+                <li>
+                    <span th:text="${member.name}"></span>
+                    <span th:if="${user.isAdmin}" th:text="Remove User"></span>
+                </li>
+            </ul>
+
+            <section th:if="${user.isAdmin}">
+                <h2>Invite a User</h2>
+                <div class="form-box">
+                    <h3>Invite User</h3>
+                    <form method="post" th:action="@{/tenant/invite}">
+                        <div class="text-input">
+                            <label for="userMail">User Mail: </label>
+                            <input id="userMail" name="email" type="text">
+                        </div>
+                        <input type="submit" value="Invite!">
+                    </form>
+                    
+                </div>
+            </section>
+            <section th:if="${user.isAdmin}">
+                <h2>Delete Tenant!</h2>
+                
+            </section>
+        </main>
+        
+    </body>
+</html>
