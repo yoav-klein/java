@@ -38,17 +38,11 @@ public class TenantController {
         return "redirect:/";
     }
 
-    @PostMapping("/join")
-    public String joinTenant(@AuthenticationPrincipal Object user, @RequestParam("id") String tenantId) {
+    @GetMapping("management")
+    public String manageTenant(Model model, @AuthenticationPrincipal Object user, @RequestParam("id") String tenantId) {
         OAuth2User oauth2User = (OAuth2User)user;
         String userId = oauth2User.getAttribute("sub");
-        try {
-            tenantService.joinToTenant(tenantId, userId);
-        } catch(UserAlreadyInTenantException e) {
-            return "user-already-in-tenant";
-        }
-
-        return "redirect:/";
+        
     }
 
     @GetMapping("/my-tenants")
