@@ -57,14 +57,12 @@ public class LoggingAspect {
         System.out.println("Before receving integer2");
     }
 
-    @Around("execution(* *(..))")
-    public void around(ProceedingJoinPoint pjp) {
-        System.out.println("Around: before");
-        try {
-            pjp.proceed();
-        } catch(Throwable e) {
-            System.out.println("Exception: " + e);
-        }
-        System.out.println("Around: after");
-    }
+    @Around("execution(* jazz(..))")
+	public Object aroundJazz(ProceedingJoinPoint pjp) throws Throwable {
+		System.out.println("Before jazz");
+		Object retVal = pjp.proceed();
+		System.out.println("After jazz");
+		// stop stopwatch
+		return retVal;
+	}
 }

@@ -23,5 +23,6 @@ public class App {
         bar.returningInteger();
         bar.receivingInteger(Integer.valueOf(3));
         bar.receivingIntegerAndMoreStuff(Integer.valueOf(3), "Hello world");
+        System.out.println(bar.jazz("Hello from main"));
     }
 }

@@ -18,4 +18,12 @@ public class Bar {
     public void receivingIntegerAndMoreStuff(Integer i, String s) {
         System.out.println("receiving integer and more stuff");
     }
+
+    public String jazz(String s) {
+        System.out.println("in jazz");
+        System.out.println(s);
+        return "Hello from jazz";
+    }
+
+    
 }
