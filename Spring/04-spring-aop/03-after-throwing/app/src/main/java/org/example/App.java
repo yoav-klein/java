@@ -8,9 +8,7 @@ public class App {
     
     public static void main(String[] args) {
         ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-        Foo foo = (Foo) context.getBean("foo");
-        foo.returnInteger();
-
+    
         try {
             foo.throwsException();
         } catch(Exception e) {
@@ -23,6 +21,5 @@ public class App {
             System.out.println("caught");
         }
 
-        System.out.println(foo.jazz("Hello from main"));
     }
 }
