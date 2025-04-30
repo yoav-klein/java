@@ -2,16 +2,10 @@ package org.example.model;
 
 public class Transaction {
     private int sum;
-    private int senderId;
-    private int receiverId;
+    private User sender;
+    private User receiver;
 
     public Transaction() {
-    }
-
-    public Transaction(int sum, int senderId, int receiverId) {
-        this.sum = sum;
-        this.senderId = senderId;
-        this.receiverId = receiverId;
     }
 
     public int getSum() {
@@ -20,17 +14,22 @@ public class Transaction {
     public void setSum(int sum) {
         this.sum = sum;
     }
-    public int getSenderId() {
-        return senderId;
+    public User getSender() {
+        return sender;
     }
-    public void setSenderId(int senderId) {
-        this.senderId = senderId;
+    public void setSender(User sender) {
+        this.sender = sender;
     }
-    public int getReceiverId() {
-        return receiverId;
+    public User getReceiver() {
+        return receiver;
     }
-    public void setReceiverId(int receiverId) {
-        this.receiverId = receiverId;
+    public void setReceiver(User receiver) {
+        this.receiver = receiver;
+    }
+
+    @Override
+    public String toString() {
+        return receiver.getName() + " Passed to " + sender.getName() + " Sum of: " + this.sum;
     }
     
 }

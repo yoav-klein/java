@@ -1,23 +1,23 @@
 package org.example.model;
 
 public class Account {
-    private int id;
+    private int sum;
     private User owner;
     
-    public Account(int id, User owner) {
-        this.id = id;
+    public Account(int sum, User owner) {
+        this.sum = sum;
         this.owner = owner;
     }
 
     public Account() {
     }
 
-    public int getId() {
-        return id;
+    public int getSum() {
+        return sum;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setSum(int sum) {
+        this.sum = sum;
     }
 
     public User getOwner() {
@@ -26,6 +26,11 @@ public class Account {
 
     public void setOwner(User owner) {
         this.owner = owner;
+    }
+
+    @Override
+    public String toString() {
+        return "User: " + this.owner.getName() + ", sum: " + this.sum;
     }
     
 }

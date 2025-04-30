@@ -5,7 +5,8 @@ package org.example;
 
 import java.util.List;
 
-import org.example.model.User;
+import org.example.model.Account;
+import org.example.model.Transaction;
 import org.example.service.TransactionService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -16,9 +17,20 @@ public class App {
         ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
         TransactionService transactionService = (TransactionService)context.getBean(TransactionService.class);
 
-        List<User> users = transactionService.getAllUsers();
-        for(User user : users) {
-            System.out.println(user.getName());
+        List<Account> accounts = transactionService.getAllAccounts();
+        for(Account account : accounts) {
+            System.out.println(account);
+        }
+
+        transactionService.transfer(1, 2, 100);
+
+        accounts = transactionService.getAllAccounts();
+        for(Account account : accounts) {
+            System.out.println(account);
+        }
+
+        for(Transaction t : transactionService.getAllTransactions()) {
+            System.out.println(t);
         }
         
     }
