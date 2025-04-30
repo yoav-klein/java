@@ -11,6 +11,7 @@ import org.example.service.TransactionService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+
 public class App {
 
     public static void main(String[] args) {
@@ -22,7 +23,14 @@ public class App {
             System.out.println(account);
         }
 
-        transactionService.transfer(1, 2, 100);
+        try {
+            transactionService.transfer(1, 2, 100, true);
+        } catch(Exception e) {}
+
+        try {
+            transactionService.transfer(1, 2, 100, false);
+        } catch(Exception e) {}
+
 
         accounts = transactionService.getAllAccounts();
         for(Account account : accounts) {
