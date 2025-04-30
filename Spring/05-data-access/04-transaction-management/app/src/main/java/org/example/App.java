@@ -3,6 +3,10 @@
  */
 package org.example;
 
+import java.util.List;
+
+import org.example.model.User;
+import org.example.service.TransactionService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -10,6 +14,12 @@ public class App {
 
     public static void main(String[] args) {
         ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+        TransactionService transactionService = (TransactionService)context.getBean(TransactionService.class);
+
+        List<User> users = transactionService.getAllUsers();
+        for(User user : users) {
+            System.out.println(user.getName());
+        }
         
     }
 }
