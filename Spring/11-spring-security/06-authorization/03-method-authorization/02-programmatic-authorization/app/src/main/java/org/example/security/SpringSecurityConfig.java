@@ -2,6 +2,7 @@
 package org.example.security;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -17,6 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity // EnableWebSecurity injects the HttpSecurity bean and probably other beans as well
 @EnableMethodSecurity
+@ComponentScan
 public class SpringSecurityConfig {
 
     @Bean
