@@ -1,16 +1,14 @@
 package org.example.business.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.ArrayList;
-
-import org.springframework.security.core.parameters.P;
-import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
 
 import org.example.business.model.Account;
 import org.example.business.model.User;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
+import org.springframework.stereotype.Service;
 
 @Service
 public class AccountService {
@@ -20,8 +18,8 @@ public class AccountService {
     // the #root is a concept in SpEL, and it refers to the root context object.
     // See https://docs.spring.io/spring-framework/reference/core/expressions/language-ref/variables.html
     
-    public void addAccount(User user) {
-        this.accounts.add(new Account(0, user));
+    public void createAccount(String id, String name) {
+        this.accounts.add(new Account(0, new User(id, name)));
     }
 
     @PreAuthorize("@authz.isUsersAccount(authentication, #id, #root)")

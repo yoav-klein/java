@@ -4,9 +4,9 @@
 		<title>Your Bank Account</title>
 	</head>
 	<body>
-		<h1>Your Bank Account</h1>
-		<h2>About You</h2>
-		<p th:text="'ID' + ${account.user.id}"></p>
-		<p th:text="'Name' + ${account.user.name}"></p>
+		<h1>Bank Uber Leumi</h1>
+		<p th:text="'Hello ' + ${name}"></p>
+		<p th:text="'Id ' + ${id}"></p>
+		<a th:href="@{/accounts/{userId}(userId=${id})}">Your Account</a>
 	</body>
 </html>

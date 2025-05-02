@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">	
+	<head>
+		<title>Your Bank Account</title>
+	</head>
+	<body>
+		<h1>Your Bank Account</h1>
+		<h2>About You</h2>
+		<p th:text="'ID: ' + ${account.owner.id}">1234</p>
+		<p th:text="'Name: ' + ${account.owner.name}">Bob Dylan</p>
+		<p th:text="'Balance: ' +${account.balance}">Bob Dylan</p>
+	</body>
+</html>

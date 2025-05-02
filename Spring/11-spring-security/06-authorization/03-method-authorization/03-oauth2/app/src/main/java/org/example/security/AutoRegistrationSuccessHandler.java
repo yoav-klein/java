@@ -3,6 +3,8 @@ package org.example.security;
 import java.io.IOException;
 import java.util.Map;
 
+import org.example.business.service.AccountService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -16,8 +18,8 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class AutoRegistrationSuccessHandler implements AuthenticationSuccessHandler {
 
-    // @Autowired
-    // AccountService accountService;
+    @Autowired
+    AccountService accountService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -30,7 +32,7 @@ public class AutoRegistrationSuccessHandler implements AuthenticationSuccessHand
         String name = (String) attrs.get("name");
         String sub = (String) attrs.get("sub");
 
-        // accountService.createAccount(sub, name);
+        accountService.createAccount(sub, name);
 
         response.sendRedirect("/app"); // Redirect to home page after successful registration
     }
