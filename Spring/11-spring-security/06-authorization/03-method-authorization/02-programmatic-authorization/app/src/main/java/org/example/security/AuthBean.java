@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 
 @Component("authz")
 public class AuthBean {
+    // For refernce of MethodSecurityExpressionOperations, see
+    // https://docs.spring.io/spring-security/reference/api/java/org/springframework/security/access/expression/method/MethodSecurityExpressionOperations.html
     public boolean decideBefore(Authentication authentication, MethodSecurityExpressionOperations operations) {
         System.out.println("=== BEFORE");
         System.out.println(authentication.getName());

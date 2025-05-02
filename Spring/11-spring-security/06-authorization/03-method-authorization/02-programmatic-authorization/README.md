@@ -1,7 +1,8 @@
-# Custom AuthorizationManager
+# Programmatic Authorization
 ---
 
-If you want a more fine-grained access control, you can implement a `AuthorizationManager` and register it
-for specific URLs.
+Sometimes SpEL expressions are not enough for us and we need a more sophisticated authorization rules.
+In this case, we can create a custom Bean which exoses a method(s) in which we implement authorization logic.
+Then, we can refer to these methods in the SpEL expressions that we put in the `@Pre` or `@Post` annotations.
 
-In this case, we register a `AuthorizationManager` for the `/monkey` path which simply rejects all requests.
+In this example, we just demonstrate how to implement this, what we have access to in those methods, etc.

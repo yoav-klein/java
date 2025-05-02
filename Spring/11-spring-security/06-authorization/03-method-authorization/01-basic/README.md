@@ -1,7 +1,7 @@
-# Custom AuthorizationManager
+# Basics
 ---
 
-If you want a more fine-grained access control, you can implement a `AuthorizationManager` and register it
-for specific URLs.
+In this project we demonstrate a simple use case. We apply the `@PreAuthorize` annotation on the `FooService.someImportantMethod`
+to enforce that only users that have the `ADMIN` role can acceess it.
 
-In this case, we register a `AuthorizationManager` for the `/monkey` path which simply rejects all requests.
+So if you try to login with `user`, you'll get a 403. If you login with `admin`, you won't.
