@@ -10,3 +10,7 @@ must result in a 403 response, and prison :).
 
 We demonstrate how to implement this using the programmatic approach, and using only SpEL. See the `AccountService` class.
 
+## Test
+---
+In order to test this, you need to login to the application using 2 Google accounts (in 2 browser windows).
+Then, in one window, access the account of the other user. You'll get a 403.
