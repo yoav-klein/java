@@ -29,11 +29,11 @@ public class Account {
     }
 
     public void push(int sum) {
-        this.balance -= sum;
+        this.balance += sum;
     }
 
     public void pull(int sum) {
-        this.balance += sum;
+        this.balance -= sum;
     }
     
 }

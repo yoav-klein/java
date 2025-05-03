@@ -9,5 +9,16 @@
 		<p th:text="'ID: ' + ${account.owner.id}">1234</p>
 		<p th:text="'Name: ' + ${account.owner.name}">Bob Dylan</p>
 		<p th:text="'Balance: ' +${account.balance}">Bob Dylan</p>
+		<hr>
+		<form th:action="@{/accounts/{id}/pull(id=${account.owner.id})}" method="post">
+			<label for="sum">Pull sum</label>
+			<input type="text" id="sum" name="sum">
+			<input type="submit" value="Pull">
+		</form>
+		<form th:action="@{/accounts/{id}/push(id=${account.owner.id})}" method="post">
+			<label for="sum">Push sum</label>
+			<input type="text" id="sum" name="sum">
+			<input type="submit" value="Push">
+		</form>
 	</body>
 </html>

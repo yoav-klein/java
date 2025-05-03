@@ -29,8 +29,10 @@ public class AuthBean {
 
         Map<String, Object> attrs = oauth2User.getAttributes();
         String sub = (String) attrs.get("sub");
+
+        System.out.println("sub: " + sub + " id: " + id);
         
-        if(sub == id) return true;
+        if(sub.equals(id)) return true;
         return false;
     }
 }

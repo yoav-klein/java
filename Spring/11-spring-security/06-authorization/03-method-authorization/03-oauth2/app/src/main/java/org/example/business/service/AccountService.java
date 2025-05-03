@@ -19,35 +19,32 @@ public class AccountService {
     // See https://docs.spring.io/spring-framework/reference/core/expressions/language-ref/variables.html
     
     public void createAccount(String id, String name) {
+        System.out.println("Creating account for: " + id);
         this.accounts.add(new Account(0, new User(id, name)));
     }
 
-    @PreAuthorize("@authz.isUsersAccount(authentication, #id, #root)")
+    // we can authorize with only SpEL by accessing the principal.claims['sub'] and compare it to the 
+    // requested ID
+    @PreAuthorize("principal.claims['sub'] == #id")
     public Optional<Account> getAccountById(@P("id") String userId) {
         for(Account account : this.accounts) {
-            if(account.getOwner().getId() == userId) return Optional.of(account);
+            if(account.getOwner().getId().equals(userId)) return Optional.of(account);
         }
         return Optional.empty();
     }
 
+    // and we can do it programatically using the AuthBean bean's isUserAccount method
     @PreAuthorize("@authz.isUsersAccount(authentication, #id, #root)")
     public void pullFromAccount(@P("id") String userId, int sum) {
         for(Account account : this.accounts) {
-            if(account.getOwner().getId() == userId) account.pull(sum);
+            if(account.getOwner().getId().equals(userId)) account.pull(sum);
         }
     }
 
     @PreAuthorize("@authz.isUsersAccount(authentication, #id, #root)")
     public void pushToAccount(@P("id") String userId, int sum) {
         for(Account account : this.accounts) {
-            if(account.getOwner().getId() == userId) account.push(sum);
+            if(account.getOwner().getId().equals(userId)) account.push(sum);
         }
     }
-/* 
-    @PreAuthorize("@authz.decideBefore(authentication, #root)")
-    @PostAuthorize("@authz.decideAfter(authentication, #root)")
-    public String someImportantMethod() {
-        System.out.println("Important method");
-        return "kuku";
-    } */
 }
