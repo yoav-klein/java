@@ -50,7 +50,7 @@ public class UserRepository {
         return Optional.of(user);
     }
 
-    public Optional<User> findById(String id) {
+    public Optional<User> getUserById(String id) {
         User user;
         try {
             user = this.jdbcTemplate.queryForObject(GET_USER_BY_ID, userRowMapper, id);

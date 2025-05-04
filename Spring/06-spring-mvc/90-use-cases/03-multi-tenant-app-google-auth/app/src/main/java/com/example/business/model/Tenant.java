@@ -29,7 +29,7 @@ public class Tenant {
         return this.members;
     }
 
-    public void setMembers(List<String> members) {
+    public void setMembers(List<User> members) {
         this.members = members;
     }
 
