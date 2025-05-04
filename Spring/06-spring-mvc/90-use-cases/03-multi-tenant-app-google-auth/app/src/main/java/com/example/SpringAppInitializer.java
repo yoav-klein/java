@@ -1,5 +1,5 @@
 
-package spring.mvc;
+package com.example;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 

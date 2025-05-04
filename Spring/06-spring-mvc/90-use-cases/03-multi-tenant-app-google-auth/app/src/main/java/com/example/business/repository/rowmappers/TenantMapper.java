@@ -16,7 +16,7 @@ import com.example.business.repository.TenantUserRepository;
 public class TenantMapper implements RowMapper<Tenant> {
 
     @Autowired
-    private final TenantUserRepository tenantUserRepository;
+    private TenantUserRepository tenantUserRepository;
     
     @Override
     public Tenant mapRow(ResultSet rs, int rowNum) throws SQLException {

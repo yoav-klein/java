@@ -3,36 +3,46 @@
 
     <body>
         <main>
-            <section th:unless="${tenants} == null" class="main-section">
-                <h2>Your Tenants</h2>
-                
+            <section th:unless="${#lists.isEmpty(tenants)} == true" class="main-section">
+                <h2>👥 Tenants</h2>
                 <table>
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
                         <th>Management Page</th>
+                        <th>Leave Tenant</th>
                     </tr>
                     <tr th:each="tenant: ${tenants}">
                         <td th:text="${tenant.id}">025a56b704134bfda753ecac2f323595</td>
-                        <td><a th:href="@{/tenant/connect(tenantId=${tenant.id})}" href="#" th:text="${tenant.name}">MyTenant</a></td>
-                        <td><a th:href="@{/tenant/management(tenantId=${tenant.id})}" href="#">Manage Tenant</a></td>
+                        <td><a th:href="@{/tenants/{tenantId}/connect(tenantId=${tenant.id})}" href="#" th:text="${tenant.name}">MyTenant</a></td>
+                        <td><a th:href="@{/tenants/{tenantId}(tenantId=${tenant.id})}" href="#">Manage Tenant</a></td>
+                        <td><a th:href="@{/tenants/{tenantId}/members/{member}/leave(tenantId=${tenant.id}, member=${user.id})}" href="#">Leave Tenant</a></td>
                     </tr>
                 </table>
             </section>
-            <section class="add-section">
-                <div class="form-box">
-                    <h3>Add Tenant</h3>
-                    <form method="post" th:action="@{/tenant/create}">
-                        <div class="text-input">
-                            <label for="name">Tenant name: </label>
-                            <input id="name" name="name" type="text">
-                        </div>
-                        <input type="submit" value="Add">
-                    </form>
-                    
-                </div>
-                
-    
+
+            <section th:if="${#lists.isEmpty(tenants)} == true">
+                <h2>You have no tenants...</h2>
+            </section>
+
+            <section th:unless="${#lists.isEmpty(invitations)} == true" class="main-section">
+                <h2>⌛ Pending Invitations</h2>
+                <ul th:each="invitation : ${invitations}">
+                    <li>
+                        <span th:text="${invitation.tenant.name}"></span>
+                        <span><a th:href="@{/invitations/{invitationId}/accept(invitationId=${invitation.id})}">Accept</a></span>
+                        <span><a th:href="@{/invitations/{invitationId}/decline(invitationId=${invitation.id})}">Decline</a></span>
+                    </li>
+                </ul>
+            </section>
+
+            <section class="main-section add-tenant">
+                <h2>👥➕ Add Tenant</h3>
+                <form method="post" th:action="@{/tenants}">
+                    <label for="name">Tenant name: </label>
+                    <input id="name" name="name" type="text">
+                    <input type="submit" value="Add Tenant">
+                </form>
             </section>
     
         </main>

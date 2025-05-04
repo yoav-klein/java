@@ -3,60 +3,70 @@
  */
 package com.example.web.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.example.business.service.TenantService;
+import com.example.business.service.UserService;
+import com.example.helpers.Constants;
+
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.oauth2.core.user.OAuth2User;
-
-import com.example.business.exception.UserAlreadyInTenantException;
-import com.example.business.service.TenantService;
-
-import com.example.helpers.Constants;
-
 @Controller
-@RequestMapping("/tenant")
+@RequestMapping("/tenants")
 public class TenantController {
     @Autowired
     TenantService tenantService;
 
-    @PostMapping("/create")
+    @Autowired
+    UserService userService;
+
+    // create tenant
+    @PostMapping
     public String createTenant(@AuthenticationPrincipal Object user, @RequestParam("name") String tenantName) {
         OAuth2User oauth2User = (OAuth2User)user;
-        String id = oauth2User.getAttribute("sub");
-        tenantService.createTenant(tenantName, id);
+        String userId = oauth2User.getAttribute("sub");
+        tenantService.createTenant(tenantName, userId);
+
+        return "redirect:/";
+    }
+    
+    // delete tenant
+    @GetMapping("/{id}/delete")
+    public String deleteTenant(Model model, @PathVariable("id") String tenantId) {
+        tenantService.deleteTenant(tenantId);
 
         return "redirect:/";
     }
 
-    @GetMapping("management")
-    public String manageTenant(Model model, @AuthenticationPrincipal Object user, @RequestParam("id") String tenantId) {
+    // tenant management page
+    @GetMapping("/{id}")
+    public String manageTenant(@AuthenticationPrincipal Object user, Model model, @PathVariable("id") String tenantId) {
+        model.addAttribute("tenant", tenantService.getTenantById(tenantId));
+
         OAuth2User oauth2User = (OAuth2User)user;
         String userId = oauth2User.getAttribute("sub");
+        model.addAttribute("user", userService.getUserById(userId).get());
+
+        model.addAttribute("invitations", tenantService.getAllInvitationsForTenant(tenantId));
         
+        return "tenant-management";
     }
 
-    @GetMapping("/my-tenants")
-    public String getTenants(Model model, @AuthenticationPrincipal Object user) {
-        OAuth2User oauth2User = (OAuth2User)user;
-        model.addAttribute("tenants", tenantService.getAllTenantsForUser(oauth2User.getAttribute("sub")));
-
-        return "my-tenants.html";
-    }
-
-    @GetMapping("/connect") 
+    // connect to tenant
+    @GetMapping("/{id}/connect")
     public String connectToTenant(@AuthenticationPrincipal Object user, 
-            @RequestParam("tenantId") String tenantId, 
-            HttpServletResponse response) {
+        @PathVariable("id") String tenantId, 
+        HttpServletResponse response) {
         
         OAuth2User oauth2User = (OAuth2User)user;
         String userId = oauth2User.getAttribute("sub");
@@ -72,6 +82,32 @@ public class TenantController {
         }
 
         return "redirect:/home";
+    }  
+
+    // invite user to tenant
+    @PostMapping("/{id}/invitations")
+    public String inviteUser(Model model, @PathVariable("id") String tenantId, @RequestParam("email") String userEmail) {
+        tenantService.inviteUser(tenantId, userEmail);
+        model.addAttribute("tenant", tenantService.getTenantById(tenantId));
+
+        return String.format("redirect:/tenants/%s", tenantId);
     }
+
+    // remove user
+    @GetMapping("/{id}/members/{user}/remove")
+    public String removeMember(Model model, @PathVariable("id") String tenantId, @PathVariable("user") String userId) {
+        tenantService.removeUserFromTenant(tenantId, userId);
+
+        return String.format("redirect:/tenants/%s", tenantId);
+    }
+
+    // leave tenant
+    @GetMapping("/{id}/members/{user}/leave")
+    public String leaveTenant(Model model, @PathVariable("id") String tenantId, @PathVariable("user") String userId) {
+        tenantService.removeUserFromTenant(tenantId, userId);
+
+        return "redirect:/my-tenants";
+    }
+
    
 }

@@ -4,19 +4,32 @@
     <body>
         <main>
             <h1 th:text="${tenant.name}"></h1>
-            <h2>Members</h2>
-            <ul th:each="member : ${members}">
-                <li>
-                    <span th:text="${member.name}"></span>
-                    <span th:if="${user.isAdmin}" th:text="Remove User"></span>
-                </li>
-            </ul>
 
-            <section th:if="${user.isAdmin}">
+            <section>
+                <h2>Members</h2>
+                <ul th:each="member : ${tenant.members}">
+                    <li>
+                        <span th:text="${member.name}"></span>
+                        <span th:if="${@tenantService.isAdmin(user.id, tenant.id)}"><a th:href="@{/tenants/{tenantId}/members/{user}/remove(tenantId=${tenant.id},user=${member.id})}">Remove User</a></span>
+                    </li>
+                </ul>
+            </section>
+
+            <section th:unless="${#lists.isEmpty(invitations)} == true">
+                <h2>Pending Invitations</h2>
+                <ul th:each="invitation : ${invitations}">
+                    <li>
+                        <span th:text="${invitation.user.name}"></span>
+                        <span th:if="${@tenantService.isAdmin(user.id, tenant.id)}"><a th:href="@{/invitations/{invitationId}/decline(invitationId=${invitation.id})}">Cancel</a></span>
+                    </li>
+                </ul>
+            </section>
+
+            <section th:if="${@tenantService.isAdmin(user.id, tenant.id)}">
                 <h2>Invite a User</h2>
                 <div class="form-box">
                     <h3>Invite User</h3>
-                    <form method="post" th:action="@{/tenant/invite}">
+                    <form method="post" th:action="@{/tenants/{tenantId}/invitations(tenantId=${tenant.id})}">
                         <div class="text-input">
                             <label for="userMail">User Mail: </label>
                             <input id="userMail" name="email" type="text">
@@ -26,9 +39,9 @@
                     
                 </div>
             </section>
-            <section th:if="${user.isAdmin}">
+            <section th:if="${@tenantService.isAdmin(user.id, tenant.id)}">
                 <h2>Delete Tenant!</h2>
-                
+                <a th:href="@{/tenants/{tenantId}/delete(tenantId=${tenant.id})}">DELETE TENANT !!!</a>
             </section>
         </main>
         

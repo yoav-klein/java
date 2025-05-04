@@ -1,6 +1,5 @@
 package com.example.business.repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -14,8 +13,8 @@ import com.example.web.forms.ProductDto;
 
 @Repository
 public class ProductRepository {
-    private static final String GET_ALL_PRODUCTS_TEMPLATE = "SELECT * FROM %s.product";
-    private static final String ADD_PRODUCT = "INSERT INTO %s.product(name) VALUES(?)";
+    private static final String GET_ALL_PRODUCTS_TEMPLATE = "SELECT * FROM tenant_%s.product";
+    private static final String ADD_PRODUCT = "INSERT INTO tenant_%s.product(name) VALUES(?)";
     
     private JdbcTemplate jdbcTemplate;
 

@@ -15,7 +15,7 @@ import com.example.business.repository.TenantRepository;
 import com.example.business.repository.TenantUserRepository;
 import com.example.business.repository.InvitationRepository;
 
-@Service
+@Service("tenantService")
 public class TenantService {
 
     @Autowired
@@ -39,6 +39,7 @@ public class TenantService {
     }
 
     // TRANSACTIONAL
+    // SECURED
     public void createTenant(String tenantName, String ownerId) {
         String tenantId = UUID.randomUUID().toString().replace("-", "");
         tenantRepository.createTenantSchema(tenantId);
@@ -50,33 +51,41 @@ public class TenantService {
         return tenantRepository.getTenantById(id);
     }
 
+    // SECURED
     public void deleteTenant(String id) {
         tenantRepository.deleteTenant(id);
+        tenantRepository.deleteTenantSchema(id);
     }
 
     // TRANSACTIONAL
+    // SECURED
     public void inviteUser(String tenantId, String email) {
+        String invitationId = UUID.randomUUID().toString().replace("-", "");
         User user = userService.getUserByEmail(email).get();
         // ERROR HANDLING - IF USER DOESN'T EXIST
-        invitationRepository.addInvitation(tenantId, user.getId());
+        invitationRepository.addInvitation(invitationId, tenantId, user.getId());
 
     }
 
+    // SECURED
     public void removeUserFromTenant(String tenantId, String userId) {
         tenantUserRepository.removeUserFromTenant(tenantId, userId);
     }
 
     // TRANSACTIONAL
+    // SECURED
     public void acceptInvitation(String invitationId) {
         Invitation invitation = invitationRepository.getInvitationById(invitationId);
         invitationRepository.removeInvitation(invitationId);
         tenantUserRepository.addUserToTenant(invitation.getTenant().getId(), invitation.getUser().getId(), "regular");
     }
 
+    // SECURED
     public void declineInvitation(String invitationId) {
         invitationRepository.removeInvitation(invitationId);
     }
-
+    
+    // SECURED
     public void joinToTenant(String tenantId, String userId) {
         try {
             tenantUserRepository.addUserToTenant(tenantId, userId, "regular");
@@ -91,5 +100,9 @@ public class TenantService {
 
     public boolean isAdmin(String userId, String tenantId) {
         return tenantUserRepository.getUserRole(userId, tenantId).equals("admin");
+    }
+
+    public List<Invitation> getAllInvitationsForTenant(String tenantId) {
+        return invitationRepository.getAllInvitationsForTenant(tenantId);
     }
 }

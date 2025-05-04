@@ -8,7 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
@@ -17,13 +17,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.business.model.Product;
-import com.example.business.model.Tenant;
 import com.example.business.service.TenantService;
 import com.example.helpers.TenantContext;
 
 //import com.example.business.model.Product;
 import com.example.web.forms.ProductDto;
 import com.example.business.service.ProductService;
+import com.example.business.service.UserService;
 
 @Controller
 public class HomeController {
@@ -32,8 +32,16 @@ public class HomeController {
     TenantService tenantService;
 
     @Autowired
+    UserService userService;
+
+    @Autowired
     ProductService productService;
 
+    @ModelAttribute("user")
+    public void addUserToModel(Model model, @AuthenticationPrincipal Object user) {
+        OAuth2User oauth2User = (OAuth2User)user;
+        model.addAttribute("user", userService.getUserById(oauth2User.getAttribute("sub")).get());
+    }
 
     @RequestMapping("/")
     public String sayHello(Model model, @AuthenticationPrincipal Object user) {
@@ -59,6 +67,16 @@ public class HomeController {
         productService.addProduct(p);
 
         return "redirect:/home";
+    }
+
+    @GetMapping("/my-tenants")
+    public String getTenants(Model model, @AuthenticationPrincipal Object user) {
+        OAuth2User oauth2User = (OAuth2User)user;
+        model.addAttribute("tenants", tenantService.getAllTenantsForUser(oauth2User.getAttribute("sub")));
+        model.addAttribute("invitations", userService.getAllInvitationsForUser(oauth2User.getAttribute("sub")));
+        
+
+        return "my-tenants";
     }
    
 }

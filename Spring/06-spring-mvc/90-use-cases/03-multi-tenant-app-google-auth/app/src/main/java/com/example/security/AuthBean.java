@@ -19,8 +19,7 @@ public class AuthBean {
     TenantService tenantService;
     
     // For refernce of MethodSecurityExpressionOperations, see
-    
-    public boolean isUsersAccount(Authentication authentication, String tenantId, MethodSecurityExpressionOperations operations) {
+    public boolean isUserPartOfTenant(Authentication authentication, String tenantId, MethodSecurityExpressionOperations operations) {
 
         OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) authentication;
         OAuth2User oauth2User = token.getPrincipal();

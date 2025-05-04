@@ -39,7 +39,6 @@ public class UserRepository {
         return user;
     };
 
-    
     public Optional<User> findByEmail(String email) {
         User user;
         try {
