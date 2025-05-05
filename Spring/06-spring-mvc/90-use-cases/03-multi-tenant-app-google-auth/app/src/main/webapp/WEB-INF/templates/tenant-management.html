@@ -7,12 +7,14 @@
 
             <section class="main-section">
                 <h2>👥 Members in Tenant</h2>
-                <ul th:each="member : ${tenant.members}">
-                    <li>
-                        <span><img th:src="${member.pictureUrl}" alt="user picture"></span>
-                        <span th:text="${member.name}"></span>
-                        <span th:text="${member.role}"></span>
-                        <span th:if="${@tenantService.isAdmin(user.id, tenant.id)}"><a th:href="@{/tenants/{tenantId}/members/{user}/remove(tenantId=${tenant.id},user=${member.id})}">Remove User</a></span>
+                <ul class="members-list">
+                    <li class="member-item" th:each="member : ${tenant.members}">
+                        <img th:src="${member.pictureUrl}" alt="user picture">
+                        <p class="member-name" th:text="${member.name}"></p>
+                        <p th:text="${member.role}"></p>
+                        <div class="member-actions" th:if="${@tenantService.isAdmin(user.id, tenant.id)}">
+                            <a th:href="@{/tenants/{tenantId}/members/{user}/remove(tenantId=${tenant.id},user=${member.id})}"><img th:src="@{/image/delete.svg}" alt=""></a>
+                        </div>
                     </li>
                 </ul>
             </section>

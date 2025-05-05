@@ -243,7 +243,7 @@ li {
 }
 
 
-/* || ADD TENANT */
+/* add tenant */
 
 .add-tenant {
     background-color: #f0f9ff;
@@ -283,7 +283,69 @@ li {
     background-color: #0056b3;
 }
 
-/* || DANGER ZONE */
+
+/* || TENANT MANAGEMENT PAGE */
+
+/* user list */
+
+.members-list {
+    list-style: none;
+    border-radius: 5px;
+    border: 1px solid #333;
+}
+
+.member-item {
+    border: 1px solid #333;
+    border-bottom: none;
+    padding: 0.25em;
+    height: 4rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+}
+
+.member-item:first-child {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.member-item:last-child {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border: 1px solid #333;
+}
+
+.member-item img {
+    height: 90%;
+    width: auto;
+}
+
+.member-name {
+    flex: 1;
+}
+
+.member-actions {
+    width: 20%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.member-actions a {
+    display: block flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.member-actions img {
+    height: 2em;
+    width: auto;
+}
+
+/* danger zone */
 .danger-zone {
     border: 1px solid #dc3545;
     background: #fff5f5;
