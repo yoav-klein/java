@@ -5,22 +5,21 @@
         <main>
             <section th:unless="${#lists.isEmpty(tenants)} == true" class="main-section">
                 <h2>👥 Tenants</h2>
-                <table>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>DisplayName</th>
-                        <th>Management Page</th>
-                        <th>Leave Tenant</th>
-                    </tr>
-                    <tr th:each="tenant: ${tenants}">
-                        <td th:text="${tenant.id}">025a56b704134bfda753ecac2f323595</td>
-                        <td><a th:href="@{/tenants/{tenantId}/connect(tenantId=${tenant.id})}" href="#" th:text="${tenant.name}">MyTenant</a></td>
-                        <td><a th:href="@{/tenants/{tenantId}/connect(tenantId=${tenant.id})}" href="#" th:text="${tenant.displayName}">MyTenant</a></td>
-                        <td><a th:href="@{/tenants/{tenantId}(tenantId=${tenant.id})}" href="#">Manage Tenant</a></td>
-                        <td><a th:href="@{/tenants/{tenantId}/members/{member}/leave(tenantId=${tenant.id}, member=${user.id})}" href="#">Leave Tenant</a></td>
-                    </tr>
-                </table>
+                <ul class="tenant-list">
+                    <li class="tenant-item" th:each="tenant : ${tenants}">
+                        <div class="tenant-info">
+                            <h3>
+                                <a th:href="@{/tenants/{tenantId}/connect(tenantId=${tenant.id})}" href="#" th:text="${tenant.name}">
+                                MyTenant <span th:if="${tenant.displayName} != null" th:text="'(' + ${tenant.displayName} + ')'"></span></h3>
+                                </a>
+                            </h3>
+                        </div>
+                        <div class="tenant-actions">
+                            <a th:href="@{/tenants/{tenantId}(tenantId=${tenant.id})}" href="#"><img height="512" width="512" th:src="@{/image/user-gear.svg}" alt="manage tenant"></a>
+                            <a th:href="@{/tenants/{tenantId}/members/{member}/leave(tenantId=${tenant.id}, member=${user.id})}" href="#"><img height="150" width="150" th:src="@{/image/house-leave.svg}" alt="leave tenant"></a>
+                        </div>
+                    </li>
+                </ul>
             </section>
 
             <section th:if="${#lists.isEmpty(tenants)} == true">

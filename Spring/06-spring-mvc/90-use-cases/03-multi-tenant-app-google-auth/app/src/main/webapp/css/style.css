@@ -10,6 +10,11 @@
     --HEADER-HEIGHT: 6rem;
 }
 
+a:any-link {
+    color: unset;
+    text-decoration: unset;
+}
+
 /* || GENERAL STYLES */
 
 html {
@@ -54,6 +59,10 @@ h1 {
 
 h2 {
     padding: 0.5em;
+}
+
+a:visited {
+    color: unset;
 }
 
 
@@ -177,6 +186,60 @@ li {
 
 .menu-content a:hover {
     background-color: rgba(0, 119, 182, 0.5);
+}
+
+/* || MY TENANTS PAGE*/
+
+/* tenants list */
+
+.tenant-list {
+    list-style: none;
+    padding: 0.5em;
+}
+
+.tenant-item {
+    background-color: rgba(0, 123, 255, 0.7);
+    border-radius: 5px;
+    border: none;
+    box-shadow: 4px 4px 4px black;
+    width: 100%;
+
+    padding: 0.5em;
+    margin-bottom: 0.5em;
+
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    height: 3rem;
+}
+
+.tenant-info {
+    width: 70%;
+}
+
+.tenant-actions {
+    width: 30%;
+    height: 100%; /* we must set height: 100% on all parent elements of the image in order 
+    that the max-height of the image will refer to the height of the line. sucks */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.tenant-actions a {
+    height: 100%; /* same reason */
+    display: block;
+}
+
+.tenant-item img {
+    max-height: 100%;
+    width: auto;
+}
+
+.tenant-info h3 {
+    margin: 0;
+    font-size: 1.1em;
 }
 
 
