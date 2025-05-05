@@ -5,6 +5,7 @@ public class User {
     private String name;
     private String email;
     private String pictureUrl;
+    private String role;
 
     // Constructors
     public User() {
@@ -59,4 +60,12 @@ public class User {
     public void setPictureUrl(String pictureUrl) {
         this.pictureUrl = pictureUrl;
     }
+    public String getRole() {
+        return role;
+    }
+    
+    public void setRole(String role) {
+        this.role = role;
+    }
+    
 }

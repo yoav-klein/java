@@ -9,12 +9,14 @@
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
+                        <th>DisplayName</th>
                         <th>Management Page</th>
                         <th>Leave Tenant</th>
                     </tr>
                     <tr th:each="tenant: ${tenants}">
                         <td th:text="${tenant.id}">025a56b704134bfda753ecac2f323595</td>
                         <td><a th:href="@{/tenants/{tenantId}/connect(tenantId=${tenant.id})}" href="#" th:text="${tenant.name}">MyTenant</a></td>
+                        <td><a th:href="@{/tenants/{tenantId}/connect(tenantId=${tenant.id})}" href="#" th:text="${tenant.displayName}">MyTenant</a></td>
                         <td><a th:href="@{/tenants/{tenantId}(tenantId=${tenant.id})}" href="#">Manage Tenant</a></td>
                         <td><a th:href="@{/tenants/{tenantId}/members/{member}/leave(tenantId=${tenant.id}, member=${user.id})}" href="#">Leave Tenant</a></td>
                     </tr>

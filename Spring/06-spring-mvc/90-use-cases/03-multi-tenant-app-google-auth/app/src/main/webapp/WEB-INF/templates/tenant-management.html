@@ -9,7 +9,9 @@
                 <h2>👥 Members in Tenant</h2>
                 <ul th:each="member : ${tenant.members}">
                     <li>
+                        <span><img th:src="${member.pictureUrl}" alt="user picture"></span>
                         <span th:text="${member.name}"></span>
+                        <span th:text="${member.role}"></span>
                         <span th:if="${@tenantService.isAdmin(user.id, tenant.id)}"><a th:href="@{/tenants/{tenantId}/members/{user}/remove(tenantId=${tenant.id},user=${member.id})}">Remove User</a></span>
                     </li>
                 </ul>
