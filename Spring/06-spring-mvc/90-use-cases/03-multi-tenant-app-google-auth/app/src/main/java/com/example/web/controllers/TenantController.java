@@ -9,6 +9,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,12 @@ public class TenantController {
 
     @Autowired
     UserService userService;
+
+    @ModelAttribute("user")
+    public void addUserToModel(Model model, @AuthenticationPrincipal Object user) {
+        OAuth2User oauth2User = (OAuth2User)user;
+        model.addAttribute("user", userService.getUserById(oauth2User.getAttribute("sub")).get());
+    }
 
     // create tenant
     @PostMapping
@@ -52,11 +59,6 @@ public class TenantController {
     @GetMapping("/{id}")
     public String manageTenant(@AuthenticationPrincipal Object user, Model model, @PathVariable("id") String tenantId) {
         model.addAttribute("tenant", tenantService.getTenantById(tenantId));
-
-        OAuth2User oauth2User = (OAuth2User)user;
-        String userId = oauth2User.getAttribute("sub");
-        model.addAttribute("user", userService.getUserById(userId).get());
-
         model.addAttribute("invitations", tenantService.getAllInvitationsForTenant(tenantId));
         
         return "tenant-management";
