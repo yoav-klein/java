@@ -5,52 +5,52 @@ body {
     padding: 20px;
   }
   
-  .container {
+.container {
     max-width: 1000px;
     margin: auto;
-  }
+}
   
-  h1 {
+h1 {
     text-align: center;
     margin-bottom: 30px;
-  }
+}
   
-  .card {
+.card {
     background: white;
     padding: 20px;
     margin-bottom: 30px;
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  }
+}
   
-  .card h2 {
+.card h2 {
     margin-top: 0;
-  }
+}
   
-  table {
+table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 10px;
-  }
+}
   
-  table th, table td {
+table th, table td {
     border: 1px solid #ddd;
     padding: 8px;
-  }
+}
   
-  label {
+label {
     display: block;
     margin: 10px 0;
-  }
+}
   
-  input[type="email"], select {
+input[type="email"], select {
     width: 100%;
     padding: 8px;
     margin-top: 5px;
     box-sizing: border-box;
-  }
+}
   
-  button {
+button {
     background-color: #007BFF;
     color: white;
     padding: 8px 14px;
@@ -58,57 +58,57 @@ body {
     border-radius: 4px;
     cursor: pointer;
     margin-top: 10px;
-  }
+}
   
-  button:hover {
+button:hover {
     background-color: #0056b3;
-  }
+}
   
-  .danger-zone {
+.danger-zone {
     border: 1px solid #dc3545;
     background: #fff5f5;
-  }
+}
   
-  .danger-zone h2 {
+.danger-zone h2 {
     color: #dc3545;
-  }
+}
   
-  button.danger {
+button.danger {
     background-color: #dc3545;
-  }
+}
   
-  button.danger:hover {
+button.danger:hover {
     background-color: #a71d2a;
-  }
+}
   
-  .add-tenant {
+.add-tenant {
     background-color: #f0f9ff;
     border-left: 5px solid #007bff;
-  }
+}
   
-  .add-tenant h2 {
+.add-tenant h2 {
     color: #007bff;
     /*display: flex;
     align-items: center;
     */
     gap: 8px;
-  }
+}
   
-  .add-tenant form {
+.add-tenant form {
     display: flex;
     flex-direction: column;
     gap: 15px;
-  }
+}
   
-  .add-tenant input[type="text"],
-  .add-tenant textarea {
+.add-tenant input[type="text"],
+.add-tenant textarea {
     width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
-  }
+}
   
-  .add-tenant button {
+.add-tenant button {
     background-color: #007bff;
     color: white;
     padding: 10px 16px;
@@ -116,8 +116,8 @@ body {
     border-radius: 4px;
     cursor: pointer;
     font-weight: bold;
-  }
+}
   
-  .add-tenant button:hover {
+.add-tenant button:hover {
     background-color: #0056b3;
-  }
+}

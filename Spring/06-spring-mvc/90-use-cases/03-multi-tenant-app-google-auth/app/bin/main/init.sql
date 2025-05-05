@@ -1,7 +1,8 @@
 
 CREATE TABLE users(id VARCHAR(70) PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
-    email VARCHAR(50) NOT NULL
+    email VARCHAR(50) NOT NULL,
+    picture_url VARCHAR(70)
 );
 
 CREATE TABLE tenants(id varchar(50) PRIMARY KEY, 

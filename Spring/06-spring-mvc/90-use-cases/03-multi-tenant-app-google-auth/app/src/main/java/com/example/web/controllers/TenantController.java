@@ -37,7 +37,7 @@ public class TenantController {
         String userId = oauth2User.getAttribute("sub");
         tenantService.createTenant(tenantName, userId);
 
-        return "redirect:/";
+        return "redirect:/my-tenants";
     }
     
     // delete tenant

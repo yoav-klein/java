@@ -3,10 +3,10 @@
 
     <body>
         <main>
-            <h1 th:text="${tenant.name}"></h1>
+            <h1>Tenant Management - <span th:text="${tenant.name}">Tenant Name</span></h1>
 
-            <section>
-                <h2>Members</h2>
+            <section class="main-section">
+                <h2>👥 Members in Tenant</h2>
                 <ul th:each="member : ${tenant.members}">
                     <li>
                         <span th:text="${member.name}"></span>
@@ -15,8 +15,8 @@
                 </ul>
             </section>
 
-            <section th:unless="${#lists.isEmpty(invitations)} == true">
-                <h2>Pending Invitations</h2>
+            <section th:unless="${#lists.isEmpty(invitations)} == true" class="main-section">
+                <h2>⌛ Pending Invitations</h2>
                 <ul th:each="invitation : ${invitations}">
                     <li>
                         <span th:text="${invitation.user.name}"></span>
@@ -25,23 +25,22 @@
                 </ul>
             </section>
 
-            <section th:if="${@tenantService.isAdmin(user.id, tenant.id)}">
-                <h2>Invite a User</h2>
-                <div class="form-box">
-                    <h3>Invite User</h3>
-                    <form method="post" th:action="@{/tenants/{tenantId}/invitations(tenantId=${tenant.id})}">
-                        <div class="text-input">
-                            <label for="userMail">User Mail: </label>
-                            <input id="userMail" name="email" type="text">
-                        </div>
-                        <input type="submit" value="Invite!">
-                    </form>
-                    
-                </div>
+            <section th:if="${@tenantService.isAdmin(user.id, tenant.id)}" class="main-section form-box">
+                <h2>📨 Invite a New User</h2>
+                <form method="post" th:action="@{/tenants/{tenantId}/invitations(tenantId=${tenant.id})}">
+                    <div class="text-input">
+                        <label for="userMail">User Mail: </label>
+                        <input id="userMail" name="email" type="text">
+                    </div>
+                    <input type="submit" value="Invite!">
+                </form>                    
             </section>
-            <section th:if="${@tenantService.isAdmin(user.id, tenant.id)}">
-                <h2>Delete Tenant!</h2>
-                <a th:href="@{/tenants/{tenantId}/delete(tenantId=${tenant.id})}">DELETE TENANT !!!</a>
+            <section th:if="${@tenantService.isAdmin(user.id, tenant.id)}" class="main-section danger-zone">
+                <h2>⚠️ Delete Tenant</h2>
+                <form method="get" th:action="@{/tenants/{tenantId}/delete(tenantId=${tenant.id})}">
+                    <button class="danger" type="submit">Delete Tenant</button>
+                </form>
+                
             </section>
         </main>
         

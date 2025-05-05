@@ -3,15 +3,12 @@ package com.example.business.repository;
 
 import java.util.Optional;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
 import javax.sql.DataSource;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import org.springframework.dao.EmptyResultDataAccessException;
 
 import com.example.business.model.User;
 
@@ -20,7 +17,7 @@ public class UserRepository {
 
     private final String GET_USER_BY_EMAIL = "SELECT * FROM tenant_system.users WHERE email = ?";
     private final String GET_USER_BY_ID = "SELECT * FROM tenant_system.users WHERE id = ?";
-    private final String ADD_USER = "INSERT INTO tenant_system.users VALUES(?, ?, ?)";
+    private final String ADD_USER = "INSERT INTO tenant_system.users VALUES(?, ?, ?, ?)";
 
     private DataSource dataSource;
     private JdbcTemplate jdbcTemplate;
@@ -35,6 +32,7 @@ public class UserRepository {
         user.setId(resultSet.getString("id"));
         user.setName(resultSet.getString("name"));
         user.setEmail(resultSet.getString("email"));
+        user.setPictureUrl(resultSet.getString("picture_url"));
 
         return user;
     };
@@ -64,6 +62,6 @@ public class UserRepository {
 
     public void addUser(User user) {
         System.out.println("Adding user: " + user.getId() + "name: " + user.getName() + " email: " + user.getEmail());
-        this.jdbcTemplate.update(ADD_USER, user.getId(), user.getName(), user.getEmail());
+        this.jdbcTemplate.update(ADD_USER, user.getId(), user.getName(), user.getEmail(), user.getPictureUrl());
     }
 }

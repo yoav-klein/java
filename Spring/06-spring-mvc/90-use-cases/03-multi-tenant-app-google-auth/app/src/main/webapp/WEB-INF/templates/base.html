@@ -9,11 +9,18 @@
 <body>
     <header>
         <h1>My Multi-Tenant Application</h1>
+        <div class="menu-wrapper">
+            <input type="image" th:src="${user.pictureUrl}" alt="user-picture-icon" class="menu-button">
+            <ul class="menu-content" hidden>
+                <li><a th:href="@{/my-tenants}">My Tenants</a></li>
+                <li><a th:href="@{/logout}">Logout</a></li>
+            </ul>
+        </div>
     </header>
     <main th:replace="${content}">
         <div>Templated main</div>
 
     </main>
-    
+    <script th:src="@{/js/main.js}"></script>
 </body>
 </html>
