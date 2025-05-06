@@ -137,6 +137,12 @@ li {
     list-style-type: none;
 }
 
+/* || UTILS */
+
+.block {
+    display: block;
+}
+
 /* || MAIN SECTION */
 
 .main-section {
@@ -240,6 +246,43 @@ li {
 .tenant-info h3 {
     margin: 0;
     font-size: 1.1em;
+}
+
+/* invitations */
+
+.invitation-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1em;
+}
+
+.invitation-item {
+    padding: 1em;
+    border: 1px solid #333;
+    border-radius: 5px;
+}
+
+.invitation-item h3 {
+    text-align: center;
+    margin-bottom: 1em;
+}
+
+.invitation-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 3em;
+}
+
+.invitation-actions a {
+    display: block;
+    height: 100%;
+}
+
+.invitation-actions img {
+    height: 100%;
+    width: auto;    
 }
 
 

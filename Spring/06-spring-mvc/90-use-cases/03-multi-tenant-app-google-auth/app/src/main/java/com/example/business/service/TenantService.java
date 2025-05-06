@@ -3,17 +3,17 @@ package com.example.business.service;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.stereotype.Service;
 
 import com.example.business.exception.UserAlreadyInTenantException;
+import com.example.business.model.Invitation;
 import com.example.business.model.Tenant;
 import com.example.business.model.User;
-import com.example.business.model.Invitation;
+import com.example.business.repository.InvitationRepository;
 import com.example.business.repository.TenantRepository;
 import com.example.business.repository.TenantUserRepository;
-import com.example.business.repository.InvitationRepository;
 
 @Service("tenantService")
 public class TenantService {
@@ -70,6 +70,10 @@ public class TenantService {
     // SECURED
     public void removeUserFromTenant(String tenantId, String userId) {
         tenantUserRepository.removeUserFromTenant(tenantId, userId);
+        // if last user in tenant, delete tenant
+        if(tenantUserRepository.getAllUsersForTenant(tenantId).isEmpty()) {
+            this.deleteTenant(tenantId);
+        }
     }
 
     // TRANSACTIONAL
@@ -104,5 +108,9 @@ public class TenantService {
 
     public List<Invitation> getAllInvitationsForTenant(String tenantId) {
         return invitationRepository.getAllInvitationsForTenant(tenantId);
+    }
+
+    public Invitation getInvitationById(String id) {
+        return invitationRepository.getInvitationById(id);
     }
 }

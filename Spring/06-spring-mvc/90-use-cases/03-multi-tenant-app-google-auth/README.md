@@ -5,8 +5,9 @@
 ---
 * Implement security checks
 * Implement transactional
-* Implement promoting of users
+* Promoting of users
+* Confirmation prompts for removing user, leaving group and deleting tenant
 * Decide on a strtegy of user hierarchy - like seniority for example (like who can demote who etc.)
 * Situations:
-* User quits from a tenant when he's the last one - should delete the tenant
-* Admin deletes tenant when he's in the tenant management page.
+* Inviting a non-existing user
+* Inviting a user when he's already in tenant

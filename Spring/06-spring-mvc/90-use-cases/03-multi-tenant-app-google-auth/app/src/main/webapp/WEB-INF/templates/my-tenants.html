@@ -28,11 +28,13 @@
 
             <section th:unless="${#lists.isEmpty(invitations)} == true" class="main-section">
                 <h2>⌛ Pending Invitations</h2>
-                <ul th:each="invitation : ${invitations}">
-                    <li>
-                        <span th:text="${invitation.tenant.name}"></span>
-                        <span><a th:href="@{/invitations/{invitationId}/accept(invitationId=${invitation.id})}">Accept</a></span>
-                        <span><a th:href="@{/invitations/{invitationId}/decline(invitationId=${invitation.id})}">Decline</a></span>
+                <ul class="invitation-list">
+                    <li class="invitation-item" th:each="invitation : ${invitations}">
+                        <h3 th:text="${invitation.tenant.name}"></h3>
+                        <div class="invitation-actions">
+                            <a class="block" th:href="@{/invitations/{invitationId}/accept(invitationId=${invitation.id})}"><img th:src="@{/image/accept.svg}" height="800" width="800" alt="accept"></a>
+                            <a class="block" th:href="@{/invitations/{invitationId}/decline(invitationId=${invitation.id})}"><img th:src="@{/image/decline.svg}" height="800" width="800" alt="decline"></a>
+                        </div>
                     </li>
                 </ul>
             </section>
