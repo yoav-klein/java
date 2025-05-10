@@ -5,11 +5,12 @@ package com.example.web.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.business.exception.*;
+import com.example.business.exception.InvalidRequestException;
+import com.example.business.exception.NoSuchUserException;
+import com.example.business.exception.UserAlreadyExistsException;
 
 @Controller
 public class HomeController {
@@ -27,10 +28,8 @@ public class HomeController {
 
     // ExceptionHandlerExceptionResolver
     @ExceptionHandler
-    public ModelAndView noSuchUserHandler(NoSuchUserException e) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("no-such-user");
-        return modelAndView;
+    public String noSuchUserHandler(NoSuchUserException e) {
+        return "no-such-user";
 
     }
 
