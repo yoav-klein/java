@@ -1,6 +1,6 @@
 package com.example.business.exception;
 
-public class NoTenantSelectedException extends RuntimeException {
+public class NoTenantSelectedException extends Exception {
     public NoTenantSelectedException(String message) {
         super(message);
     }

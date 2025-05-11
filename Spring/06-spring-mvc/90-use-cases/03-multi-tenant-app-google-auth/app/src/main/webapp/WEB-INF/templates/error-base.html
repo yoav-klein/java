@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" th:fragment="layout(content)" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/style.css}" href="../../css/style.css">
+    <title>My MultiTenant App</title>
+</head>
+<body>
+    <header>
+        <h1>My Multi-Tenant Application</h1>
+    </header>
+    <main>
+        <h1>Error...</h1>
+        <div class="error-box">
+            <h2 th:replace="${content}">Error message</h2>
+    
+            <a id="homebutton" th:href="@{/}">Home</a>
+        </div>
+    </main>
+    
+</body>
+</html>

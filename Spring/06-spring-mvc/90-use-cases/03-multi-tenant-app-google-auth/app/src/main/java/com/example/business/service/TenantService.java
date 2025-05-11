@@ -8,12 +8,14 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import com.example.business.exception.UserAlreadyInTenantException;
+import com.example.business.exception.UserNotExistsException;
 import com.example.business.model.Invitation;
 import com.example.business.model.Tenant;
 import com.example.business.model.User;
 import com.example.business.repository.InvitationRepository;
 import com.example.business.repository.TenantRepository;
 import com.example.business.repository.TenantUserRepository;
+
 
 @Service("tenantService")
 public class TenantService {
@@ -59,12 +61,15 @@ public class TenantService {
 
     // TRANSACTIONAL
     // SECURED
-    public void inviteUser(String tenantId, String email) {
+    public void inviteUser(String tenantId, String email) throws UserNotExistsException, UserAlreadyInTenantException {
         String invitationId = UUID.randomUUID().toString().replace("-", "");
-        User user = userService.getUserByEmail(email).get();
-        // ERROR HANDLING - IF USER DOESN'T EXIST
-        invitationRepository.addInvitation(invitationId, tenantId, user.getId());
+        
+        User user = userService.getUserByEmail(email).orElseThrow(() -> { return new UserNotExistsException();});
+        if(isUserPartOfTenant(user.getId(), tenantId)) {
+            throw new UserAlreadyInTenantException();
+        }
 
+        invitationRepository.addInvitation(invitationId, tenantId, user.getId());
     }
 
     // SECURED
@@ -90,7 +95,7 @@ public class TenantService {
     }
     
     // SECURED
-    public void joinToTenant(String tenantId, String userId) {
+    public void joinToTenant(String tenantId, String userId) throws UserAlreadyInTenantException {
         try {
             tenantUserRepository.addUserToTenant(tenantId, userId, "regular");
         } catch(DuplicateKeyException e) {

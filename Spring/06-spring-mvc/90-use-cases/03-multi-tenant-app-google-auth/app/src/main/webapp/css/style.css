@@ -405,3 +405,35 @@ button.danger {
 button.danger:hover {
     background-color: #a71d2a;
 }
+
+/* || ERROR PAGES */
+
+
+.error-box {
+    width: 70%;
+    height: 50vh;
+    margin: 0 auto;
+    background-color: rgb(232, 232, 109);
+    position: relative;
+}
+
+.error-box h2 {
+    text-align: center;
+}
+
+#homebutton {
+    background-color: #0077b6;
+    display: block flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    /* center-bottom the link */
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 1em;
+    /* sizing the link */
+    height: 2em;
+    width: 10em;
+    margin: 0 auto;
+}
