@@ -3,12 +3,10 @@ package com.example.security;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Component;
-
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.stereotype.Component;
 
 import com.example.business.service.TenantService;
 
@@ -18,9 +16,7 @@ public class AuthBean {
     @Autowired
     TenantService tenantService;
     
-    // For refernce of MethodSecurityExpressionOperations, see
-    public boolean isUserPartOfTenant(Authentication authentication, String tenantId, MethodSecurityExpressionOperations operations) {
-
+    public boolean isUserPartOfTenant(Authentication authentication, String tenantId) {
         OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) authentication;
         OAuth2User oauth2User = token.getPrincipal();
         Map<String, Object> attrs = oauth2User.getAttributes();
@@ -29,7 +25,7 @@ public class AuthBean {
         return tenantService.isUserPartOfTenant(sub, tenantId);
     }
 
-    public boolean isAdmin(Authentication authentication, String tenantId, MethodSecurityExpressionOperations operations) {
+    public boolean isAdmin(Authentication authentication, String tenantId) {
 
         OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) authentication;
         OAuth2User oauth2User = token.getPrincipal();

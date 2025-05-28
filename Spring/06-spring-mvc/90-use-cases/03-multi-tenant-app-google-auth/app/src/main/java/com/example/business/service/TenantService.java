@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import com.example.business.exception.UserAlreadyInTenantException;
@@ -15,7 +17,6 @@ import com.example.business.model.User;
 import com.example.business.repository.InvitationRepository;
 import com.example.business.repository.TenantRepository;
 import com.example.business.repository.TenantUserRepository;
-
 
 @Service("tenantService")
 public class TenantService {
@@ -41,7 +42,6 @@ public class TenantService {
     }
 
     // TRANSACTIONAL
-    // SECURED
     public void createTenant(String tenantName, String ownerId) {
         String tenantId = UUID.randomUUID().toString().replace("-", "");
         tenantRepository.createTenantSchema(tenantId);
@@ -53,14 +53,14 @@ public class TenantService {
         return tenantRepository.getTenantById(id);
     }
 
-    // SECURED
-    public void deleteTenant(String id) {
+    @PreAuthorize("@authz.isAdmin(authentication, #id)")
+    public void deleteTenant(@P("id") String id) {
         tenantRepository.deleteTenant(id);
         tenantRepository.deleteTenantSchema(id);
     }
 
     // TRANSACTIONAL
-    // SECURED
+    @PreAuthorize("@authz.isAdmin(authentication, #id)")
     public void inviteUser(String tenantId, String email) throws UserNotExistsException, UserAlreadyInTenantException {
         String invitationId = UUID.randomUUID().toString().replace("-", "");
         
