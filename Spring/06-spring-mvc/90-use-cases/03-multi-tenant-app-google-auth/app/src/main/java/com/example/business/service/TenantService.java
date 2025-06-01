@@ -61,7 +61,7 @@ public class TenantService {
 
     // TRANSACTIONAL
     @PreAuthorize("@authz.isAdmin(authentication, #id)")
-    public void inviteUser(String tenantId, String email) throws UserNotExistsException, UserAlreadyInTenantException {
+    public void inviteUser(@P("id") String tenantId, String email) throws UserNotExistsException, UserAlreadyInTenantException {
         String invitationId = UUID.randomUUID().toString().replace("-", "");
         
         User user = userService.getUserByEmail(email).orElseThrow(() -> { return new UserNotExistsException();});
@@ -72,8 +72,8 @@ public class TenantService {
         invitationRepository.addInvitation(invitationId, tenantId, user.getId());
     }
 
-    // SECURED
-    public void removeUserFromTenant(String tenantId, String userId) {
+    @PreAuthorize("@authz.isAdmin(authentication, #tenantId) or @authz.isUser(authentication, #userId)")
+    public void removeUserFromTenant(@P("tenantId") String tenantId, @P("userId") String userId) {
         tenantUserRepository.removeUserFromTenant(tenantId, userId);
         // if last user in tenant, delete tenant
         if(tenantUserRepository.getAllUsersForTenant(tenantId).isEmpty()) {
@@ -82,7 +82,6 @@ public class TenantService {
     }
 
     // TRANSACTIONAL
-    // SECURED
     public void acceptInvitation(String invitationId) {
         Invitation invitation = invitationRepository.getInvitationById(invitationId);
         invitationRepository.removeInvitation(invitationId);
