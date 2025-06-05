@@ -31,6 +31,11 @@ java {
 application {
     // Define the main class for the application.
     mainClass = 'org.example.App'
+    applicationDefaultJvmArgs = ['-Danimal=elephant']
+}
+
+run {
+    environment 'COLOR', 'blue'
 }
 
 tasks.named('test') {

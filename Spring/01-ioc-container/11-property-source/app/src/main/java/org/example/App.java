@@ -14,5 +14,10 @@ public class App {
         TestBean tb = (TestBean)context.getBean("testBean");
         tb.sayHi();
 
+        // JVM property
+        System.out.println(context.getEnvironment().getProperty("animal"));
+        // Environment variable
+        System.out.println(context.getEnvironment().getProperty("COLOR"));
+
     }
 }
