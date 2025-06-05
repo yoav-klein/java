@@ -11,5 +11,8 @@ public class App {
     public static void main(String[] args) {
         ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
         
+        TestBean tb = (TestBean)context.getBean("testBean");
+        tb.sayHi();
+
     }
 }
