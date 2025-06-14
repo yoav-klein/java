@@ -3,12 +3,20 @@
  */
 package spring.mvc.web;
 
+import java.net.URI;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.http.HttpHeaders;
 
 import spring.mvc.business.UserService;
+import spring.mvc.business.exception.BadUserException;
 
 @Controller
 public class WebController {
@@ -26,6 +34,21 @@ public class WebController {
     public String getAllUsers(Model model) {
         model.addAttribute("users", userService.getAllUsers());
         return "users"; // This corresponds to the view name
+    }
+
+    @GetMapping("/user")
+    public String addUser(Model model, @RequestParam("name") String userName) throws BadUserException {
+        if(userName.equals("yoav")) {
+            throw new BadUserException();
+        }
+        
+        return "index"; // This corresponds to the view name
+    }
+
+     @RequestMapping("/server-error")
+    public ResponseEntity<String> serverError() {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        return new ResponseEntity<String>("Hello World", responseHeaders, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }
