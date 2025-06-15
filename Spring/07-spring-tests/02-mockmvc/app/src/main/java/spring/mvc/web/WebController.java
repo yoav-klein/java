@@ -39,6 +39,7 @@ public class WebController {
     @GetMapping("/user")
     public String addUser(Model model, @RequestParam("name") String userName) throws BadUserException {
         if(userName.equals("yoav")) {
+            System.out.println("Throwing");
             throw new BadUserException();
         }
         

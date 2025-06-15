@@ -9,13 +9,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
+import org.springframework.util.Assert;
 import org.springframework.web.context.WebApplicationContext;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import jakarta.servlet.ServletException;
-
-import org.testng.Reporter;
 
 import spring.mvc.business.BusinessConfig;
 import spring.mvc.business.exception.BadUserException;
@@ -34,22 +31,27 @@ public class MyTest extends AbstractTestNGSpringContextTests {
 		this.mockMvc = webAppContextSetup(this.wac).build();
 	}
 
+    // basic test, assert that status is ok and model contains a certain attribute
     @Test
     void testHello() throws Exception {
         mockMvc.perform(get("/hello")).andExpect(status().isOk())
         .andExpect(model().attributeExists("name"));
     }
 
-    // when a controller method throws an excpetion, it is wrapped by a ServletException
-    @Test(expectedExceptions=ServletException.class)
-    void testException() throws BadUserException, Exception {
-        mockMvc.perform(get("/user").param("name", "yoav"));
+    // assert that a specific exception was thrown
+    // NOTE: this works only if the exception was handled by an exception resolver
+    @Test
+    void testException() throws Exception {
+        mockMvc.perform(get("/user").param("name", "yoav"))
+            .andExpect(result -> {
+                Exception ex = result.getResolvedException();
+                Assert.isInstanceOf(BadUserException.class, ex);
+            });
     }
 
+    // expect a certain status code
     @Test
     void testStatusCode() throws Exception {
         mockMvc.perform(get("/server-error")).andExpect(status().is5xxServerError());
     }
-
-    
 }
