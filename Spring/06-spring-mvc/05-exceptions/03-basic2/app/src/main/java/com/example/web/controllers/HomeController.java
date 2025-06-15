@@ -39,7 +39,7 @@ public class HomeController {
         throw new UserAlreadyExistsException();
     }
 
-    // ResponseStatusExceptionResolver
+    // SimpleMappingExceptionResolver
     @RequestMapping("/updateUser")
     public String updateUser() throws InvalidRequestException {
         throw new InvalidRequestException();
