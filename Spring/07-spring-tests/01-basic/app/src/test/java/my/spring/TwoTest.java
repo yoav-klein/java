@@ -1,11 +1,9 @@
 package my.spring;
 
-import org.springframework.test.context.*;
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.testng.annotations.*;
-import static org.testng.Assert.*;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.testng.annotations.Test;
 
 @ContextConfiguration(classes = {AppConfig.class})
 public class TwoTest extends AbstractTestNGSpringContextTests  {
