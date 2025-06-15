@@ -4,23 +4,22 @@
 package spring.mvc;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.HashMap;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class MyController {
 
+    // if an exception with no handling is thrown, then it bubbles up to a ServletExcpetion
     @RequestMapping("/hello")
-    public String sayHello(Model model) throws IOException {
+    public String sayHello(Model model) throws FooException, IOException {
         model.addAttribute("message", "Hello, Spring MVC!");
 
-        if(1 == 1) { throw new IOException(); }
+        if(1 == 1) { throw new FooException(); }
         return "hellopage"; // This corresponds to the view name
     }
 
