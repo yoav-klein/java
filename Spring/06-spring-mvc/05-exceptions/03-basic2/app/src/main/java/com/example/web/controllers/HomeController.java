@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.business.exception.InvalidRequestException;
 import com.example.business.exception.NoSuchUserException;
+import com.example.business.exception.UnhandledException;
 import com.example.business.exception.UserAlreadyExistsException;
 
 @Controller
@@ -17,16 +18,28 @@ public class HomeController {
     @RequestMapping("/")
     public String sayHello(Model model) {
         model.addAttribute("name", "Yaffa");
+
         return "index"; // This corresponds to the view name
     }
 
+    // unhandled exception will bubble up to a ServletException
+    @RequestMapping("/unhandled")
+    public String unahandled(Model model) throws UnhandledException {
+        if(1==1) throw new UnhandledException();
+
+        model.addAttribute("name", "Yaffa");
+        return "index"; // This corresponds to the view name
+        
+    }
+
+    // ExceptionHandlerExceptionResolver
+    // there's an Exception handler method (below) for a NoSuchUserException
     @RequestMapping("/getUser")
     public String getUser() throws NoSuchUserException {
         
         throw new NoSuchUserException();
     }    
-
-    // ExceptionHandlerExceptionResolver
+    
     @ExceptionHandler
     public String noSuchUserHandler(NoSuchUserException e) {
         return "no-such-user";
@@ -34,12 +47,14 @@ public class HomeController {
     }
 
     // ResponseStatusExceptionResolver
+    // the UserAlreadyExistsException declares the @ResponseStatus annotation
     @RequestMapping("/addUser")
     public String addUser() throws UserAlreadyExistsException {
         throw new UserAlreadyExistsException();
     }
 
     // SimpleMappingExceptionResolver
+    // in the Spring configuration we have a mapping between the InvalidRequestException to the invalid-request view
     @RequestMapping("/updateUser")
     public String updateUser() throws InvalidRequestException {
         throw new InvalidRequestException();

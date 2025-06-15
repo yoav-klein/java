@@ -3,24 +3,22 @@ package com.example.web;
 
 import java.util.Properties;
 
-
-import org.springframework.context.annotation.Configuration;
 import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.HandlerExceptionResolver;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.HandlerExceptionResolver;
-import org.springframework.context.annotation.Bean;
-
-import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring6.SpringTemplateEngine;
-import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring6.view.ThymeleafViewResolver;
+import org.thymeleaf.templatemode.TemplateMode;
 
-import com.example.business.exception.*;
+import com.example.business.exception.InvalidRequestException;
 
 @Configuration
 @EnableWebMvc
@@ -71,11 +69,11 @@ public class SpringWebConfig implements WebMvcConfigurer, ApplicationContextAwar
         p.setProperty(InvalidRequestException.class.getName(), "invalid-request");
         s.setExceptionMappings(p);
 
-        //setting default error view
+        /* //setting default error view
         s.setDefaultErrorView("defaultErrorView");
         //setting default status code
         s.setDefaultStatusCode(400);
-
+ */
         return s;
     }
 
