@@ -9,7 +9,6 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import  org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import static org.hamcrest.Matchers.*;
 
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
@@ -43,9 +42,12 @@ public class SecurityTest extends AbstractTestNGSpringContextTests {
             .build();
 	}
 
+	// basic test
 	@Test
 	public void testOauth2() throws Exception {
-		mvc.perform(get("/").with(oauth2Login())).andExpect(model().attributeExists("userid")).andExpect(model().attribute("userid", (Object)"user"));
+		mvc.perform(get("/").with(oauth2Login()))
+			.andExpect(model().attributeExists("userid"))
+			.andExpect(model().attribute("userid", "user"));
 	}
 	
 }
