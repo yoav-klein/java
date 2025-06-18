@@ -3,13 +3,15 @@
  */
 package com.example.web.controllers;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.Authentication;
-import org.springframework.context.ApplicationContext;
+
+import com.example.business.service.MessageService;
 
 
 @Controller
@@ -18,9 +20,12 @@ public class HomeController {
     @Autowired
     ApplicationContext context;
 
-    @RequestMapping("/")
+    @Autowired
+    MessageService messageService;
+
+    @RequestMapping("/methodsecurity")
     public String sayHello(Model model, @AuthenticationPrincipal Object user, Authentication authentication) {
-        
+        model.addAttribute("message", messageService.getMessage());
         return "index"; // This corresponds to the view name
     }
 
@@ -28,6 +33,11 @@ public class HomeController {
     public String adminPage(Model model, @AuthenticationPrincipal Object user, Authentication authentication) {
         
         return "index"; // This corresponds to the view name
+    }
+
+    @RequestMapping("/management")
+    public String managementPage() {
+        return "index";
     }
    
 }
