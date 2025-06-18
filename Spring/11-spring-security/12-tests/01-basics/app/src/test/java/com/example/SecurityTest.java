@@ -3,11 +3,10 @@
 package com.example;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.security.test.context.support.WithMockUser;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.*;
-import  org.springframework.security.test.context.support.WithMockUser;
+import  static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
@@ -58,7 +57,9 @@ public class SecurityTest extends AbstractTestNGSpringContextTests {
         messageService.getMessage();
     }
 
-	/* @Test // (expectedExceptions=AuthenticationCredentialsNotFoundException.class)
+	/* this doesn't work I don't know why 
+	
+	@Test // (expectedExceptions=AuthenticationCredentialsNotFoundException.class)
 	@WithMockUser("yoav")
 	public void getMessageUnauthenticated() {
 		messageService.onlyAuthenticated();
