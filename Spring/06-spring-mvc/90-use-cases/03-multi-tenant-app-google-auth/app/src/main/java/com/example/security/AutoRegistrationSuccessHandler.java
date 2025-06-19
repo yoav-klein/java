@@ -43,8 +43,8 @@ public class AutoRegistrationSuccessHandler implements AuthenticationSuccessHand
             response.sendRedirect("/app");
             return;
         }
-        
-        System.out.println("AutoRegistrationSuccessHandler:: user does not exist!");
+
+        System.out.println("Registering user");
         
         // if not, add them to the database
         User user = new User(sub, name, email, pictureUrl);

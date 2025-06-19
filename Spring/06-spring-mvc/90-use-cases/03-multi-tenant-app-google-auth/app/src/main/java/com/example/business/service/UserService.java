@@ -34,4 +34,5 @@ public class UserService {
         return invitationRepository.getAllInvitationsForUser(userId);
 
     }
+
 }

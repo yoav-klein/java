@@ -23,25 +23,32 @@ repositories {
 
 
 dependencies {
-    // Use JUnit Jupiter for testing.
-    testImplementation libs.junit.jupiter
 
-    implementation 'org.springframework:spring-webmvc:6.1.1'
-    implementation group: 'org.springframework.security', name: 'spring-security-web', version: '6.4.2'
-    implementation group: 'org.springframework.security', name: 'spring-security-core', version: '6.4.2'
-    implementation group: 'org.springframework.security', name: 'spring-security-config', version: '6.4.2'
-    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: '6.4.2'
-    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-jose', version: '6.4.2'
-    implementation group: 'org.springframework', name: 'spring-jdbc', version: '6.1.11'
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.18.2'
     implementation 'org.apache.tomcat:tomcat-servlet-api:10.1.24'
     implementation group: 'org.thymeleaf', name: 'thymeleaf-spring6', version: '3.1.2.RELEASE'
     implementation 'mysql:mysql-connector-java:8.0.33'
 
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation(platform("org.springframework.security:spring-security-bom:6.5.0"))
+    implementation 'org.springframework:spring-webmvc:6.1.1'
+    implementation group: 'org.springframework.security', name: 'spring-security-web'
+    implementation group: 'org.springframework.security', name: 'spring-security-core'
+    implementation group: 'org.springframework.security', name: 'spring-security-config'
+    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client'
+    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-jose'
+    implementation group: 'org.springframework', name: 'spring-jdbc', version: '6.1.11'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.18.2'
 
-    // This dependency is used by the application.
-    implementation libs.guava
+    // TESTING
+    
+    // TestNG for testing dude
+    testImplementation libs.testng
+    
+    // Spring tests
+    testImplementation group: 'org.springframework.security', name: 'spring-security-test'
+    testImplementation group: 'org.springframework', name: 'spring-test', version: '6.2.8'
+
+    // this is to use model().attribute() method
+    testImplementation("org.hamcrest:hamcrest:3.0")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -53,7 +60,7 @@ java {
 
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
-    useJUnitPlatform()
+    useTestNG()
 }
 
 tasks.register('deploy', Copy) {
