@@ -52,10 +52,8 @@ public class UserRepository {
         try {
             user = this.jdbcTemplate.queryForObject(GET_USER_BY_ID, userRowMapper, id);
         } catch(EmptyResultDataAccessException e) {
-            System.out.println("UserRepository:: user with id " + id + " is not found!");
             return Optional.empty();
         }
-        System.out.println("UserRepository:: user with id " + id + " is found!");
         return Optional.of(user);
         
     }

@@ -11,7 +11,7 @@ import org.testng.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import org.springframework.test.context.web.WebAppConfiguration;
 import  org.springframework.test.web.servlet.MockMvc;
 import  org.springframework.test.web.servlet.MvcResult;
@@ -36,7 +36,8 @@ import com.example.web.SpringWebConfig;
 
 @WebAppConfiguration
 @ContextConfiguration(classes = { SpringWebConfig.class, SpringSecurityConfig.class, SpringBusinessConfig.class })
-public class SecurityTest extends AbstractTestNGSpringContextTests {
+public class SecurityTest extends AbstractTransactionalTestNGSpringContextTests {
+    // extending AbstractTransactionalTestNGSpringContextTests so that each test method will rollback database changes
     
 	@Autowired
 	private WebApplicationContext context;
@@ -103,12 +104,12 @@ public class SecurityTest extends AbstractTestNGSpringContextTests {
         Assert.assertTrue(listOfTenants.isEmpty());
 		
         // create tenant
-        result = mvc.perform(post("/tenants").param("name", "HomeSweetHome").with(john()).with(csrf()))
-            .andReturn();
+        mvc.perform(post("/tenants").param("name", "HomeSweetHome").with(john()).with(csrf()));
         
+        result = mvc.perform(get("/my-tenants").with(john())).andReturn();
         model = result.getModelAndView().getModel();
         listOfTenants = (List<Tenant>)model.get("tenants");
-        Assert.assertTrue(listOfTenants.isEmpty());
+        Assert.assertTrue(listOfTenants.size() == 1);
 	}
 	
 }
