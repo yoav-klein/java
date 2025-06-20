@@ -90,7 +90,7 @@ public class SecurityTest extends AbstractTransactionalTestNGSpringContextTests 
     
 	// basic test
 	@Test
-	public void testOauth2() throws Exception {
+	public void basicTest() throws Exception {
         mvc.perform(get("/").with(muhammad())).andExpect(status().isOk());
 
         MvcResult result = mvc.perform(get("/my-tenants").with(john()))
@@ -106,10 +106,32 @@ public class SecurityTest extends AbstractTransactionalTestNGSpringContextTests 
         // create tenant
         mvc.perform(post("/tenants").param("name", "HomeSweetHome").with(john()).with(csrf()));
         
+        // assert tenant was created
         result = mvc.perform(get("/my-tenants").with(john())).andReturn();
         model = result.getModelAndView().getModel();
         listOfTenants = (List<Tenant>)model.get("tenants");
         Assert.assertTrue(listOfTenants.size() == 1);
 	}
+
+    // test inviting user
+    @Test
+	public void testInviteUser() throws Exception {
+        // create tenant
+        mvc.perform(post("/tenants").param("name", "HomeSweetHome").with(john()).with(csrf()));
+        
+        // get the ID of the tenant
+        MvcResult result = mvc.perform(get("/my-tenants").with(john())).andReturn();
+        Map<String, Object>  model = result.getModelAndView().getModel();
+        List<Tenant> listOfTenants = (List<Tenant>)model.get("tenants");
+        Tenant createdTenant = listOfTenants.get(0);
+        String tenantId = createdTenant.getId();
+
+        // invite muhammad
+        mvc.perform(post(String.format("/tenants/%s/invitations", tenantId)).param("email", "muhammad@tmail.com"));
+
+        
+	}
+
+
 	
 }
