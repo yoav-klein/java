@@ -59,8 +59,8 @@ java {
 }
 
 tasks.named('test') {
-    // Use JUnit Platform for unit tests.
     useTestNG()
+    testLogging.showStandardStreams = true
 }
 
 tasks.register('deploy', Copy) {

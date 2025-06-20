@@ -43,12 +43,16 @@ public class TenantController {
     // create tenant
     @PostMapping
     public String createTenant(@AuthenticationPrincipal Object user, @RequestParam("name") String tenantName) {
+        System.out.println("HERE");
         OAuth2User oauth2User = (OAuth2User)user;
         String userId = oauth2User.getAttribute("sub");
         tenantService.createTenant(tenantName, userId);
 
         return "redirect:/my-tenants";
     }
+
+    @GetMapping("/test")
+    public String testCreate() { System.out.println("WOOWWW"); return "redirect:/my-tenants"; }
     
     // delete tenant
     @GetMapping("/{id}/delete")

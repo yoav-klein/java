@@ -1,24 +1,34 @@
 package com.example;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+import org.testng.Assert;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oauth2Login;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.context.web.WebAppConfiguration;
 import  org.springframework.test.web.servlet.MockMvc;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import  org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.;
+
+// oauth2login, csrf, etc.
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+import org.springframework.test.context.ActiveProfiles;
+// get(), post(), etc
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+// status(), model(), etc.
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 import org.springframework.web.context.WebApplicationContext;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 import com.example.business.SpringBusinessConfig;
+import com.example.business.model.Tenant;
 import com.example.business.model.User;
 import com.example.business.service.UserService;
 import com.example.security.SpringSecurityConfig;
@@ -82,10 +92,23 @@ public class SecurityTest extends AbstractTestNGSpringContextTests {
 	public void testOauth2() throws Exception {
         mvc.perform(get("/").with(muhammad())).andExpect(status().isOk());
 
-        mvc.perform(get("/my-tenants").with(john()))
+        MvcResult result = mvc.perform(get("/my-tenants").with(john()))
             .andExpect(model().attributeExists("tenants"))
-            .andExpect(status().isOk());
-		// mvc.perform(get("/").with(oauth2Login().attributes(attrs -> attrs.put("name", "Yoav"))));
+            .andExpect(status().isOk())
+            .andReturn();
+        
+        // assert empty list of tenants
+        Map<String, Object> model = result.getModelAndView().getModel();
+        List<Tenant> listOfTenants = (List<Tenant>)model.get("tenants");
+        Assert.assertTrue(listOfTenants.isEmpty());
+		
+        // create tenant
+        result = mvc.perform(post("/tenants").param("name", "HomeSweetHome").with(john()).with(csrf()))
+            .andReturn();
+        
+        model = result.getModelAndView().getModel();
+        listOfTenants = (List<Tenant>)model.get("tenants");
+        Assert.assertTrue(listOfTenants.isEmpty());
 	}
 	
 }
