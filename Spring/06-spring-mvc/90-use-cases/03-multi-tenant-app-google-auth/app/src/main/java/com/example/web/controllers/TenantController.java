@@ -100,8 +100,8 @@ public class TenantController {
     }
 
     // remove user
-    @GetMapping("/{id}/members/{user}/remove")
-    public String removeMember(Model model, @PathVariable("id") String tenantId, @PathVariable("user") String userId) {
+    @GetMapping("/{id}/members/{userId}/remove")
+    public String removeMember(Model model, @PathVariable("id") String tenantId, @PathVariable("userId") String userId) {
         tenantService.removeUserFromTenant(tenantId, userId);
 
         return String.format("redirect:/tenants/%s", tenantId);
