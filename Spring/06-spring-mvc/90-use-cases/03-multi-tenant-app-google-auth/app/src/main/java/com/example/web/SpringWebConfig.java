@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -22,6 +23,7 @@ import com.example.web.interceptor.TenantInterceptor;
 @Configuration
 @EnableWebMvc
 @ComponentScan
+@EnableMethodSecurity
 public class SpringWebConfig implements WebMvcConfigurer, ApplicationContextAware  {
     private ApplicationContext applicationContext;
 

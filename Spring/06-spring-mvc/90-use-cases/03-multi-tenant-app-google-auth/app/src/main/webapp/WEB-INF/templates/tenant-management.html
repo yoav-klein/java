@@ -14,7 +14,7 @@
                         <p class="member-name" th:text="${member.email}"></p>
                         <p th:text="${member.role}"></p>
                         <div class="member-actions" th:if="${@tenantService.isAdmin(user.id, tenant.id)}">
-                            <form method="post" th:action="@{/tenants/{tenantId}/members/{user}(tenantId=${tenant.id},user=${member.id})}">
+                            <form th:unless="${member.id} == ${user.id}" method="post" th:action="@{/tenants/{tenantId}/members/{user}(tenantId=${tenant.id},user=${member.id})}">
                                 <input type="hidden" name="_method" value="delete">
                                 <button type="submit"><img th:src="@{/image/delete.svg}" alt=""></button>
                             </form>

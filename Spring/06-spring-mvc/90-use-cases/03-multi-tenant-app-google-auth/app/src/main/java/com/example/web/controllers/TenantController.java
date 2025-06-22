@@ -4,7 +4,9 @@
 package com.example.web.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -61,17 +63,19 @@ public class TenantController {
 
     // tenant management page
     @GetMapping("/{id}")
-    public String manageTenant(@AuthenticationPrincipal Object user, Model model, @PathVariable("id") String tenantId) {
+    @PreAuthorize("@authz.isUserPartOfTenant(authentication, #tenantId)")
+    public String manageTenant(@AuthenticationPrincipal Object user, Model model, @PathVariable("id") @P("tenantId") String tenantId) {
         model.addAttribute("tenant", tenantService.getTenantById(tenantId));
         model.addAttribute("invitations", tenantService.getAllInvitationsForTenant(tenantId));
         
         return "tenant-management";
     }
-
+    
     // connect to tenant
     @GetMapping("/{id}/connect")
+    @PreAuthorize("@authz.isUserPartOfTenant(authentication, #tenantId)")
     public String connectToTenant(@AuthenticationPrincipal Object user, 
-        @PathVariable("id") String tenantId, 
+        @PathVariable("id") @P("tenantId") String tenantId, 
         HttpServletResponse response) {
         
         OAuth2User oauth2User = (OAuth2User)user;

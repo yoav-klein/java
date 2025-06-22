@@ -17,6 +17,7 @@ public class AuthBean {
     TenantService tenantService;
     
     public boolean isUserPartOfTenant(Authentication authentication, String tenantId) {
+        System.out.println("=== isParTOfTenant");
         OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) authentication;
         OAuth2User oauth2User = token.getPrincipal();
         Map<String, Object> attrs = oauth2User.getAttributes();
