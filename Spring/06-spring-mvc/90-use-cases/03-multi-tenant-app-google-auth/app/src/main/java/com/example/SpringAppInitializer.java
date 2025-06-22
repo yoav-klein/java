@@ -1,13 +1,15 @@
 
 package com.example;
 
+import org.springframework.web.filter.DelegatingFilterProxy;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import com.example.business.SpringBusinessConfig;
 import com.example.security.SpringSecurityConfig;
 import com.example.web.SpringWebConfig;
+
 import jakarta.servlet.Filter;
-import org.springframework.web.filter.DelegatingFilterProxy;
 
 public class SpringAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
@@ -30,6 +32,6 @@ public class SpringAppInitializer extends AbstractAnnotationConfigDispatcherServ
 	public Filter[] getServletFilters() {
 		DelegatingFilterProxy delegatingFilterProxy = new DelegatingFilterProxy();
 		delegatingFilterProxy.setTargetBeanName("springSecurityFilterChain");
-		return new Filter[] { delegatingFilterProxy };
+		return new Filter[] { delegatingFilterProxy, new HiddenHttpMethodFilter() };
 	}
 }

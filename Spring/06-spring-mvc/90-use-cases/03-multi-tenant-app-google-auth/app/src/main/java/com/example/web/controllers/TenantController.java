@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -16,10 +17,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.business.exception.UserAlreadyInTenantException;
+import com.example.business.exception.UserNotExistsException;
 import com.example.business.service.TenantService;
 import com.example.business.service.UserService;
-import com.example.business.exception.UserNotExistsException;
-import com.example.business.exception.UserAlreadyInTenantException;
 import com.example.helpers.Constants;
 
 import jakarta.servlet.http.Cookie;
@@ -51,7 +52,7 @@ public class TenantController {
     }
     
     // delete tenant
-    @GetMapping("/{id}/delete")
+    @DeleteMapping("/{id}")
     public String deleteTenant(Model model, @PathVariable("id") String tenantId) {
         tenantService.deleteTenant(tenantId);
 
@@ -100,7 +101,7 @@ public class TenantController {
     }
 
     // remove user
-    @GetMapping("/{id}/members/{userId}/remove")
+    @DeleteMapping("/{id}/members/{userId}")
     public String removeMember(Model model, @PathVariable("id") String tenantId, @PathVariable("userId") String userId) {
         tenantService.removeUserFromTenant(tenantId, userId);
 
@@ -108,7 +109,7 @@ public class TenantController {
     }
 
     // leave tenant
-    @GetMapping("/{id}/members/{user}/leave")
+    @DeleteMapping("/{id}/members/{user}/leave")
     public String leaveTenant(Model model, @PathVariable("id") String tenantId, @PathVariable("user") String userId) {
         tenantService.removeUserFromTenant(tenantId, userId);
 

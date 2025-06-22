@@ -238,6 +238,16 @@ li {
     display: block;
 }
 
+.tenant-actions form {
+    height: 100%;
+}
+
+
+.tenant-actions form button {
+    height: 100%;
+}
+
+
 .tenant-item img {
     max-height: 100%;
     width: auto;
