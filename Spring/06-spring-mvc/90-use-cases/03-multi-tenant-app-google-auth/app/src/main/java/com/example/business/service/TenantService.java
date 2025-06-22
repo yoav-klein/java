@@ -81,17 +81,6 @@ public class TenantService {
         }
     }
 
-    // TRANSACTIONAL
-    public void acceptInvitation(String invitationId) {
-        Invitation invitation = invitationRepository.getInvitationById(invitationId);
-        invitationRepository.removeInvitation(invitationId);
-        tenantUserRepository.addUserToTenant(invitation.getTenant().getId(), invitation.getUser().getId(), "regular");
-    }
-
-    // SECURED
-    public void declineInvitation(String invitationId) {
-        invitationRepository.removeInvitation(invitationId);
-    }
     
     // SECURED
     public void joinToTenant(String tenantId, String userId) throws UserAlreadyInTenantException {
@@ -114,7 +103,4 @@ public class TenantService {
         return invitationRepository.getAllInvitationsForTenant(tenantId);
     }
 
-    public Invitation getInvitationById(String id) {
-        return invitationRepository.getInvitationById(id);
-    }
 }
