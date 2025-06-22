@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.business.service.InvitationService;
-import com.example.business.service.TenantService;
 
 
 @Controller
