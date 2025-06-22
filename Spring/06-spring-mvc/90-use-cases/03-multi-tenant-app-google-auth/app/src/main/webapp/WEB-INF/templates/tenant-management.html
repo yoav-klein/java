@@ -14,7 +14,10 @@
                         <p class="member-name" th:text="${member.email}"></p>
                         <p th:text="${member.role}"></p>
                         <div class="member-actions" th:if="${@tenantService.isAdmin(user.id, tenant.id)}">
-                            <a th:unless="${user.id} == ${member.id}" th:href="@{/tenants/{tenantId}/members/{user}/remove(tenantId=${tenant.id},user=${member.id})}"><img th:src="@{/image/delete.svg}" alt=""></a>
+                            <form method="post" th:action="@{/tenants/{tenantId}/members/{user}(tenantId=${tenant.id},user=${member.id})}">
+                                <input type="hidden" name="_method" value="delete">
+                                <button type="submit"><img th:src="@{/image/delete.svg}" alt=""></button>
+                            </form>
                         </div>
                     </li>
                 </ul>
@@ -28,7 +31,10 @@
                         <p class="member-name" th:text="${invitation.user.name}"></p>
                         <p class="member-name" th:text="${invitation.user.email}"></p>
                         <div class="member-actions" th:if="${@tenantService.isAdmin(user.id, tenant.id)}">
-                            <a th:href="@{/invitations/{invitationId}/cancel(invitationId=${invitation.id})}"><img th:src="@{/image/delete.svg}" alt=""></a>
+                            <form th:action="@{/invitations/{invitationId}(invitationId=${invitation.id})}" method="post">
+                                <input type="hidden" name="_method" value="delete">
+                                <button type="submit"><img th:src="@{/image/delete.svg}" alt="cancel-invitation"></button>
+                            </form>
                         </div>
                     </li>
                 </ul>
@@ -46,7 +52,8 @@
             </section>
             <section th:if="${@tenantService.isAdmin(user.id, tenant.id)}" class="main-section danger-zone">
                 <h2>⚠️ Delete Tenant</h2>
-                <form method="get" th:action="@{/tenants/{tenantId}/delete(tenantId=${tenant.id})}">
+                <form method="post" th:action="@{/tenants/{tenantId}(tenantId=${tenant.id})}">
+                    <input type="hidden" name="_method" value="delete">
                     <button class="danger" type="submit">Delete Tenant</button>
                 </form>
                 

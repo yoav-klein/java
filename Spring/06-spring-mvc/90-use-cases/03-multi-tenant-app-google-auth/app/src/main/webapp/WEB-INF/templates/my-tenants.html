@@ -16,7 +16,7 @@
                         </div>
                         <div class="tenant-actions">
                             <a th:href="@{/tenants/{tenantId}(tenantId=${tenant.id})}" href="#"><img height="512" width="512" th:src="@{/image/user-gear.svg}" alt="manage tenant"></a>
-                            <form th:action="@{/tenants/{tenantId}(tenantId=${tenant.id})}" method="post">
+                            <form th:action="@{/tenants/{tenantId}/members/{member}/leave(tenantId=${tenant.id}, member=${user.id})}" method="post">
                                 <input type="hidden" name="_method" value="delete">
                                 <button type="submit"><img height="150" width="150" th:src="@{/image/house-leave.svg}" alt="leave tenant"></button>
                             </form>
@@ -35,8 +35,12 @@
                     <li class="invitation-item" th:each="invitation : ${invitations}">
                         <h3 th:text="${invitation.tenant.name}"></h3>
                         <div class="invitation-actions">
-                            <a class="block" th:href="@{/invitations/{invitationId}/accept(invitationId=${invitation.id})}"><img th:src="@{/image/accept.svg}" height="800" width="800" alt="accept"></a>
-                            <a class="block" th:href="@{/invitations/{invitationId}/decline(invitationId=${invitation.id})}"><img th:src="@{/image/decline.svg}" height="800" width="800" alt="decline"></a>
+                            <form method="post" th:action="@{/invitations/{invitationId}/accept(invitationId=${invitation.id})}">
+                                <button type="submit"><img th:src="@{/image/accept.svg}" height="800" width="800" alt="accept"></button>
+                            </form>
+                            <form method="post" th:action="@{/invitations/{invitationId}/decline(invitationId=${invitation.id})}">
+                                <button type="submit"><img th:src="@{/image/decline.svg}" height="800" width="800" alt="decline"></button>
+                            </form>
                         </div>
                     </li>
                 </ul>

@@ -285,8 +285,12 @@ li {
     height: 3em;
 }
 
-.invitation-actions a {
+.invitation-actions form {
     display: block;
+    height: 100%;
+}
+
+.invitation-actions form button {
     height: 100%;
 }
 
