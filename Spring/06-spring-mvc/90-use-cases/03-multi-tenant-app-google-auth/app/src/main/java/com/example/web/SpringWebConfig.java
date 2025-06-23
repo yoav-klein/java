@@ -70,9 +70,14 @@ public class SpringWebConfig implements WebMvcConfigurer, ApplicationContextAwar
         return viewResolver;
     }
 
+    @Bean
+    TenantInterceptor tenantInterceptor() {
+        return new TenantInterceptor();
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new TenantInterceptor())
+        registry.addInterceptor(tenantInterceptor())
                 .addPathPatterns("/product/**")
                 .addPathPatterns("/home")
                 .excludePathPatterns("/login");
