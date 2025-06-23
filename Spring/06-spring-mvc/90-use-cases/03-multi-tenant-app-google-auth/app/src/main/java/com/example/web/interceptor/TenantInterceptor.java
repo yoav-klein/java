@@ -16,7 +16,7 @@ import com.example.helpers.Constants;
 import com.example.helpers.TenantContext;
 import com.example.security.AuthBean;
 import com.example.business.exception.NoTenantSelectedException;
-@Component
+
 public class TenantInterceptor implements HandlerInterceptor {
     
     @Autowired
