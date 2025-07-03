@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import  org.springframework.test.web.servlet.MvcResult;
 import  static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -145,7 +146,7 @@ public class SecurityTest extends AbstractTransactionalTestNGSpringContextTests 
             .with(john()).with(csrf()))
             .andExpect(status().is3xxRedirection());
 
-        // let's see if mohammad has an invitation
+        // let's see if bob has an invitation
         result = mvc.perform(get("/my-tenants").with(bob()))
             .andReturn();
         
@@ -155,7 +156,7 @@ public class SecurityTest extends AbstractTransactionalTestNGSpringContextTests 
         String invitationId = invitations.get(0).getId();
 
         // accept the invitation
-        result = mvc.perform(get(String.format("/invitations/%s/accept", invitationId)).with(bob()))
+        result = mvc.perform(post(String.format("/invitations/%s/accept", invitationId)).with(bob()).with(csrf()))
             .andExpect(status().is3xxRedirection()).andReturn();
         
         // verify that bob is in tenant
@@ -166,7 +167,7 @@ public class SecurityTest extends AbstractTransactionalTestNGSpringContextTests 
         Assert.assertEquals(theTenantThatbobJoined.getId(), tenantId);
 
         // remove bob from tenant
-        mvc.perform(get(String.format("/tenants/%s/members/%s/remove", tenantId, "bob")).with(john())).andExpect(status().is3xxRedirection());
+        mvc.perform(delete(String.format("/tenants/%s/members/%s", tenantId, "bob")).with(john()).with(csrf())).andExpect(status().is3xxRedirection());
         
         // verify that bob not in tenant
         result = mvc.perform(get("/my-tenants").with(bob())).andReturn();
