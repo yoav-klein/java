@@ -3,7 +3,7 @@ package com.example;
 import org.testng.annotations.*;
 import org.testng.*;
 
-public class SimpleTest {
+public class SimpleTest extends Base {
     private int a = 0;
     
     // just to see that you can use instance variables and initialize them in BeforeClass
