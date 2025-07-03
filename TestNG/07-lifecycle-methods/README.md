@@ -1,4 +1,5 @@
-# Before stuff..
+# Lifecycle Methods
 ---
 
-Testing the `@BeforeClass` annotation
+Digging deeper into the `@Before` and `@After` methods.
+
