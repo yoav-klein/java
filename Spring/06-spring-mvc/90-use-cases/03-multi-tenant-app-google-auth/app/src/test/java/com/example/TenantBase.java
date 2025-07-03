@@ -13,28 +13,31 @@ import org.springframework.test.context.testng.AbstractTransactionalTestNGSpring
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import  org.springframework.test.web.servlet.MvcResult;
-import  static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import  static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 import org.springframework.web.context.WebApplicationContext;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 import org.testng.Assert;
-import org.testng.annotations.*;
 
 import com.example.business.SpringBusinessConfig;
-import com.example.business.model.Invitation;
 import com.example.business.model.Tenant;
 import com.example.business.model.User;
 import com.example.business.service.UserService;
 import com.example.security.SpringSecurityConfig;
 import com.example.web.SpringWebConfig;
 
+/**
+ * A base TestNG class that creates a tenant in the beginning and destroys it in the end
+ */
+
 @WebAppConfiguration
 @ContextConfiguration(classes = { SpringWebConfig.class, SpringSecurityConfig.class, SpringBusinessConfig.class })
-public class BasicTest extends AbstractTransactionalTestNGSpringContextTests {
+public class TenantBase extends AbstractTransactionalTestNGSpringContextTests {
     // extending AbstractTransactionalTestNGSpringContextTests so that each test method will rollback database changes
     
 	@Autowired
@@ -43,9 +46,9 @@ public class BasicTest extends AbstractTransactionalTestNGSpringContextTests {
     @Autowired
     UserService userService;
 
-	private MockMvc mvc;
-    private Tenant tenant;
-/* 
+	protected MockMvc mvc;
+    protected Tenant tenant;
+
     @BeforeClass
     public void createTenant() throws Exception {
         mvc = webAppContextSetup(context)
@@ -53,25 +56,29 @@ public class BasicTest extends AbstractTransactionalTestNGSpringContextTests {
         .build();
         
         // create tenant
-        mvc.perform(post("/tenants").param("name", "HomeSweetHome").with(john()).with(csrf()));
+        mvc.perform(post("/tenants").param("name", "HomeSweetHome").with(yoav()).with(csrf()));
         // assert tenant was created
-        MvcResult result = mvc.perform(get("/my-tenants").with(john())).andReturn();
+        MvcResult result = mvc.perform(get("/my-tenants").with(yoav())).andReturn();
         Map<String, Object> model = result.getModelAndView().getModel();
         List<Tenant> listOfTenants = (List<Tenant>)model.get("tenants");
         this.tenant = listOfTenants.get(0);
-    }
 
+        System.out.println("NUMBER OF TENANTS: " + listOfTenants.size());
+        System.out.println("CREATED TENANT: " + this.tenant.getId());
+    }
+    
     @AfterClass
     public void deleteTenant() throws Exception {
-        mvc.perform(delete(String.format("/tenants/%s", this.tenant.getId())));
-    } */
+        mvc.perform(delete(String.format("/tenants/%s", this.tenant.getId())).with(yoav()).with(csrf()));
+        System.out.println("DELETED TENANT: " + this.tenant.getId());
+    }
 
     // AuthenticationSuccessHandler are not called in Spring Tests, 
     // so we need to manually register the user
-    public RequestPostProcessor john() {
-        User user = new User("john", "John Adams", "john.adams@tmail.com", "https://john.picture.com");
+    protected RequestPostProcessor yoav() {
+        User user = new User("yoav", "Yoav Klein", "yoav.klein@tmail.com", "https://yoav.picture.com");
         // check if the user already exists in the database
-        Optional<User> optionalUser = userService.getUserById("john");
+        Optional<User> optionalUser = userService.getUserById("yoav");
         if(optionalUser.isEmpty()) {
             userService.addUser(user);
         }
@@ -82,6 +89,16 @@ public class BasicTest extends AbstractTransactionalTestNGSpringContextTests {
             attrs.put("email", user.getEmail());
             attrs.put("pictureUrl", user.getPictureUrl());
         });
+    }
+
+    
+    @Test
+    public void verifyTenantCreated() throws Exception {
+        MvcResult result = this.mvc.perform(get("/my-tenants").with(yoav())).andReturn();
+        Map<String, Object> model = result.getModelAndView().getModel();
+        List<Tenant> listOfTenants = (List<Tenant>)model.get("tenants");
+        Assert.assertTrue(listOfTenants.size() == 1);
+        Assert.assertEquals(listOfTenants.get(0).getId(), this.tenant.getId());
     }
     
 	

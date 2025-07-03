@@ -63,7 +63,7 @@ public class TenantService {
     @PreAuthorize("@authz.isAdmin(authentication, #id)")
     public void inviteUser(@P("id") String tenantId, String email) throws UserNotExistsException, UserAlreadyInTenantException {
         String invitationId = UUID.randomUUID().toString().replace("-", "");
-        
+
         User user = userService.getUserByEmail(email).orElseThrow(() -> { return new UserNotExistsException();});
         if(isUserPartOfTenant(user.getId(), tenantId)) {
             throw new UserAlreadyInTenantException();

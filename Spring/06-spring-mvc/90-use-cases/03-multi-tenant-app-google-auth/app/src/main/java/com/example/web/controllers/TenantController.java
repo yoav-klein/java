@@ -96,7 +96,7 @@ public class TenantController {
 
     // invite user to tenant
     @PostMapping("/{id}/invitations")
-    public String inviteUser(Model model, @PathVariable("id") String tenantId, @RequestParam("email") String userEmail) 
+    public String inviteUser(Model model, @PathVariable("id") String tenantId, @RequestParam("email") String userEmail)
         throws UserNotExistsException, UserAlreadyInTenantException {
         tenantService.inviteUser(tenantId, userEmail);
         model.addAttribute("tenant", tenantService.getTenantById(tenantId));
