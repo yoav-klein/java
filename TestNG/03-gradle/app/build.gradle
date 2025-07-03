@@ -37,5 +37,7 @@ application {
 
 tasks.named('test') {
     // Use TestNG for unit tests.
-    useTestNG()
+    useTestNG {
+        suites("testng.xml")
+    }
 }
