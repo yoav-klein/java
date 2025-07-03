@@ -37,6 +37,11 @@ application {
 
 tasks.named('test') {
     // Use TestNG for unit tests.
+    
+    // usually you'll just use the following line
+    // useTestNG
+
+    // but here we demonstrate how to point to a testng.xml file to specify exactly the suite to run
     useTestNG {
         suites("testng.xml")
     }
