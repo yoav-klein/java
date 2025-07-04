@@ -32,7 +32,7 @@ import com.example.web.SpringWebConfig;
 
 @WebAppConfiguration
 @ContextConfiguration(classes = { SpringWebConfig.class, SpringSecurityConfig.class, SpringBusinessConfig.class })
-public class SecurityTest extends TenantBase {
+public class FlowsTests extends TenantBase {
     
 	@Autowired
 	private WebApplicationContext context;
@@ -224,6 +224,24 @@ public class SecurityTest extends TenantBase {
         Map<String, Object> model = result.getModelAndView().getModel();
         List<Tenant> tenantList = (List<Tenant>)model.get("tenants");
         Assert.assertTrue(tenantList.stream().anyMatch(tenant -> tenant.getId().equals(this.tenantId)));
+    }
+
+    @Test
+    public void testConnectToTenant() throws Exception {
+        acceptedInvitation();
+
+        MvcResult result = mvc.perform(get(String.format("/tenants/%s", this.tenantId)).with(john()))
+            .andExpect(status().isOk())
+            .andReturn();
+    }
+
+    @Test
+    public void testConnectToTenantNotAuthorized() throws Exception {
+        acceptedInvitation();
+
+        MvcResult result = mvc.perform(get(String.format("/tenants/%s", this.tenantId)).with(bob()))
+            .andExpect(status().is(403))
+            .andReturn();
     }
 	
 }
