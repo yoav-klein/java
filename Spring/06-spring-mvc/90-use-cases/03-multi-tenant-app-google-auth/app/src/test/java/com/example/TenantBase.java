@@ -19,10 +19,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 import org.springframework.web.context.WebApplicationContext;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import org.testng.Assert;
 
 import com.example.business.SpringBusinessConfig;
 import com.example.business.model.Tenant;
@@ -47,7 +47,7 @@ public class TenantBase extends AbstractTransactionalTestNGSpringContextTests {
     UserService userService;
 
 	protected MockMvc mvc;
-    protected Tenant tenant;
+    protected String tenantId;
 
     @BeforeClass
     public void createTenant() throws Exception {
@@ -56,21 +56,14 @@ public class TenantBase extends AbstractTransactionalTestNGSpringContextTests {
         .build();
         
         // create tenant
-        mvc.perform(post("/tenants").param("name", "HomeSweetHome").with(yoav()).with(csrf()));
-        // assert tenant was created
-        MvcResult result = mvc.perform(get("/my-tenants").with(yoav())).andReturn();
-        Map<String, Object> model = result.getModelAndView().getModel();
-        List<Tenant> listOfTenants = (List<Tenant>)model.get("tenants");
-        this.tenant = listOfTenants.get(0);
+        MvcResult result = mvc.perform(post("/tenants").param("name", "HomeSweetHome").with(yoav()).with(csrf())).andReturn();
+        this.tenantId = (String)result.getFlashMap().get("tenantId");
 
-        System.out.println("NUMBER OF TENANTS: " + listOfTenants.size());
-        System.out.println("CREATED TENANT: " + this.tenant.getId());
     }
     
     @AfterClass
     public void deleteTenant() throws Exception {
-        mvc.perform(delete(String.format("/tenants/%s", this.tenant.getId())).with(yoav()).with(csrf()));
-        System.out.println("DELETED TENANT: " + this.tenant.getId());
+        mvc.perform(delete(String.format("/tenants/%s", this.tenantId)).with(yoav()).with(csrf()));
     }
 
     // AuthenticationSuccessHandler are not called in Spring Tests, 
@@ -97,8 +90,8 @@ public class TenantBase extends AbstractTransactionalTestNGSpringContextTests {
         MvcResult result = this.mvc.perform(get("/my-tenants").with(yoav())).andReturn();
         Map<String, Object> model = result.getModelAndView().getModel();
         List<Tenant> listOfTenants = (List<Tenant>)model.get("tenants");
-        Assert.assertTrue(listOfTenants.size() == 1);
-        Assert.assertEquals(listOfTenants.get(0).getId(), this.tenant.getId());
+
+        Assert.assertTrue(listOfTenants.stream().anyMatch(tenant -> tenant.getId().equals(this.tenantId)));
     }
     
 	

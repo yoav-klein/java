@@ -13,6 +13,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MvcResult;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import  static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import  static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import  org.springframework.test.web.servlet.request.RequestPostProcessor;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
@@ -64,47 +65,124 @@ public class SecurityTest extends TenantBase {
         });
     }
 
-
-    // test inviting user
-    @Test
-	public void testInviteUser() throws Exception {
+    public RequestPostProcessor bob() {
+        User user = new User("bob", "Bob Ali", "bob.ali@tmail.com", "https://bob.picture.com");
+        // check if the user already exists in the database
+        Optional<User> optionalUser = userService.getUserById("bob");
+        if(optionalUser.isEmpty()) {
+            userService.addUser(user);
+        }
         
-        // invite john
-        mvc.perform(post(String.format("/tenants/%s/invitations", this.tenant.getId())).param("email", "john.adams@tmail.com")
-            .with(yoav()).with(csrf()))
-            .andExpect(status().is3xxRedirection());
+        return oauth2Login().attributes(attrs -> {
+            attrs.put("sub", user.getId());
+            attrs.put("name", user.getName());
+            attrs.put("email", user.getEmail());
+            attrs.put("pictureUrl", user.getPictureUrl());
+        });
+    }
 
+    // invite john by yoav
+    private String inviteUser() throws Exception {
+        // invite john
+        MvcResult result = mvc.perform(post(String.format("/tenants/%s/invitations", this.tenantId)).param("email", "john.adams@tmail.com")
+            .with(yoav()).with(csrf()))
+            .andExpect(status().is3xxRedirection())
+            .andReturn();
+        
+        String invitationId = (String)result.getFlashMap().get("invitationId");
+
+        return invitationId;
+	}
+
+    // john accepts invitation
+    private void acceptedInvitation() throws Exception {
+        String invitationId = inviteUser();
+        // accept the invitation
+        MvcResult result = mvc.perform(post(String.format("/invitations/%s/accept", invitationId)).with(john()).with(csrf()))
+            .andExpect(status().is3xxRedirection()).andReturn();
+
+	}
+
+    @Test
+    public void testInviteUser() throws Exception {
+        String invitationId = inviteUser();
+        
         // let's see if john has an invitation
         MvcResult result = mvc.perform(get("/my-tenants").with(john()))
             .andReturn();
         
         Map<String, Object> model = result.getModelAndView().getModel();
         List<Invitation> invitations = (List<Invitation>)model.get("invitations");
-        Assert.assertTrue(invitations.size() == 1);
-	}
+
+        Assert.assertTrue(invitations.stream().anyMatch(invitation -> invitation.getId().equals(invitationId)));
+    }
     
-    @Test(dependsOnMethods = { "testInviteUser" })
+    @Test
     public void testAcceptInvitation() throws Exception {
-        MvcResult result = mvc.perform(get("/my-tenants").with(john()))
-            .andReturn();
-            
-        Map<String, Object> model = result.getModelAndView().getModel();
-        List<Invitation> invitations = (List<Invitation>)model.get("invitations");
-        Assert.assertTrue(invitations.size() == 1);
-        String invitationId = invitations.get(0).getId();
-        
+        String invitationId = inviteUser();
+
         // accept the invitation
-        result = mvc.perform(post(String.format("/invitations/%s/accept", invitationId)).with(john()).with(csrf()))
+        MvcResult result = mvc.perform(post(String.format("/invitations/%s/accept", invitationId)).with(john()).with(csrf()))
             .andExpect(status().is3xxRedirection()).andReturn();
         
         // verify that john is in tenant
         result = mvc.perform(get("/my-tenants").with(john())).andReturn();
-        model = result.getModelAndView().getModel();
+        Map<String, Object> model = result.getModelAndView().getModel();
         List<Tenant> listOfTenants = (List<Tenant>)model.get("tenants");
         Tenant theTenantThatJohnJoined = listOfTenants.get(0);
-        Assert.assertEquals(theTenantThatJohnJoined.getId(), this.tenant.getId());
+        Assert.assertEquals(theTenantThatJohnJoined.getId(), this.tenantId);
     }
 
+    @Test
+    public void testAcceptInvitationByUnauthorizedUser() throws Exception {
+        String invitationId = inviteUser();
 
+        // accept the invitation
+        mvc.perform(post(String.format("/invitations/%s/accept", invitationId)).with(bob()).with(csrf()))
+            .andExpect(status().is4xxClientError());
+        
+    }
+
+    @Test
+    public void testDeclineInvitation() throws Exception {
+        String invitationId = inviteUser();
+
+        // decline the invitation
+        MvcResult result = mvc.perform(post(String.format("/invitations/%s/decline", invitationId)).with(john()).with(csrf()))
+            .andExpect(status().is3xxRedirection()).andReturn();
+        
+        // verify that john is NOT in tenant
+        result = mvc.perform(get("/my-tenants").with(john())).andReturn();
+        Map<String, Object> model = result.getModelAndView().getModel();
+        List<Tenant> listOfTenants = (List<Tenant>)model.get("tenants");
+        
+        Assert.assertTrue(listOfTenants.stream().allMatch(tenant -> !tenant.getId().equals(this.tenantId)));
+
+        // verify that invitation doesn't exist
+        List<Invitation> invitations = (List<Invitation>)model.get("invitations");
+        
+        Assert.assertTrue(invitations.stream().allMatch(invitation -> !invitation.getId().equals(invitationId)));
+    }
+
+    @Test
+    public void testCancelInvitation() throws Exception {
+        String invitationId = inviteUser();
+
+        // accept the invitation
+        MvcResult result = mvc.perform(delete(String.format("/invitations/%s", invitationId)).with(yoav()).with(csrf()))
+            .andExpect(status().is3xxRedirection()).andReturn();
+        
+        // verify that invitation doesn't exist
+        result = mvc.perform(get("/my-tenants").with(john())).andReturn();
+        Map<String, Object> model = result.getModelAndView().getModel();
+        List<Invitation> invitations = (List<Invitation>)model.get("invitations");
+        
+        Assert.assertTrue(invitations.stream().allMatch(invitation -> !invitation.getId().equals(invitationId)));
+    }
+
+    @Test
+    public void testUserLeavesTenant() throws Exception {
+        
+    }
 	
 }

@@ -35,7 +35,6 @@ public class AuthBean {
     }
 
     public boolean isUser(Authentication authentication, String userId) {
-        System.out.println("IS USER");
         OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) authentication;
         OAuth2User oauth2User = token.getPrincipal();
         Map<String, Object> attrs = oauth2User.getAttributes();

@@ -35,7 +35,7 @@ public class InvitationService {
         invitationRepository.removeInvitation(invitationId);
         tenantUserRepository.addUserToTenant(invitation.getTenant().getId(), invitation.getUser().getId(), "regular");
     }
-
+    // @authz.isAdmin(authentication, @invitationService.getInvitationTenantId(#invitationId)) or 
     // security - allowed only to the invited user, or tenant admin
     @PreAuthorize("@authz.isAdmin(authentication, @invitationService.getInvitationTenantId(#invitationId)) or @authz.isUser(authentication, @invitationService.getInvitedUserId(#invitationId))")
     public void declineInvitation(@P("invitationId") String invitationId) {

@@ -42,11 +42,17 @@ public class TenantService {
     }
 
     // TRANSACTIONAL
-    public void createTenant(String tenantName, String ownerId) {
+    public Tenant createTenant(String tenantName, String ownerId) {
         String tenantId = UUID.randomUUID().toString().replace("-", "");
         tenantRepository.createTenantSchema(tenantId);
         tenantRepository.createTenant(tenantId, tenantName);
         tenantUserRepository.addUserToTenant(tenantId, ownerId, "admin");
+
+        Tenant tenant = new Tenant();
+        tenant.setId(tenantId);
+        tenant.setName(tenantName);
+
+        return tenant;
     }
 
     public Tenant getTenantById(String id) {
@@ -61,15 +67,18 @@ public class TenantService {
 
     // TRANSACTIONAL
     @PreAuthorize("@authz.isAdmin(authentication, #id)")
-    public void inviteUser(@P("id") String tenantId, String email) throws UserNotExistsException, UserAlreadyInTenantException {
+    public Invitation inviteUser(@P("id") String tenantId, String email) throws UserNotExistsException, UserAlreadyInTenantException {
         String invitationId = UUID.randomUUID().toString().replace("-", "");
 
         User user = userService.getUserByEmail(email).orElseThrow(() -> { return new UserNotExistsException();});
         if(isUserPartOfTenant(user.getId(), tenantId)) {
             throw new UserAlreadyInTenantException();
         }
-
+        
         invitationRepository.addInvitation(invitationId, tenantId, user.getId());
+        
+        Tenant tenant = getTenantById(tenantId);
+        return new Invitation(invitationId, tenant, user);
     }
 
     @PreAuthorize("@authz.isAdmin(authentication, #tenantId) or @authz.isUser(authentication, #userId)")
@@ -96,7 +105,7 @@ public class TenantService {
     }
 
     public boolean isAdmin(String userId, String tenantId) {
-        return tenantUserRepository.getUserRole(userId, tenantId).equals("admin");
+        return tenantUserRepository.isUserPartOfTenant(userId, tenantId) && tenantUserRepository.getUserRole(userId, tenantId).equals("admin");
     }
 
     public List<Invitation> getAllInvitationsForTenant(String tenantId) {

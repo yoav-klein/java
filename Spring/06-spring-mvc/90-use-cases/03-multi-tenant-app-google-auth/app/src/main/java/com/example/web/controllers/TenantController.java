@@ -18,9 +18,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.business.exception.UserAlreadyInTenantException;
 import com.example.business.exception.UserNotExistsException;
+import com.example.business.model.Invitation;
+import com.example.business.model.Tenant;
 import com.example.business.service.TenantService;
 import com.example.business.service.UserService;
 import com.example.helpers.Constants;
@@ -45,10 +48,13 @@ public class TenantController {
 
     // create tenant
     @PostMapping
-    public String createTenant(@AuthenticationPrincipal Object user, @RequestParam("name") String tenantName) {
+    public String createTenant(RedirectAttributes ra, @AuthenticationPrincipal Object user, @RequestParam("name") String tenantName) {
         OAuth2User oauth2User = (OAuth2User)user;
         String userId = oauth2User.getAttribute("sub");
-        tenantService.createTenant(tenantName, userId);
+        Tenant tenant = tenantService.createTenant(tenantName, userId);
+
+        // add the tenantId as flash attribute, mostly for tests
+        ra.addFlashAttribute("tenantId", tenant.getId());
 
         return "redirect:/my-tenants";
     }
@@ -96,10 +102,11 @@ public class TenantController {
 
     // invite user to tenant
     @PostMapping("/{id}/invitations")
-    public String inviteUser(Model model, @PathVariable("id") String tenantId, @RequestParam("email") String userEmail)
+    public String inviteUser(RedirectAttributes ra, Model model, @PathVariable("id") String tenantId, @RequestParam("email") String userEmail)
         throws UserNotExistsException, UserAlreadyInTenantException {
-        tenantService.inviteUser(tenantId, userEmail);
+        Invitation invitation = tenantService.inviteUser(tenantId, userEmail);
         model.addAttribute("tenant", tenantService.getTenantById(tenantId));
+        ra.addFlashAttribute("invitationId", invitation.getId());
 
         return String.format("redirect:/tenants/%s", tenantId);
     }
