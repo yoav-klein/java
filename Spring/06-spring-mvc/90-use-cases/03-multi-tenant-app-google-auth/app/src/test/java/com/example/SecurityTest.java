@@ -11,9 +11,9 @@ import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfig
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MvcResult;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import  static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import  static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import  static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import  org.springframework.test.web.servlet.request.RequestPostProcessor;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
@@ -182,7 +182,48 @@ public class SecurityTest extends TenantBase {
 
     @Test
     public void testUserLeavesTenant() throws Exception {
+        acceptedInvitation();
+
+        // accept the invitation
+        MvcResult result = mvc.perform(delete(String.format("/tenants/%s/members/john/leave", this.tenantId)).with(john()).with(csrf()))
+            .andExpect(status().is3xxRedirection()).andReturn();
         
+        // verify that john is NOT in tenant
+        result = mvc.perform(get("/my-tenants").with(john())).andReturn();
+        Map<String, Object> model = result.getModelAndView().getModel();
+        List<Tenant> tenantList = (List<Tenant>)model.get("tenants");
+        Assert.assertTrue(tenantList.stream().allMatch(tenant -> !tenant.getId().equals(this.tenantId)));
+
+    }
+
+    @Test
+    public void testAdminKicksUser() throws Exception {
+        acceptedInvitation();
+
+        // remove john with yoav (admin)
+        MvcResult result = mvc.perform(delete(String.format("/tenants/%s/members/john", this.tenantId)).with(yoav()).with(csrf()))
+            .andExpect(status().is3xxRedirection()).andReturn();
+        
+        // verify that john is NOT in tenant
+        result = mvc.perform(get("/my-tenants").with(john())).andReturn();
+        Map<String, Object> model = result.getModelAndView().getModel();
+        List<Tenant> tenantList = (List<Tenant>)model.get("tenants");
+        Assert.assertTrue(tenantList.stream().allMatch(tenant -> !tenant.getId().equals(this.tenantId)));
+    }
+    
+    @Test
+    public void testAdminKicksUserNotAuthorized() throws Exception {
+        acceptedInvitation();
+
+        // remove john with bob (not admin)
+        MvcResult result = mvc.perform(delete(String.format("/tenants/%s/members/john", this.tenantId)).with(bob()).with(csrf()))
+            .andExpect(status().is(403)).andReturn();
+        
+        // verify that john IS in tenant
+        result = mvc.perform(get("/my-tenants").with(john())).andReturn();
+        Map<String, Object> model = result.getModelAndView().getModel();
+        List<Tenant> tenantList = (List<Tenant>)model.get("tenants");
+        Assert.assertTrue(tenantList.stream().anyMatch(tenant -> tenant.getId().equals(this.tenantId)));
     }
 	
 }
