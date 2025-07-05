@@ -1,21 +1,20 @@
 package com.example.web.interceptor;
 
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.Cookie;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.security.access.AccessDeniedException;
 
+import com.example.business.exception.NoTenantSelectedException;
 import com.example.helpers.Constants;
 import com.example.helpers.TenantContext;
 import com.example.security.AuthBean;
-import com.example.business.exception.NoTenantSelectedException;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class TenantInterceptor implements HandlerInterceptor {
     

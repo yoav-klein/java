@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
@@ -87,16 +86,6 @@ public class TenantService {
         // if last user in tenant, delete tenant
         if(tenantUserRepository.getAllUsersForTenant(tenantId).isEmpty()) {
             this.deleteTenant(tenantId);
-        }
-    }
-
-    
-    // SECURED
-    public void joinToTenant(String tenantId, String userId) throws UserAlreadyInTenantException {
-        try {
-            tenantUserRepository.addUserToTenant(tenantId, userId, "regular");
-        } catch(DuplicateKeyException e) {
-            throw new UserAlreadyInTenantException();
         }
     }
 

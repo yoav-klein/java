@@ -87,15 +87,9 @@ public class TenantController {
         OAuth2User oauth2User = (OAuth2User)user;
         String userId = oauth2User.getAttribute("sub");
 
-        if (tenantService.isUserPartOfTenant(userId, tenantId)) {
-            System.out.println("SETTING COOKIE");
-            Cookie tenantCookie = new Cookie(Constants.TENANT_COOKIE_NAME, tenantId);
-            tenantCookie.setPath("/");
-            response.addCookie(tenantCookie);
-        } else {
-            System.out.println("NOT GOOD");
-            // return 403
-        }
+        Cookie tenantCookie = new Cookie(Constants.TENANT_COOKIE_NAME, tenantId);
+        tenantCookie.setPath("/");
+        response.addCookie(tenantCookie);
 
         return "redirect:/home";
     }  
