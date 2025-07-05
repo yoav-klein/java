@@ -8,30 +8,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oauth2Login;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MvcResult;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import  static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import  static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import  org.springframework.test.web.servlet.request.RequestPostProcessor;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
+import  static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import  static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 import org.springframework.web.context.WebApplicationContext;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import com.example.business.SpringBusinessConfig;
 import com.example.business.model.Invitation;
 import com.example.business.model.Tenant;
 import com.example.business.model.User;
 import com.example.business.service.UserService;
-import com.example.security.SpringSecurityConfig;
-import com.example.web.SpringWebConfig;
 
-@WebAppConfiguration
-@ContextConfiguration(classes = { SpringWebConfig.class, SpringSecurityConfig.class, SpringBusinessConfig.class })
 public class FlowsTests extends TenantBase {
     
 	@Autowired
