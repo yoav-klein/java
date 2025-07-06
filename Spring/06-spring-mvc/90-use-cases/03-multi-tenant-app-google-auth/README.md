@@ -13,24 +13,32 @@ registers the user in our database once he successfully logs in.
 
 Additionally, we use Spring Security's method security to secure service-level methods (`@PreAuthorize`).
 
+## Tenant management logic
+---
+A user creates a tenant - which makes him the tenant admin.
+The admin (and only him) can invite other users.
+The user accepts the invitation and becomes a tenant member.
+The admin can promote the member to be an admin.
+In the `tenant_user` table there's a column of `admin_since`, and `since` column for regular users.
+An older admin can demote a newer admin, but not vice versa.
+If the last admin leaves the tenant, the oldest user in the tenant becomes admin.
+
 ## Flows
 ---
 * User registration (auto registration)
 * Create tenant
-* Invite user to tenant (scenarios: user doesn't exist, user part of tenant)
-* Accept invitation (scenario: accepting cancelled invitation)
-* Decline invitation (scenario: declining cancelled invitation)
+* Invite user to tenant
+* Accept invitation
+* Decline invitation
 * Delete user from tenant
 * Leave tenant
 * Delete tenant
 
 ## Tasks
 ---
-* Implement security checks
 * Implement transactional
 * Promoting of users
 * Confirmation prompts for removing user, leaving group and deleting tenant
 * Confirmation prompt for logout
 * Decide on a strtegy of user hierarchy - like seniority for example (like who can demote who etc.)
-* Situations:
 
