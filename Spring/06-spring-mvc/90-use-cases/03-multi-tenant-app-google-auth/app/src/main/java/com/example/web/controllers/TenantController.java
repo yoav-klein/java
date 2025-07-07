@@ -25,6 +25,7 @@ import com.example.business.exception.UserNotExistsException;
 import com.example.business.model.Invitation;
 import com.example.business.model.Tenant;
 import com.example.business.service.TenantService;
+import com.example.business.service.TenantUserService;
 import com.example.business.service.UserService;
 import com.example.helpers.Constants;
 
@@ -36,6 +37,9 @@ import jakarta.servlet.http.HttpServletResponse;
 public class TenantController {
     @Autowired
     TenantService tenantService;
+
+    @Autowired
+    TenantUserService tenantUserService;
 
     @Autowired
     UserService userService;
@@ -108,7 +112,7 @@ public class TenantController {
     // remove user
     @DeleteMapping("/{id}/members/{userId}")
     public String removeMember(Model model, @PathVariable("id") String tenantId, @PathVariable("userId") String userId) {
-        tenantService.removeUserFromTenant(tenantId, userId);
+        tenantUserService.removeUserFromTenant(tenantId, userId);
 
         return String.format("redirect:/tenants/%s", tenantId);
     }
@@ -116,7 +120,7 @@ public class TenantController {
     // leave tenant
     @DeleteMapping("/{id}/members/{user}/leave")
     public String leaveTenant(Model model, @PathVariable("id") String tenantId, @PathVariable("user") String userId) {
-        tenantService.removeUserFromTenant(tenantId, userId);
+        tenantUserService.removeUserFromTenant(tenantId, userId);
 
         return "redirect:/my-tenants";
     }

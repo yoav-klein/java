@@ -8,13 +8,13 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 
-import com.example.business.service.TenantService;
+import com.example.business.service.TenantUserService;
 
 @Component("authz")
 public class AuthBean {
 
     @Autowired
-    TenantService tenantService;
+    TenantUserService tenantUserService;
     
     public boolean isUserPartOfTenant(Authentication authentication, String tenantId) {
         OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) authentication;
@@ -22,7 +22,7 @@ public class AuthBean {
         Map<String, Object> attrs = oauth2User.getAttributes();
         String sub = (String) attrs.get("sub");
 
-        return tenantService.isUserPartOfTenant(sub, tenantId);
+        return tenantUserService.isUserPartOfTenant(sub, tenantId);
     }
 
     public boolean isAdmin(Authentication authentication, String tenantId) {
@@ -31,7 +31,7 @@ public class AuthBean {
         Map<String, Object> attrs = oauth2User.getAttributes();
         String sub = (String) attrs.get("sub");
 
-        return tenantService.isAdmin(sub, tenantId);
+        return tenantUserService.isAdmin(sub, tenantId);
     }
 
     public boolean isUser(Authentication authentication, String userId) {

@@ -1,5 +1,6 @@
 package com.example.business.repository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.example.business.model.Tenant;
+import com.example.business.model.TenantMembership;
 import com.example.business.model.User;
 
 @Repository
@@ -31,22 +33,22 @@ public class TenantUserRepository {
     @Autowired
     UserRepository userRepository;
 
-    private RowMapper<User> usersRowMapper = (rs, rowNum) -> {
+    private RowMapper<TenantMembership> tenantMembershipMapper = (rs, rowNum) -> {
         String userId = rs.getString("user_id");
-        User user = userRepository.getUserById(userId).get();
-        user.setRole(rs.getString("role"));
-
-        return user;
-    };
-
-    private RowMapper<Tenant> tenantsRowMapper = (rs, rowNum) -> {
         String tenantId = rs.getString("tenant_id");
+        
+        User user = userRepository.getUserById(userId).get();
         Tenant tenant = tenantRepository.getTenantById(tenantId);
-        tenant.setDisplayName(rs.getString("display_name"));
+        LocalDateTime since = rs.getTimestamp("since").toLocalDateTime();
+        LocalDateTime adminSince = null;
+        if(rs.getTimestamp("admin_since") != null) adminSince = rs.getTimestamp("admin_since").toLocalDateTime();
+        String role = rs.getString("role");
+        
+        TenantMembership tm = new TenantMembership(user, tenant, role, since, adminSince);
 
-        return tenant;
+        return tm;
     };
-    
+
     
     public TenantUserRepository(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
@@ -60,14 +62,13 @@ public class TenantUserRepository {
         this.jdbcTemplate.update(REMOVE_USER_FROM_TENANT, tenantId, userId);
     }
 
-    public List<Tenant> getAllTenantsForUser(String userId) {
-        return this.jdbcTemplate.query(GET_ALL_TENANTS_FOR_USER, tenantsRowMapper, userId);
+    public List<TenantMembership> getAllTenantsForUser(String userId) {
+        return this.jdbcTemplate.query(GET_ALL_TENANTS_FOR_USER, tenantMembershipMapper, userId);
     }
 
-    public List<User> getAllUsersForTenant(String tenantId) {
-        return this.jdbcTemplate.query(GET_ALL_USERS_FOR_TENANT, usersRowMapper, tenantId);
+    public List<TenantMembership> getAllUsersForTenant(String tenantId) {
+        return this.jdbcTemplate.query(GET_ALL_USERS_FOR_TENANT, tenantMembershipMapper, tenantId);
     }
-    
     
     public boolean isUserPartOfTenant(String userId, String tenantId) {
         return this.jdbcTemplate.queryForObject(IS_USER_PART_OF_TENANT, Integer.class, tenantId, userId) > 0;
