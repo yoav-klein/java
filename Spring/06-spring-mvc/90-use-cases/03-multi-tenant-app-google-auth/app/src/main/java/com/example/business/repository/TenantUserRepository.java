@@ -1,5 +1,7 @@
 package com.example.business.repository;
 
+import java.time.Instant;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,13 +19,14 @@ import com.example.business.model.User;
 
 @Repository
 public class TenantUserRepository {
-    private static final String ADD_USER_TO_TENANT = "INSERT INTO tenant_system.tenant_user(tenant_id, user_id, role) VALUES(?, ?, ?)";
+    private static final String ADD_USER_TO_TENANT = "INSERT INTO tenant_system.tenant_user(tenant_id, user_id, role, since, admin_since) VALUES(?, ?, ?, ?, ?)";
     // private static final String REMOVE_ALL_TENANT_MEMBERS = "DELETE FROM tenant_system.tenant_user WHERE tenant_id = ?";
     private static final String REMOVE_USER_FROM_TENANT = "DELETE FROM tenant_system.tenant_user WHERE tenant_id = ? AND user_id = ?";
     private static final String GET_ALL_TENANTS_FOR_USER = "SELECT * FROM tenant_system.tenant_user WHERE user_id = ?";
     private static final String GET_ALL_USERS_FOR_TENANT = "SELECT * FROM tenant_system.tenant_user WHERE tenant_id = ?";
     private static final String IS_USER_PART_OF_TENANT = "SELECT COUNT(*) AS COUNT FROM tenant_system.tenant_user WHERE tenant_id = ? AND user_id = ?";
     private static final String GET_ROLE_OF_USER = "SELECT role FROM tenant_system.tenant_user WHERE tenant_id = ? AND user_id = ?";
+    private static final String PROMOTE_TO_ADMIN = "UPDATE tenant_system.tenant_user SET role = 'admin', admin_since = ? WHERE tenant_id = ? AND user_id = ?";
     
     private JdbcTemplate jdbcTemplate;
     
@@ -55,7 +58,12 @@ public class TenantUserRepository {
     }
 
     public void addUserToTenant(String tenantId, String userId, String role) {
-        this.jdbcTemplate.update(ADD_USER_TO_TENANT, tenantId, userId, role);
+        Timestamp now = Timestamp.from(Instant.now());
+        if(role.equals("admin")) {
+            this.jdbcTemplate.update(ADD_USER_TO_TENANT, tenantId, userId, role, now, now);
+        } else {
+            this.jdbcTemplate.update(ADD_USER_TO_TENANT, tenantId, userId, role, now, null);
+        }
     }
 
     public void removeUserFromTenant(String tenantId, String userId) {
@@ -76,5 +84,9 @@ public class TenantUserRepository {
 
     public String getUserRole(String userId, String tenantId) {
         return this.jdbcTemplate.queryForObject(GET_ROLE_OF_USER, String.class, tenantId, userId);
+    }
+
+    public void promoteToAdmin(String tenantId, String userId) {
+        this.jdbcTemplate.update(PROMOTE_TO_ADMIN, Timestamp.from(Instant.now()), tenantId, userId);
     }
 }

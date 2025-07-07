@@ -30,6 +30,9 @@ public class TenantService {
     TenantUserRepository tenantUserRepository;
 
     @Autowired
+    TenantUserService tenantUserService;
+
+    @Autowired
     InvitationRepository invitationRepository;
 
     // TRANSACTIONAL
@@ -37,7 +40,7 @@ public class TenantService {
         String tenantId = UUID.randomUUID().toString().replace("-", "");
         tenantRepository.createTenantSchema(tenantId);
         tenantRepository.createTenant(tenantId, tenantName);
-        tenantUserRepository.addUserToTenant(tenantId, ownerId, "admin");
+        tenantUserService.addUserToTenant(tenantId, ownerId, "admin");
 
         Tenant tenant = new Tenant();
         tenant.setId(tenantId);

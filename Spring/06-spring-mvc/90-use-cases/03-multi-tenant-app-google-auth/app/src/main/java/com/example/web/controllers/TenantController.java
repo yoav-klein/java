@@ -76,6 +76,7 @@ public class TenantController {
     @PreAuthorize("@authz.isUserPartOfTenant(authentication, #tenantId)")
     public String manageTenant(@AuthenticationPrincipal Object user, Model model, @PathVariable("id") @P("tenantId") String tenantId) {
         model.addAttribute("tenant", tenantService.getTenantById(tenantId));
+        model.addAttribute("memberships", tenantUserService.getAllUsersForTenant(tenantId));
         model.addAttribute("invitations", tenantService.getAllInvitationsForTenant(tenantId));
         
         return "tenant-management";
