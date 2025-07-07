@@ -44,16 +44,16 @@ public class TenantUserService {
     public void removeUserFromTenant(@P("tenantId") String tenantId, @P("userId") String userId) {
         List<TenantMembership> memberships = tenantUserRepository.getAllUsersForTenant(tenantId);
 
-        // if last user in tenant, delete tenant
+        // if last user in tenant, delete tenant and return
         if(memberships.size() == 1) {
             tenantService.deleteTenant(tenantId);
             return;
         }
         tenantUserRepository.removeUserFromTenant(tenantId, userId);
 
-        // if no admin left, appoint a new admin
+        // if no admin left, assign a new admin based on seniority
         memberships = tenantUserRepository.getAllUsersForTenant(tenantId);
-        if(!memberships.stream().anyMatch(membership -> membership.getRole() == "admin")) {
+        if(!memberships.stream().anyMatch(membership -> membership.getRole().equals("admin"))) {
             // sort the list by seniority
             Collections.sort(memberships, new Comparator<TenantMembership>() {
                 @Override
@@ -63,7 +63,6 @@ public class TenantUserService {
             });
             // promote the most senior member in the tenant to admin
             this.promoteToAdmin(tenantId, memberships.get(0).getUser().getId());
-
         }
     }
 
