@@ -118,6 +118,13 @@ public class TenantController {
         return String.format("redirect:/tenants/%s", tenantId);
     }
 
+    @PostMapping("/{id}/members/{userId}/promote")
+    public String promoteMember(Model model, @PathVariable("id") String tenantId, @PathVariable("userId") String userId) {
+        tenantUserService.promoteToAdmin(tenantId, userId);
+
+        return String.format("redirect:/tenants/%s", tenantId);
+    }
+
     // leave tenant
     @DeleteMapping("/{id}/members/{user}/leave")
     public String leaveTenant(Model model, @PathVariable("id") String tenantId, @PathVariable("user") String userId) {

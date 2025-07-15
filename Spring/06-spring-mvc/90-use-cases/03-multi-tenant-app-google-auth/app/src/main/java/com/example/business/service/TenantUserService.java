@@ -36,7 +36,8 @@ public class TenantUserService {
         return tenantUserRepository.isUserPartOfTenant(userId, tenantId) && tenantUserRepository.getUserRole(userId, tenantId).equals("admin");
     }
 
-    public void promoteToAdmin(String tenantId, String userId) {
+    @PreAuthorize("@authz.isAdmin(authentication, #tenantId)")
+    public void promoteToAdmin(@P("tenantId") String tenantId, @P("userId") String userId) {
         tenantUserRepository.promoteToAdmin(tenantId, userId);
     }
 
@@ -68,6 +69,30 @@ public class TenantUserService {
 
     public void addUserToTenant(String tenantId, String userId, String role) {
         tenantUserRepository.addUserToTenant(tenantId, userId, role);
+    }
+
+    public boolean isStrongerMember(String tenantId, String firstMemberId, String secondMemberId) throws Exception {
+        // if first member is not admin, false
+        if(!this.isAdmin(firstMemberId, tenantId)) return false;
+
+        List<TenantMembership> allMembers = this.getAllUsersForTenant(tenantId);
+
+        TenantMembership firstMember = allMembers.stream()
+            .filter(member -> member.getUser().getId().equals(firstMemberId))
+            .findFirst()
+            .orElseThrow(() -> new Exception("Not found"));
+        
+        TenantMembership secondMember = allMembers.stream()
+            .filter(member -> member.getUser().getId().equals(secondMemberId))
+            .findFirst()
+            .orElseThrow(() -> new Exception("Not found"));
+        
+        
+        if(!secondMember.getRole().equals("admin")) return true;
+        if(firstMember.getAdminSince().isBefore(secondMember.getAdminSince())) return true;
+
+        return false;
+        
     }
 
 

@@ -13,11 +13,16 @@
                         <p class="member-name" th:text="${membership.user.name}"></p>
                         <p class="member-name" th:text="${membership.user.email}"></p>
                         <p th:text="${membership.role}"></p>
-                        <div class="member-actions" th:if="${@tenantUserService.isAdmin(user.id, tenant.id)}">
-                            <form th:unless="${membership.user.id} == ${user.id}" method="post" th:action="@{/tenants/{tenantId}/members/{user}(tenantId=${tenant.id},user=${membership.user.id})}">
-                                <input type="hidden" name="_method" value="delete">
-                                <button type="submit"><img th:src="@{/image/delete.svg}" alt=""></button>
-                            </form>
+                        <div class="member-actions-placeholder">
+                            <div th:unless="${membership.user.id} == ${user.id}" class="member-actions" th:if="${@tenantUserService.isAdmin(user.id, tenant.id)}">
+                                <form th:if="${@tenantUserService.isStrongerMember(tenant.id, user.id, membership.user.id)}" method="post" th:action="@{/tenants/{tenantId}/members/{user}(tenantId=${tenant.id},user=${membership.user.id})}">
+                                    <input type="hidden" name="_method" value="delete">
+                                    <button type="submit"><img th:src="@{/image/delete.svg}" alt=""></button>
+                                </form>
+                                <form th:unless="${membership.role} == 'admin'" method="post" th:action="@{/tenants/{tenantId}/members/{user}/promote(tenantId=${tenant.id},user=${membership.user.id})}">
+                                    <button type="submit">PROMOTE</button>
+                                </form>
+                            </div>
                         </div>
                     </li>
                 </ul>
