@@ -22,6 +22,7 @@ import org.testng.annotations.Test;
 
 import com.example.business.model.Invitation;
 import com.example.business.model.Tenant;
+import com.example.business.model.TenantMembership;
 import com.example.business.model.User;
 import com.example.business.service.UserService;
 
@@ -93,8 +94,15 @@ public class FlowsTests extends TenantBase {
         // accept the invitation
         MvcResult result = mvc.perform(post(String.format("/invitations/%s/accept", invitationId)).with(john()).with(csrf()))
             .andExpect(status().is3xxRedirection()).andReturn();
-
 	}
+
+    private List<Tenant> getTenantsForJohn() throws Exception {
+        MvcResult result = mvc.perform(get("/my-tenants").with(john())).andReturn();
+        Map<String, Object> model = result.getModelAndView().getModel();
+        
+        List<TenantMembership> tenantMemberships = (List<TenantMembership>)model.get("tenantMemberships");
+        return tenantMemberships.stream().map(membership -> membership.getTenant()).toList();
+    }
 
     @Test
     public void testInviteUser() throws Exception {
@@ -119,23 +127,20 @@ public class FlowsTests extends TenantBase {
             .andExpect(status().is3xxRedirection()).andReturn();
         
         // verify that john is in tenant
-        result = mvc.perform(get("/my-tenants").with(john())).andReturn();
-        Map<String, Object> model = result.getModelAndView().getModel();
-        List<Tenant> listOfTenants = (List<Tenant>)model.get("tenants");
-        Tenant theTenantThatJohnJoined = listOfTenants.get(0);
+        List<Tenant> johnTenants = getTenantsForJohn();
+        Tenant theTenantThatJohnJoined = johnTenants.get(0);
         Assert.assertEquals(theTenantThatJohnJoined.getId(), this.tenantId);
     }
-
     @Test
     public void testAcceptInvitationByUnauthorizedUser() throws Exception {
         String invitationId = inviteUser();
-
+        
         // accept the invitation
         mvc.perform(post(String.format("/invitations/%s/accept", invitationId)).with(bob()).with(csrf()))
-            .andExpect(status().is4xxClientError());
+        .andExpect(status().is4xxClientError());
         
     }
-
+        
     @Test
     public void testDeclineInvitation() throws Exception {
         String invitationId = inviteUser();
@@ -143,20 +148,21 @@ public class FlowsTests extends TenantBase {
         // decline the invitation
         MvcResult result = mvc.perform(post(String.format("/invitations/%s/decline", invitationId)).with(john()).with(csrf()))
             .andExpect(status().is3xxRedirection()).andReturn();
-        
+            
         // verify that john is NOT in tenant
-        result = mvc.perform(get("/my-tenants").with(john())).andReturn();
-        Map<String, Object> model = result.getModelAndView().getModel();
-        List<Tenant> listOfTenants = (List<Tenant>)model.get("tenants");
+        List<Tenant> johnTenants = getTenantsForJohn();
         
-        Assert.assertTrue(listOfTenants.stream().allMatch(tenant -> !tenant.getId().equals(this.tenantId)));
+        Assert.assertTrue(johnTenants.stream().allMatch(tenant -> !tenant.getId().equals(this.tenantId)));
 
         // verify that invitation doesn't exist
+        result = mvc.perform(get("/my-tenants").with(john())).andReturn();
+        Map<String, Object> model = result.getModelAndView().getModel();
         List<Invitation> invitations = (List<Invitation>)model.get("invitations");
         
         Assert.assertTrue(invitations.stream().allMatch(invitation -> !invitation.getId().equals(invitationId)));
     }
-
+    
+    
     @Test
     public void testCancelInvitation() throws Exception {
         String invitationId = inviteUser();
@@ -181,11 +187,8 @@ public class FlowsTests extends TenantBase {
         MvcResult result = mvc.perform(delete(String.format("/tenants/%s/members/john/leave", this.tenantId)).with(john()).with(csrf()))
             .andExpect(status().is3xxRedirection()).andReturn();
         
-        // verify that john is NOT in tenant
-        result = mvc.perform(get("/my-tenants").with(john())).andReturn();
-        Map<String, Object> model = result.getModelAndView().getModel();
-        List<Tenant> tenantList = (List<Tenant>)model.get("tenants");
-        Assert.assertTrue(tenantList.stream().allMatch(tenant -> !tenant.getId().equals(this.tenantId)));
+        List<Tenant> johnTenants = getTenantsForJohn();
+        Assert.assertTrue(johnTenants.stream().allMatch(tenant -> !tenant.getId().equals(this.tenantId)));
 
     }
 
@@ -198,10 +201,8 @@ public class FlowsTests extends TenantBase {
             .andExpect(status().is3xxRedirection()).andReturn();
         
         // verify that john is NOT in tenant
-        result = mvc.perform(get("/my-tenants").with(john())).andReturn();
-        Map<String, Object> model = result.getModelAndView().getModel();
-        List<Tenant> tenantList = (List<Tenant>)model.get("tenants");
-        Assert.assertTrue(tenantList.stream().allMatch(tenant -> !tenant.getId().equals(this.tenantId)));
+        List<Tenant> johnTenants = getTenantsForJohn();
+        Assert.assertTrue(johnTenants.stream().allMatch(tenant -> !tenant.getId().equals(this.tenantId)));
     }
     
     @Test
@@ -213,10 +214,8 @@ public class FlowsTests extends TenantBase {
             .andExpect(status().is(403)).andReturn();
         
         // verify that john IS in tenant
-        result = mvc.perform(get("/my-tenants").with(john())).andReturn();
-        Map<String, Object> model = result.getModelAndView().getModel();
-        List<Tenant> tenantList = (List<Tenant>)model.get("tenants");
-        Assert.assertTrue(tenantList.stream().anyMatch(tenant -> tenant.getId().equals(this.tenantId)));
+        List<Tenant> johnTenants = getTenantsForJohn();
+        Assert.assertTrue(johnTenants.stream().anyMatch(tenant -> tenant.getId().equals(this.tenantId)));
     }
 
     @Test
