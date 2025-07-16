@@ -41,7 +41,7 @@ public class TenantUserService {
         tenantUserRepository.promoteToAdmin(tenantId, userId);
     }
 
-    @PreAuthorize("@authz.isAdmin(authentication, #tenantId) or @authz.isUser(authentication, #userId)")
+    @PreAuthorize("@tenantUserService.isStrongerMember(#tenantId, @authz.getUserIdFromAuthentication(authentication), #userId) or @authz.isUser(authentication, #userId)")
     public void removeUserFromTenant(@P("tenantId") String tenantId, @P("userId") String userId) {
         List<TenantMembership> memberships = tenantUserRepository.getAllUsersForTenant(tenantId);
 

@@ -42,4 +42,11 @@ public class AuthBean {
 
         return sub.equals(userId);
     }
+
+    public String getUserIdFromAuthentication(Authentication authentication) {
+        OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) authentication;
+        OAuth2User oauth2User = token.getPrincipal();
+        Map<String, Object> attrs = oauth2User.getAttributes();
+        return (String) attrs.get("sub");
+    }
 }
