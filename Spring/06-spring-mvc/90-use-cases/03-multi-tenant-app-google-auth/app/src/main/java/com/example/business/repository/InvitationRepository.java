@@ -1,12 +1,14 @@
 package com.example.business.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import com.example.business.model.Invitation;
 import com.example.business.repository.rowmappers.InvitationMapper;
@@ -37,8 +39,14 @@ public class InvitationRepository {
         this.jdbcTemplate.update(REMOVE_INVITATION, invitationId);
     }
 
-    public Invitation getInvitationById(String invitationId) {
-        return this.jdbcTemplate.queryForObject(GET_INVITATION_BY_ID, invitationRowMapper, invitationId);
+    public Optional<Invitation> findInvitationById(String invitationId) {
+        Invitation invitation;
+        try {
+            invitation = this.jdbcTemplate.queryForObject(GET_INVITATION_BY_ID, invitationRowMapper, invitationId);
+        } catch(EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+        return Optional.of(invitation);
     }
 
     public List<Invitation> getAllInvitationsForUser(String userId) {

@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import com.example.business.exception.UserAlreadyInTenantException;
+import com.example.business.exception.UserAlreadyInvitedException;
 import com.example.business.exception.UserNotExistsException;
 import com.example.business.model.Invitation;
 import com.example.business.model.Tenant;
@@ -61,7 +63,7 @@ public class TenantService {
 
     // TRANSACTIONAL
     @PreAuthorize("@authz.isAdmin(authentication, #id)")
-    public Invitation inviteUser(@P("id") String tenantId, String email) throws UserNotExistsException, UserAlreadyInTenantException {
+    public Invitation inviteUser(@P("id") String tenantId, String email) throws UserNotExistsException, UserAlreadyInTenantException, UserAlreadyInvitedException {
         String invitationId = UUID.randomUUID().toString().replace("-", "");
 
         User user = userService.getUserByEmail(email).orElseThrow(() -> { return new UserNotExistsException();});
@@ -69,7 +71,11 @@ public class TenantService {
             throw new UserAlreadyInTenantException();
         }
         
-        invitationRepository.addInvitation(invitationId, tenantId, user.getId());
+        try {
+            invitationRepository.addInvitation(invitationId, tenantId, user.getId());
+        } catch(DuplicateKeyException e) {
+            throw new UserAlreadyInvitedException();
+        }
         
         Tenant tenant = getTenantById(tenantId);
         return new Invitation(invitationId, tenant, user);

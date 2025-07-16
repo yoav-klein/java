@@ -11,7 +11,6 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.business.exception.UserAlreadyInTenantException;
 import com.example.business.exception.UserNotExistsException;
+import com.example.business.exception.UserAlreadyInvitedException;
 import com.example.business.model.Invitation;
 import com.example.business.model.Tenant;
 import com.example.business.service.TenantService;
@@ -102,7 +102,7 @@ public class TenantController {
     // invite user to tenant
     @PostMapping("/{id}/invitations")
     public String inviteUser(RedirectAttributes ra, Model model, @PathVariable("id") String tenantId, @RequestParam("email") String userEmail)
-        throws UserNotExistsException, UserAlreadyInTenantException {
+        throws UserNotExistsException, UserAlreadyInTenantException, UserAlreadyInvitedException {
         Invitation invitation = tenantService.inviteUser(tenantId, userEmail);
         model.addAttribute("tenant", tenantService.getTenantById(tenantId));
         ra.addFlashAttribute("invitationId", invitation.getId());
@@ -134,16 +134,16 @@ public class TenantController {
     }
 
     // ExceptionHandlerExceptionResolver
-    @ExceptionHandler
+    /* @ExceptionHandler
     public String noSuchUserHandler(UserNotExistsException e) {
         return "user-not-exists";
 
-    }
+    } 
 
     @ExceptionHandler
     public String userAlreadyInTenantHandler(UserAlreadyInTenantException e) {
         return "user-already-in-tenant";
 
-    }
+    } */
    
 }

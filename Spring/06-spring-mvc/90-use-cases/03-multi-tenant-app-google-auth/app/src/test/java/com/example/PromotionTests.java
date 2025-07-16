@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import  static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -18,11 +19,9 @@ import com.example.business.model.Tenant;
 import com.example.business.model.TenantMembership;
 import com.example.business.service.UserService;
 
-public class FlowsTests extends TenantBase {
-
+public class PromotionTests extends TenantBase {
     @Autowired
     UserService userService;
-
     
     // invite john by yoav
     private String inviteUser() throws Exception {
@@ -52,63 +51,88 @@ public class FlowsTests extends TenantBase {
         List<TenantMembership> tenantMemberships = (List<TenantMembership>)model.get("tenantMemberships");
         return tenantMemberships.stream().map(membership -> membership.getTenant()).toList();
     }
-
+    
     @Test
-    public void testUserLeavesTenant() throws Exception {
+    public void testPromoteToAdmin() throws Exception {
         acceptedInvitation();
 
-        // accept the invitation
-        MvcResult result = mvc.perform(delete(String.format("/tenants/%s/members/john/leave", this.tenantId)).with(john()).with(csrf()))
+        // promote john to admin
+        MvcResult result = mvc.perform(post(String.format("/tenants/%s/members/john/promote", this.tenantId)).with(yoav()).with(csrf()))
             .andExpect(status().is3xxRedirection()).andReturn();
-        
-        List<Tenant> johnTenants = getTenantsForJohn();
-        Assert.assertTrue(johnTenants.stream().allMatch(tenant -> !tenant.getId().equals(this.tenantId)));
-
     }
 
     @Test
-    public void testAdminKicksUser() throws Exception {
+    public void testAdminKicksAdmin() throws Exception {
         acceptedInvitation();
-    
-        // remove john with yoav (admin)
-        MvcResult result = mvc.perform(delete(String.format("/tenants/%s/members/john", this.tenantId)).with(yoav()).with(csrf()))
+        
+        // wait a second so that john is less senior that yoav
+        Thread.sleep(1500);
+
+        // promote john to admin
+        MvcResult result = mvc.perform(post(String.format("/tenants/%s/members/john/promote", this.tenantId)).with(yoav()).with(csrf()))
+            .andExpect(status().is3xxRedirection()).andReturn();
+
+        // yoav kicks john
+        result = mvc.perform(delete(String.format("/tenants/%s/members/john", this.tenantId)).with(yoav()).with(csrf()))
             .andExpect(status().is3xxRedirection()).andReturn();
         
         // verify that john is NOT in tenant
         List<Tenant> johnTenants = getTenantsForJohn();
         Assert.assertTrue(johnTenants.stream().allMatch(tenant -> !tenant.getId().equals(this.tenantId)));
+
     }
-    
+
     @Test
-    public void testAdminKicksUserNotAuthorized() throws Exception {
+    public void testAdminKicksAdminNotAuthorized() throws Exception {
         acceptedInvitation();
 
-        // remove john with bob (not admin)
-        MvcResult result = mvc.perform(delete(String.format("/tenants/%s/members/john", this.tenantId)).with(bob()).with(csrf()))
+        // promote john to admin
+        MvcResult result = mvc.perform(post(String.format("/tenants/%s/members/john/promote", this.tenantId)).with(yoav()).with(csrf()))
+            .andExpect(status().is3xxRedirection()).andReturn();
+
+        // john kicks yoav
+        result = mvc.perform(delete(String.format("/tenants/%s/members/yoav", this.tenantId)).with(john()).with(csrf()))
             .andExpect(status().is(403)).andReturn();
         
-        // verify that john IS in tenant
+        // verify that yoav IS in tenant
         List<Tenant> johnTenants = getTenantsForJohn();
         Assert.assertTrue(johnTenants.stream().anyMatch(tenant -> tenant.getId().equals(this.tenantId)));
-    }
 
-
-    @Test
-    public void testConnectToTenant() throws Exception {
-        acceptedInvitation();
-
-        MvcResult result = mvc.perform(get(String.format("/tenants/%s", this.tenantId)).with(john()))
-            .andExpect(status().isOk())
-            .andReturn();
     }
 
     @Test
-    public void testConnectToTenantNotAuthorized() throws Exception {
+    public void testAutoPromotion() throws Exception {
         acceptedInvitation();
 
-        MvcResult result = mvc.perform(get(String.format("/tenants/%s", this.tenantId)).with(bob()))
-            .andExpect(status().is(403))
+        // wait a second before accepting bob as a user
+        Thread.sleep(1000);
+        // invite bob to tenant
+        MvcResult result = mvc.perform(post(String.format("/tenants/%s/invitations", this.tenantId)).param("email", "bob.ali@tmail.com")
+            .with(yoav()).with(csrf()))
+            .andExpect(status().is3xxRedirection())
             .andReturn();
+        
+        String invitationId = (String)result.getFlashMap().get("invitationId");
+        // accept the invitation
+        result = mvc.perform(post(String.format("/invitations/%s/accept", invitationId)).with(bob()).with(csrf()))
+            .andExpect(status().is3xxRedirection()).andReturn();
+        
+        // now yoav (admin) leaves tenant
+        result = mvc.perform(delete(String.format("/tenants/%s/members/yoav/leave", this.tenantId)).with(yoav()).with(csrf()))
+            .andExpect(status().is3xxRedirection()).andReturn();
+        
+        // now john should be the admin
+        result = mvc.perform(get("/my-tenants").with(john())).andReturn();
+        Map<String, Object> model = result.getModelAndView().getModel();
+        List<TenantMembership> tenantMemberships = (List<TenantMembership>)model.get("tenantMemberships");
+        Assert.assertTrue(tenantMemberships.get(0).getRole().equals("admin"));
+
+        result = mvc.perform(get("/my-tenants").with(bob())).andReturn();
+        model = result.getModelAndView().getModel();
+        tenantMemberships = (List<TenantMembership>)model.get("tenantMemberships");
+        Assert.assertTrue(tenantMemberships.get(0).getRole().equals("regular"));
+
     }
-	
+
+    
 }

@@ -84,17 +84,40 @@ public class TenantBase extends AbstractTransactionalTestNGSpringContextTests {
         });
     }
 
-    /* 
-    @Test
-    public void verifyTenantCreated() throws Exception {
-        MvcResult result = this.mvc.perform(get("/my-tenants").with(yoav())).andReturn();
-        Map<String, Object> model = result.getModelAndView().getModel();
-        List<Tenant> listOfTenants = (List<Tenant>)model.get("tenants");
+    // AuthenticationSuccessHandler are not called in Spring Tests, 
+    // so we need to manually register the user
+    protected RequestPostProcessor john() {
+        User user = new User("john", "John Adams", "john.adams@tmail.com", "https://john.picture.com");
+        // check if the user already exists in the database
+        Optional<User> optionalUser = userService.getUserById("john");
+        if(optionalUser.isEmpty()) {
+            userService.addUser(user);
+        }
+        
+        return oauth2Login().attributes(attrs -> {
+            attrs.put("sub", user.getId());
+            attrs.put("name", user.getName());
+            attrs.put("email", user.getEmail());
+            attrs.put("pictureUrl", user.getPictureUrl());
+        });
+    }
 
-        System.out.println(listOfTenants.size());
+    protected RequestPostProcessor bob() {
+        User user = new User("bob", "Bob Ali", "bob.ali@tmail.com", "https://bob.picture.com");
+        // check if the user already exists in the database
+        Optional<User> optionalUser = userService.getUserById("bob");
+        if(optionalUser.isEmpty()) {
+            userService.addUser(user);
+        }
+        
+        return oauth2Login().attributes(attrs -> {
+            attrs.put("sub", user.getId());
+            attrs.put("name", user.getName());
+            attrs.put("email", user.getEmail());
+            attrs.put("pictureUrl", user.getPictureUrl());
+        });
+    }
 
-        Assert.assertTrue(listOfTenants.stream().anyMatch(tenant -> tenant.getId().equals(this.tenantId)));
-    } */
     
 	
 }
