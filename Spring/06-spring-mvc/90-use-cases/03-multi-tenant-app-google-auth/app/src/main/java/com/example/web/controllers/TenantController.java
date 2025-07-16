@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.business.exception.UserAlreadyInTenantException;
-import com.example.business.exception.UserNotExistsException;
+import com.example.business.exception.UserNotFoundException;
 import com.example.business.exception.UserAlreadyInvitedException;
 import com.example.business.model.Invitation;
 import com.example.business.model.Tenant;
@@ -45,9 +45,9 @@ public class TenantController {
     UserService userService;
 
     @ModelAttribute("user")
-    public void addUserToModel(Model model, @AuthenticationPrincipal Object user) {
+    public void addUserToModel(Model model, @AuthenticationPrincipal Object user) throws UserNotFoundException {
         OAuth2User oauth2User = (OAuth2User)user;
-        model.addAttribute("user", userService.getUserById(oauth2User.getAttribute("sub")).get());
+        model.addAttribute("user", userService.getUserById(oauth2User.getAttribute("sub")));
     }
 
     // create tenant
@@ -102,7 +102,7 @@ public class TenantController {
     // invite user to tenant
     @PostMapping("/{id}/invitations")
     public String inviteUser(RedirectAttributes ra, Model model, @PathVariable("id") String tenantId, @RequestParam("email") String userEmail)
-        throws UserNotExistsException, UserAlreadyInTenantException, UserAlreadyInvitedException {
+        throws UserNotFoundException, UserAlreadyInTenantException, UserAlreadyInvitedException {
         Invitation invitation = tenantService.inviteUser(tenantId, userEmail);
         model.addAttribute("tenant", tenantService.getTenantById(tenantId));
         ra.addFlashAttribute("invitationId", invitation.getId());

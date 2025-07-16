@@ -1,9 +1,8 @@
 package com.example.business.repository;
 
-import java.time.Instant;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -40,8 +39,8 @@ public class TenantUserRepository {
         String userId = rs.getString("user_id");
         String tenantId = rs.getString("tenant_id");
         
-        User user = userRepository.getUserById(userId).get();
-        Tenant tenant = tenantRepository.getTenantById(tenantId);
+        User user = userRepository.findUserById(userId).get();
+        Tenant tenant = tenantRepository.findTenantById(tenantId).get();
         LocalDateTime since = rs.getTimestamp("since").toLocalDateTime();
         LocalDateTime adminSince = null;
         if(rs.getTimestamp("admin_since") != null) adminSince = rs.getTimestamp("admin_since").toLocalDateTime();

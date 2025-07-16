@@ -51,12 +51,9 @@ public class InvitationRepository {
 
     public List<Invitation> getAllInvitationsForUser(String userId) {
         return this.jdbcTemplate.query(GET_ALL_INVITATIONS_FOR_USER, invitationRowMapper, userId);
-
     }
 
     public List<Invitation> getAllInvitationsForTenant(String tenantId) {
         return this.jdbcTemplate.query(GET_ALL_INVITATIONS_FOR_TENANT, invitationRowMapper, tenantId);
     }
-
-    
 }

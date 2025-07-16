@@ -8,8 +8,8 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.example.business.model.Invitation;
-import com.example.business.model.User;
 import com.example.business.model.Tenant;
+import com.example.business.model.User;
 import com.example.business.repository.TenantRepository;
 import com.example.business.repository.UserRepository;
 
@@ -28,8 +28,8 @@ public class InvitationMapper implements RowMapper<Invitation> {
         String tenantId = rs.getString("tenant_id");
         String userId = rs.getString("user_id");
 
-        User user = userRepository.getUserById(userId).get();
-        Tenant tenant = tenantRepository.getTenantById(tenantId);
+        User user = userRepository.findUserById(userId).get();
+        Tenant tenant = tenantRepository.findTenantById(tenantId).get();
 
         return new Invitation(invitationId, tenant, user);
     }

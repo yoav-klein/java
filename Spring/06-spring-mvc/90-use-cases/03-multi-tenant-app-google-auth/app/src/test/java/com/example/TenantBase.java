@@ -71,8 +71,7 @@ public class TenantBase extends AbstractTransactionalTestNGSpringContextTests {
     protected RequestPostProcessor yoav() {
         User user = new User("yoav", "Yoav Klein", "yoav.klein@tmail.com", "https://yoav.picture.com");
         // check if the user already exists in the database
-        Optional<User> optionalUser = userService.getUserById("yoav");
-        if(optionalUser.isEmpty()) {
+        if(!userService.checkIfUserExists(user.getId())) {
             userService.addUser(user);
         }
         
@@ -89,8 +88,7 @@ public class TenantBase extends AbstractTransactionalTestNGSpringContextTests {
     protected RequestPostProcessor john() {
         User user = new User("john", "John Adams", "john.adams@tmail.com", "https://john.picture.com");
         // check if the user already exists in the database
-        Optional<User> optionalUser = userService.getUserById("john");
-        if(optionalUser.isEmpty()) {
+        if(!userService.checkIfUserExists(user.getId())) {
             userService.addUser(user);
         }
         
@@ -105,8 +103,7 @@ public class TenantBase extends AbstractTransactionalTestNGSpringContextTests {
     protected RequestPostProcessor bob() {
         User user = new User("bob", "Bob Ali", "bob.ali@tmail.com", "https://bob.picture.com");
         // check if the user already exists in the database
-        Optional<User> optionalUser = userService.getUserById("bob");
-        if(optionalUser.isEmpty()) {
+        if(!userService.checkIfUserExists(user.getId())) {
             userService.addUser(user);
         }
         

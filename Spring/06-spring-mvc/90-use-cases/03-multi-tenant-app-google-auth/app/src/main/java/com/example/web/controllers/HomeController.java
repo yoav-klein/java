@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.example.business.exception.UserNotFoundException;
 import com.example.business.model.Product;
 import com.example.business.service.TenantUserService;
 import com.example.helpers.TenantContext;
@@ -38,9 +39,9 @@ public class HomeController {
     ProductService productService;
 
     @ModelAttribute("user")
-    public void addUserToModel(Model model, @AuthenticationPrincipal Object user) {
+    public void addUserToModel(Model model, @AuthenticationPrincipal Object user) throws UserNotFoundException {
         OAuth2User oauth2User = (OAuth2User)user;
-        model.addAttribute("user", userService.getUserById(oauth2User.getAttribute("sub")).get());
+        model.addAttribute("user", userService.getUserById(oauth2User.getAttribute("sub")));
     }
 
     @RequestMapping("/")

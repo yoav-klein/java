@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.business.exception.UserAlreadyInTenantException;
 import com.example.business.exception.UserAlreadyInvitedException;
-import com.example.business.exception.UserNotExistsException;
+import com.example.business.exception.UserNotFoundException;
 import com.example.business.model.Invitation;
 import com.example.business.model.Tenant;
 import com.example.business.model.User;
@@ -52,7 +52,7 @@ public class TenantService {
     }
 
     public Tenant getTenantById(String id) {
-        return tenantRepository.getTenantById(id);
+        return tenantRepository.findTenantById(id).get();
     }
 
     @PreAuthorize("@authz.isAdmin(authentication, #id)")
@@ -63,10 +63,10 @@ public class TenantService {
 
     // TRANSACTIONAL
     @PreAuthorize("@authz.isAdmin(authentication, #id)")
-    public Invitation inviteUser(@P("id") String tenantId, String email) throws UserNotExistsException, UserAlreadyInTenantException, UserAlreadyInvitedException {
+    public Invitation inviteUser(@P("id") String tenantId, String email) throws UserNotFoundException, UserAlreadyInTenantException, UserAlreadyInvitedException {
         String invitationId = UUID.randomUUID().toString().replace("-", "");
 
-        User user = userService.getUserByEmail(email).orElseThrow(() -> { return new UserNotExistsException();});
+        User user = userService.getUserByEmail(email);
         if(tenantUserRepository.isUserPartOfTenant(user.getId(), tenantId)) {
             throw new UserAlreadyInTenantException();
         }

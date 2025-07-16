@@ -1,10 +1,12 @@
 package com.example.business.repository;
 
+import java.util.Optional;
 import javax.sql.DataSource;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.dao.EmptyResultDataAccessException;
 import com.example.business.model.Tenant;
 import com.example.business.repository.rowmappers.TenantMapper;
 @Repository
@@ -33,8 +35,14 @@ public class TenantRepository {
         this.jdbcTemplate.update(DELETE_TENANT, tenantId);
     }
 
-    public Tenant getTenantById(String tenantId) {
-        return this.jdbcTemplate.queryForObject(GET_TENANT_BY_ID, tenantRowMapper, tenantId);
+    public Optional<Tenant> findTenantById(String tenantId) {
+        Tenant tenant;
+        try {
+            tenant = this.jdbcTemplate.queryForObject(GET_TENANT_BY_ID, tenantRowMapper, tenantId);
+        } catch(EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+        return Optional.of(tenant);
     }
 
     public void createTenantSchema(String tenantId) {
