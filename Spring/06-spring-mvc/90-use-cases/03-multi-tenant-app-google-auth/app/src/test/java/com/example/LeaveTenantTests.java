@@ -13,12 +13,11 @@ import  static org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.example.business.model.Invitation;
 import com.example.business.model.Tenant;
 import com.example.business.model.TenantMembership;
 import com.example.business.service.UserService;
 
-public class FlowsTests extends TenantBase {
+public class LeaveTenantTests extends TenantBase {
 
     @Autowired
     UserService userService;
@@ -132,7 +131,17 @@ public class FlowsTests extends TenantBase {
         acceptedInvitation();
 
         MvcResult result = mvc.perform(get(String.format("/tenants/%s", this.tenantId)).with(john()))
-            .andExpect(status().isOk())
+        .andExpect(status().isOk())
+        .andReturn();
+    }
+
+    @Test
+    public void testDeleteTenantUnauthorized() throws Exception {
+        Thread.sleep(1500);
+        acceptedInvitation();
+
+        MvcResult result = mvc.perform(delete(String.format("/tenants/%s", this.tenantId)).with(john()))
+            .andExpect(status().is(403))
             .andReturn();
     }
 

@@ -42,14 +42,14 @@ public class TenantUserService {
     public boolean isMostSenior(String userId, String tenantId) {
         List<TenantMembership> adminsNotModifiable = tenantUserRepository.getAllUsersForTenant(tenantId).stream().filter(membership -> membership.getRole().equals("admin")).toList();
         List<TenantMembership> admins = new ArrayList<>(adminsNotModifiable);
-
+        
         Collections.sort(admins, new Comparator<TenantMembership>() {
             @Override
             public int compare(TenantMembership a, TenantMembership b) {
                 return a.getAdminSince().compareTo(b.getAdminSince());
             }
         });
-
+        
         return admins.get(0).getUser().getId().equals(userId);
     }
 
@@ -97,7 +97,6 @@ public class TenantUserService {
     }
 
     public boolean isStrongerMember(String tenantId, String firstMemberId, String secondMemberId) throws Exception {
-        System.out.println("IS STRONGER MEMBER");
         // if first member is not admin, false
         if(!this.isAdmin(firstMemberId, tenantId)) return false;
 

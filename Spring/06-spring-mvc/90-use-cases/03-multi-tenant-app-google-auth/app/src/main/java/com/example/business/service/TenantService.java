@@ -62,8 +62,8 @@ public class TenantService {
     }
 
     // TRANSACTIONAL
-    @PreAuthorize("@authz.isAdmin(authentication, #id)")
-    public Invitation inviteUser(@P("id") String tenantId, String email) throws UserNotFoundException, UserAlreadyInTenantException, UserAlreadyInvitedException {
+    @PreAuthorize("@authz.isAdmin(authentication, #tenantId)")
+    public Invitation inviteUser(@P("tenantId") String tenantId, String email) throws UserNotFoundException, UserAlreadyInTenantException, UserAlreadyInvitedException {
         String invitationId = UUID.randomUUID().toString().replace("-", "");
 
         User user = userService.getUserByEmail(email);
