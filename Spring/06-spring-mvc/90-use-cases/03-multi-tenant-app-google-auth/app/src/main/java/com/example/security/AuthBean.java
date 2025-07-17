@@ -39,7 +39,7 @@ public class AuthBean {
         OAuth2User oauth2User = token.getPrincipal();
         Map<String, Object> attrs = oauth2User.getAttributes();
         String sub = (String) attrs.get("sub");
-
+        
         return sub.equals(userId);
     }
 

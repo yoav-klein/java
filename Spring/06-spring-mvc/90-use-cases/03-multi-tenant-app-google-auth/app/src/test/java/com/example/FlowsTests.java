@@ -57,7 +57,7 @@ public class FlowsTests extends TenantBase {
     public void testUserLeavesTenant() throws Exception {
         acceptedInvitation();
 
-        // accept the invitation
+        // leave tenant
         MvcResult result = mvc.perform(delete(String.format("/tenants/%s/members/john/leave", this.tenantId)).with(john()).with(csrf()))
             .andExpect(status().is3xxRedirection()).andReturn();
         
@@ -77,6 +77,40 @@ public class FlowsTests extends TenantBase {
         // verify that john is NOT in tenant
         List<Tenant> johnTenants = getTenantsForJohn();
         Assert.assertTrue(johnTenants.stream().allMatch(tenant -> !tenant.getId().equals(this.tenantId)));
+    }
+
+    @Test
+    public void testAdminKicksUserAfterUserLeft() throws Exception {
+        acceptedInvitation();
+    
+        // john leaves
+        MvcResult result = mvc.perform(delete(String.format("/tenants/%s/members/john/leave", this.tenantId)).with(john()).with(csrf()))
+            .andExpect(status().is3xxRedirection()).andReturn();
+        
+            // verify that john is NOT in tenant
+        List<Tenant> johnTenants = getTenantsForJohn();
+        Assert.assertTrue(johnTenants.stream().allMatch(tenant -> !tenant.getId().equals(this.tenantId)));
+
+        // admin kicks john
+        result = mvc.perform(delete(String.format("/tenants/%s/members/john", this.tenantId)).with(yoav()).with(csrf()))
+            .andExpect(status().is(400)).andReturn();
+    }
+    
+    @Test
+    public void testUserLeavesAfterKickedByAdmin() throws Exception {
+        acceptedInvitation();
+
+        // remove john with yoav (admin)
+        MvcResult result = mvc.perform(delete(String.format("/tenants/%s/members/john", this.tenantId)).with(yoav()).with(csrf()))
+            .andExpect(status().is3xxRedirection()).andReturn();
+            
+        // verify that john is NOT in tenant
+        List<Tenant> johnTenants = getTenantsForJohn();
+        Assert.assertTrue(johnTenants.stream().allMatch(tenant -> !tenant.getId().equals(this.tenantId)));
+        
+        // john leaves
+        result = mvc.perform(delete(String.format("/tenants/%s/members/john/leave", this.tenantId)).with(john()).with(csrf()))
+            .andExpect(status().is(400)).andReturn();
     }
     
     @Test

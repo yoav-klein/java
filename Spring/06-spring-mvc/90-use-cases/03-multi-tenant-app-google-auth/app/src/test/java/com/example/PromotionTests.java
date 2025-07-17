@@ -59,6 +59,14 @@ public class PromotionTests extends TenantBase {
         // promote john to admin
         MvcResult result = mvc.perform(post(String.format("/tenants/%s/members/john/promote", this.tenantId)).with(yoav()).with(csrf()))
             .andExpect(status().is3xxRedirection()).andReturn();
+        
+        // check if john is admin
+        result = mvc.perform(get("/my-tenants").with(john())).andReturn();
+        Map<String, Object> model = result.getModelAndView().getModel();
+        
+        List<TenantMembership> tenantMemberships = (List<TenantMembership>)model.get("tenantMemberships");
+        Assert.assertTrue(tenantMemberships.get(0).getRole().equals("admin"));
+
     }
 
     @Test

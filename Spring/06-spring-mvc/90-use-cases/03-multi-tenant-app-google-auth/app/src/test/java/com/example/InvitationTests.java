@@ -159,7 +159,7 @@ public class InvitationTests extends TenantBase {
     public void testCancelInvitation() throws Exception {
         String invitationId = inviteUser();
 
-        // accept the invitation
+        // cancel invitation
         MvcResult result = mvc.perform(delete(String.format("/invitations/%s", invitationId)).with(yoav()).with(csrf()))
             .andExpect(status().is3xxRedirection()).andReturn();
         
@@ -171,5 +171,40 @@ public class InvitationTests extends TenantBase {
         Assert.assertTrue(invitations.stream().allMatch(invitation -> !invitation.getId().equals(invitationId)));
     }
 
-    
+    @Test
+    public void testCancelInvitationNonExisting() throws Exception {
+        String invitationId = inviteUser();
+
+        // accept the invitation
+        MvcResult result = mvc.perform(post(String.format("/invitations/%s/accept", invitationId)).with(john()).with(csrf()))
+            .andExpect(status().is3xxRedirection()).andReturn();
+        
+        // verify that john is in tenant
+        List<Tenant> johnTenants = getTenantsForJohn();
+        Tenant theTenantThatJohnJoined = johnTenants.get(0);
+        Assert.assertEquals(theTenantThatJohnJoined.getId(), this.tenantId);
+
+        // try cancel invitation
+        result = mvc.perform(delete(String.format("/invitations/%s", invitationId)).with(yoav()).with(csrf()))
+            .andExpect(status().is(404)).andReturn();
+    }
+
+    @Test
+    public void testAcceptInvitationNonExisting() throws Exception {
+        String invitationId = inviteUser();
+
+        // accept the invitation
+        MvcResult result = mvc.perform(post(String.format("/invitations/%s/accept", invitationId)).with(john()).with(csrf()))
+            .andExpect(status().is3xxRedirection()).andReturn();
+        
+        // verify that john is in tenant
+        List<Tenant> johnTenants = getTenantsForJohn();
+        Tenant theTenantThatJohnJoined = johnTenants.get(0);
+        Assert.assertEquals(theTenantThatJohnJoined.getId(), this.tenantId);
+
+        // try cancel invitation
+        // accept the invitation
+        result = mvc.perform(post(String.format("/invitations/%s/accept", invitationId)).with(john()).with(csrf()))
+            .andExpect(status().is(404)).andReturn();
+    }
 }

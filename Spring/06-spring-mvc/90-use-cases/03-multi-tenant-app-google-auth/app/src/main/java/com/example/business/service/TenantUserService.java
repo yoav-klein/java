@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
+import com.example.business.exception.UserNotFoundException;
 import com.example.business.model.TenantMembership;
 import com.example.business.repository.TenantUserRepository;
 
@@ -37,12 +38,16 @@ public class TenantUserService {
     }
 
     @PreAuthorize("@authz.isAdmin(authentication, #tenantId)")
-    public void promoteToAdmin(@P("tenantId") String tenantId, @P("userId") String userId) {
+    public void promoteToAdmin(@P("tenantId") String tenantId, @P("userId") String userId) throws UserNotFoundException {
+        if(!isUserPartOfTenant(userId, tenantId)) throw new UserNotFoundException("User not part of tenant");
+
         tenantUserRepository.promoteToAdmin(tenantId, userId);
     }
 
     @PreAuthorize("@tenantUserService.isStrongerMember(#tenantId, @authz.getUserIdFromAuthentication(authentication), #userId) or @authz.isUser(authentication, #userId)")
-    public void removeUserFromTenant(@P("tenantId") String tenantId, @P("userId") String userId) {
+    public void removeUserFromTenant(@P("tenantId") String tenantId, @P("userId") String userId) throws UserNotFoundException {
+        if(!isUserPartOfTenant(userId, tenantId)) throw new UserNotFoundException("User not part of tenant");
+
         List<TenantMembership> memberships = tenantUserRepository.getAllUsersForTenant(tenantId);
 
         // if last user in tenant, delete tenant and return
@@ -72,6 +77,7 @@ public class TenantUserService {
     }
 
     public boolean isStrongerMember(String tenantId, String firstMemberId, String secondMemberId) throws Exception {
+        System.out.println("IS STRONGER MEMBER");
         // if first member is not admin, false
         if(!this.isAdmin(firstMemberId, tenantId)) return false;
 
@@ -80,12 +86,12 @@ public class TenantUserService {
         TenantMembership firstMember = allMembers.stream()
             .filter(member -> member.getUser().getId().equals(firstMemberId))
             .findFirst()
-            .orElseThrow(() -> new Exception("Not found"));
+            .orElseThrow(() -> new UserNotFoundException());
         
         TenantMembership secondMember = allMembers.stream()
             .filter(member -> member.getUser().getId().equals(secondMemberId))
             .findFirst()
-            .orElseThrow(() -> new Exception("Not found"));
+            .orElseThrow(() -> new UserNotFoundException());
         
         
         if(!secondMember.getRole().equals("admin")) return true;

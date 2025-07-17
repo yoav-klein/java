@@ -112,14 +112,14 @@ public class TenantController {
 
     // remove user
     @DeleteMapping("/{id}/members/{userId}")
-    public String removeMember(Model model, @PathVariable("id") String tenantId, @PathVariable("userId") String userId) {
+    public String removeMember(Model model, @PathVariable("id") String tenantId, @PathVariable("userId") String userId) throws UserNotFoundException {
         tenantUserService.removeUserFromTenant(tenantId, userId);
 
         return String.format("redirect:/tenants/%s", tenantId);
     }
 
     @PostMapping("/{id}/members/{userId}/promote")
-    public String promoteMember(Model model, @PathVariable("id") String tenantId, @PathVariable("userId") String userId) {
+    public String promoteMember(Model model, @PathVariable("id") String tenantId, @PathVariable("userId") String userId) throws UserNotFoundException {
         tenantUserService.promoteToAdmin(tenantId, userId);
 
         return String.format("redirect:/tenants/%s", tenantId);
@@ -127,7 +127,7 @@ public class TenantController {
 
     // leave tenant
     @DeleteMapping("/{id}/members/{user}/leave")
-    public String leaveTenant(Model model, @PathVariable("id") String tenantId, @PathVariable("user") String userId) {
+    public String leaveTenant(Model model, @PathVariable("id") String tenantId, @PathVariable("user") String userId) throws UserNotFoundException {
         tenantUserService.removeUserFromTenant(tenantId, userId);
 
         return "redirect:/my-tenants";
