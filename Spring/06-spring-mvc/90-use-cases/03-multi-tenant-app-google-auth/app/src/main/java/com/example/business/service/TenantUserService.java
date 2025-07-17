@@ -98,9 +98,5 @@ public class TenantUserService {
         if(firstMember.getAdminSince().isBefore(secondMember.getAdminSince())) return true;
 
         return false;
-        
     }
-
-
-
 }
