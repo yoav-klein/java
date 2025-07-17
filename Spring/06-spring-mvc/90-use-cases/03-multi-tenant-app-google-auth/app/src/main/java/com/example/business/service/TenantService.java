@@ -55,10 +55,10 @@ public class TenantService {
         return tenantRepository.findTenantById(id).get();
     }
 
-    @PreAuthorize("@authz.isAdmin(authentication, #id)")
-    public void deleteTenant(@P("id") String id) {
-        tenantRepository.deleteTenant(id);
-        tenantRepository.deleteTenantSchema(id);
+    @PreAuthorize("@tenantUserService.isMostSenior(authentication, #tenantId)")
+    public void deleteTenant(@P("tenantId") String tenantId) {
+        tenantRepository.deleteTenant(tenantId);
+        tenantRepository.deleteTenantSchema(tenantId);
     }
 
     // TRANSACTIONAL

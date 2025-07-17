@@ -1,17 +1,20 @@
 package com.example.business.service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import com.example.business.exception.UserNotFoundException;
 import com.example.business.model.TenantMembership;
 import com.example.business.repository.TenantUserRepository;
+import com.example.security.AuthBean;
 
 @Service("tenantUserService")
 public class TenantUserService {
@@ -20,6 +23,9 @@ public class TenantUserService {
 
     @Autowired
     TenantUserRepository tenantUserRepository;
+
+    @Autowired
+    AuthBean authz;
     
     public List<TenantMembership> getAllTenantsForUser(String userId) {
         return tenantUserRepository.getAllTenantsForUser(userId);
@@ -31,6 +37,21 @@ public class TenantUserService {
 
     public boolean isUserPartOfTenant(String userId, String tenantId) {
         return tenantUserRepository.isUserPartOfTenant(userId, tenantId);
+    }
+
+    public boolean isMostSenior(Authentication auth, String tenantId) {
+        String userId = authz.getUserIdFromAuthentication(auth);
+        List<TenantMembership> adminsNotModifiable = tenantUserRepository.getAllUsersForTenant(tenantId).stream().filter(membership -> membership.getRole().equals("admin")).toList();
+        List<TenantMembership> admins = new ArrayList<>(adminsNotModifiable);
+
+        Collections.sort(admins, new Comparator<TenantMembership>() {
+            @Override
+            public int compare(TenantMembership a, TenantMembership b) {
+                return a.getAdminSince().compareTo(b.getAdminSince());
+            }
+        });
+
+        return admins.get(0).getUser().getId().equals(userId);
     }
 
     public boolean isAdmin(String userId, String tenantId) {
