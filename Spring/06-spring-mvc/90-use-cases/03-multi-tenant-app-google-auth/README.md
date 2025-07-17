@@ -42,3 +42,4 @@ If the last admin leaves the tenant, the oldest user in the tenant becomes admin
 * Confirmation prompt for logout
 * Decide on a strtegy of user hierarchy - like seniority for example (like who can demote who etc.)
 
+![flows](flows.png)
