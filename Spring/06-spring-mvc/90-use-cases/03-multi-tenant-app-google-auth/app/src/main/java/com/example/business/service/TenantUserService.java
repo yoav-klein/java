@@ -39,8 +39,7 @@ public class TenantUserService {
         return tenantUserRepository.isUserPartOfTenant(userId, tenantId);
     }
 
-    public boolean isMostSenior(Authentication auth, String tenantId) {
-        String userId = authz.getUserIdFromAuthentication(auth);
+    public boolean isMostSenior(String userId, String tenantId) {
         List<TenantMembership> adminsNotModifiable = tenantUserRepository.getAllUsersForTenant(tenantId).stream().filter(membership -> membership.getRole().equals("admin")).toList();
         List<TenantMembership> admins = new ArrayList<>(adminsNotModifiable);
 

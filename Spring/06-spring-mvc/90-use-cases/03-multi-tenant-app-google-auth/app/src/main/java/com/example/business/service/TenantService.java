@@ -55,7 +55,7 @@ public class TenantService {
         return tenantRepository.findTenantById(id).get();
     }
 
-    @PreAuthorize("@tenantUserService.isMostSenior(authentication, #tenantId)")
+    @PreAuthorize("@tenantUserService.isMostSenior(@authz.getUserIdFromAuthentication(authentication), #tenantId)")
     public void deleteTenant(@P("tenantId") String tenantId) {
         tenantRepository.deleteTenant(tenantId);
         tenantRepository.deleteTenantSchema(tenantId);

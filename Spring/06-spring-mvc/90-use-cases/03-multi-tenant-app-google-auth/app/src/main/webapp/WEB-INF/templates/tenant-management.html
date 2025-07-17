@@ -55,7 +55,7 @@
                     <input type="submit" value="Invite!">
                 </form>                    
             </section>
-            <section th:if="${@tenantUserService.isMostSenior(authentication, tenant.id)}" class="main-section danger-zone">
+            <section th:if="${@tenantUserService.isMostSenior(user.id, tenant.id)}" class="main-section danger-zone">
                 <h2>⚠️ Delete Tenant</h2>
                 <form method="post" th:action="@{/tenants/{tenantId}(tenantId=${tenant.id})}">
                     <input type="hidden" name="_method" value="delete">
