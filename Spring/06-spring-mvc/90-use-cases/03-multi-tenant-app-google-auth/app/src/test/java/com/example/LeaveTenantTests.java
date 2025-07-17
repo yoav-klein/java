@@ -136,11 +136,28 @@ public class LeaveTenantTests extends TenantBase {
     }
 
     @Test
-    public void testDeleteTenantUnauthorized() throws Exception {
+    public void testDeleteTenantByUser() throws Exception {
         Thread.sleep(1500);
         acceptedInvitation();
 
         MvcResult result = mvc.perform(delete(String.format("/tenants/%s", this.tenantId)).with(john()))
+            .andExpect(status().is(403))
+            .andReturn();
+    }
+
+    @Test
+    public void testDeleteTenantByUnauthorizedAdmin() throws Exception {
+        Thread.sleep(1500);
+        acceptedInvitation();
+        
+        // promote john to admin
+        MvcResult result = mvc.perform(post(String.format("/tenants/%s/members/john/promote", this.tenantId)).with(yoav()).with(csrf()))
+        .andExpect(status().is3xxRedirection()).andReturn();
+        
+        Thread.sleep(1500);
+
+        // try delete tenant with john
+        result = mvc.perform(delete(String.format("/tenants/%s", this.tenantId)).with(john()))
             .andExpect(status().is(403))
             .andReturn();
     }
