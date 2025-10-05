@@ -52,8 +52,8 @@ public class TenantBase extends AbstractTransactionalTestNGSpringContextTests {
     @BeforeClass
     public void createTenant() throws Exception {
         mvc = webAppContextSetup(context)
-        .apply(SecurityMockMvcConfigurers.springSecurity())
-        .build();
+            .apply(SecurityMockMvcConfigurers.springSecurity())
+            .build();
         
         // create tenant
         MvcResult result = mvc.perform(post("/tenants").param("name", "HomeSweetHome").with(yoav()).with(csrf())).andReturn();
@@ -71,8 +71,7 @@ public class TenantBase extends AbstractTransactionalTestNGSpringContextTests {
     protected RequestPostProcessor yoav() {
         User user = new User("yoav", "Yoav Klein", "yoav.klein@tmail.com", "https://yoav.picture.com");
         // check if the user already exists in the database
-        Optional<User> optionalUser = userService.getUserById("yoav");
-        if(optionalUser.isEmpty()) {
+        if(!userService.checkIfUserExists(user.getId())) {
             userService.addUser(user);
         }
         
@@ -84,15 +83,38 @@ public class TenantBase extends AbstractTransactionalTestNGSpringContextTests {
         });
     }
 
-    
-    @Test
-    public void verifyTenantCreated() throws Exception {
-        MvcResult result = this.mvc.perform(get("/my-tenants").with(yoav())).andReturn();
-        Map<String, Object> model = result.getModelAndView().getModel();
-        List<Tenant> listOfTenants = (List<Tenant>)model.get("tenants");
-
-        Assert.assertTrue(listOfTenants.stream().anyMatch(tenant -> tenant.getId().equals(this.tenantId)));
+    // AuthenticationSuccessHandler are not called in Spring Tests, 
+    // so we need to manually register the user
+    protected RequestPostProcessor john() {
+        User user = new User("john", "John Adams", "john.adams@tmail.com", "https://john.picture.com");
+        // check if the user already exists in the database
+        if(!userService.checkIfUserExists(user.getId())) {
+            userService.addUser(user);
+        }
+        
+        return oauth2Login().attributes(attrs -> {
+            attrs.put("sub", user.getId());
+            attrs.put("name", user.getName());
+            attrs.put("email", user.getEmail());
+            attrs.put("pictureUrl", user.getPictureUrl());
+        });
     }
+
+    protected RequestPostProcessor bob() {
+        User user = new User("bob", "Bob Ali", "bob.ali@tmail.com", "https://bob.picture.com");
+        // check if the user already exists in the database
+        if(!userService.checkIfUserExists(user.getId())) {
+            userService.addUser(user);
+        }
+        
+        return oauth2Login().attributes(attrs -> {
+            attrs.put("sub", user.getId());
+            attrs.put("name", user.getName());
+            attrs.put("email", user.getEmail());
+            attrs.put("pictureUrl", user.getPictureUrl());
+        });
+    }
+
     
 	
 }

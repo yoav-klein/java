@@ -37,8 +37,7 @@ public class AutoRegistrationSuccessHandler implements AuthenticationSuccessHand
         String pictureUrl = (String) attrs.get("picture");
 
         // check if the user already exists in the database
-        Optional<User> optionalUser = userService.getUserById(sub);
-        if(optionalUser.isPresent()) {
+        if(userService.checkIfUserExists(sub)) {
             System.out.println("AutoRegistrationSuccessHandler:: user exists!");
             response.sendRedirect("/app");
             return;

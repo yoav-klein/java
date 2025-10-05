@@ -20,25 +20,14 @@ The admin (and only him) can invite other users.
 The user accepts the invitation and becomes a tenant member.
 The admin can promote the member to be an admin.
 In the `tenant_user` table there's a column of `admin_since`, and `since` column for regular users.
-An older admin can demote a newer admin, but not vice versa.
+An older admin can demote a newer admin and remove him, but not vice versa.
 If the last admin leaves the tenant, the oldest user in the tenant becomes admin.
 
-## Flows
----
-* User registration (auto registration)
-* Create tenant
-* Invite user to tenant
-* Accept invitation
-* Decline invitation
-* Delete user from tenant
-* Leave tenant
-* Delete tenant
 
-## Tasks
+## TODO
 ---
 * Implement transactional
-* Promoting of users
 * Confirmation prompts for removing user, leaving group and deleting tenant
 * Confirmation prompt for logout
-* Decide on a strtegy of user hierarchy - like seniority for example (like who can demote who etc.)
 
+![flows](flows.png)

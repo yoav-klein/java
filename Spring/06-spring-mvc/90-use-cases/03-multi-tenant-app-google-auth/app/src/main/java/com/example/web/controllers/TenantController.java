@@ -11,7 +11,6 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,10 +20,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.business.exception.UserAlreadyInTenantException;
-import com.example.business.exception.UserNotExistsException;
+import com.example.business.exception.UserNotFoundException;
+import com.example.business.exception.UserAlreadyInvitedException;
 import com.example.business.model.Invitation;
 import com.example.business.model.Tenant;
 import com.example.business.service.TenantService;
+import com.example.business.service.TenantUserService;
 import com.example.business.service.UserService;
 import com.example.helpers.Constants;
 
@@ -38,12 +39,15 @@ public class TenantController {
     TenantService tenantService;
 
     @Autowired
+    TenantUserService tenantUserService;
+
+    @Autowired
     UserService userService;
 
     @ModelAttribute("user")
-    public void addUserToModel(Model model, @AuthenticationPrincipal Object user) {
+    public void addUserToModel(Model model, @AuthenticationPrincipal Object user) throws UserNotFoundException {
         OAuth2User oauth2User = (OAuth2User)user;
-        model.addAttribute("user", userService.getUserById(oauth2User.getAttribute("sub")).get());
+        model.addAttribute("user", userService.getUserById(oauth2User.getAttribute("sub")));
     }
 
     // create tenant
@@ -72,6 +76,7 @@ public class TenantController {
     @PreAuthorize("@authz.isUserPartOfTenant(authentication, #tenantId)")
     public String manageTenant(@AuthenticationPrincipal Object user, Model model, @PathVariable("id") @P("tenantId") String tenantId) {
         model.addAttribute("tenant", tenantService.getTenantById(tenantId));
+        model.addAttribute("memberships", tenantUserService.getAllUsersForTenant(tenantId));
         model.addAttribute("invitations", tenantService.getAllInvitationsForTenant(tenantId));
         
         return "tenant-management";
@@ -97,7 +102,7 @@ public class TenantController {
     // invite user to tenant
     @PostMapping("/{id}/invitations")
     public String inviteUser(RedirectAttributes ra, Model model, @PathVariable("id") String tenantId, @RequestParam("email") String userEmail)
-        throws UserNotExistsException, UserAlreadyInTenantException {
+        throws UserNotFoundException, UserAlreadyInTenantException, UserAlreadyInvitedException {
         Invitation invitation = tenantService.inviteUser(tenantId, userEmail);
         model.addAttribute("tenant", tenantService.getTenantById(tenantId));
         ra.addFlashAttribute("invitationId", invitation.getId());
@@ -107,31 +112,38 @@ public class TenantController {
 
     // remove user
     @DeleteMapping("/{id}/members/{userId}")
-    public String removeMember(Model model, @PathVariable("id") String tenantId, @PathVariable("userId") String userId) {
-        tenantService.removeUserFromTenant(tenantId, userId);
+    public String removeMember(Model model, @PathVariable("id") String tenantId, @PathVariable("userId") String userId) throws UserNotFoundException {
+        tenantUserService.removeUserFromTenant(tenantId, userId);
+
+        return String.format("redirect:/tenants/%s", tenantId);
+    }
+
+    @PostMapping("/{id}/members/{userId}/promote")
+    public String promoteMember(Model model, @PathVariable("id") String tenantId, @PathVariable("userId") String userId) throws UserNotFoundException {
+        tenantUserService.promoteToAdmin(tenantId, userId);
 
         return String.format("redirect:/tenants/%s", tenantId);
     }
 
     // leave tenant
     @DeleteMapping("/{id}/members/{user}/leave")
-    public String leaveTenant(Model model, @PathVariable("id") String tenantId, @PathVariable("user") String userId) {
-        tenantService.removeUserFromTenant(tenantId, userId);
+    public String leaveTenant(Model model, @PathVariable("id") String tenantId, @PathVariable("user") String userId) throws UserNotFoundException {
+        tenantUserService.removeUserFromTenant(tenantId, userId);
 
         return "redirect:/my-tenants";
     }
 
     // ExceptionHandlerExceptionResolver
-    @ExceptionHandler
+    /* @ExceptionHandler
     public String noSuchUserHandler(UserNotExistsException e) {
         return "user-not-exists";
 
-    }
+    } 
 
     @ExceptionHandler
     public String userAlreadyInTenantHandler(UserAlreadyInTenantException e) {
         return "user-already-in-tenant";
 
-    }
+    } */
    
 }

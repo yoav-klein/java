@@ -8,16 +8,21 @@
             <section class="main-section">
                 <h2>👥 Members in Tenant</h2>
                 <ul class="members-list">
-                    <li class="member-item" th:each="member : ${tenant.members}">
-                        <img th:src="${member.pictureUrl}" alt="user picture">
-                        <p class="member-name" th:text="${member.name}"></p>
-                        <p class="member-name" th:text="${member.email}"></p>
-                        <p th:text="${member.role}"></p>
-                        <div class="member-actions" th:if="${@tenantService.isAdmin(user.id, tenant.id)}">
-                            <form th:unless="${member.id} == ${user.id}" method="post" th:action="@{/tenants/{tenantId}/members/{user}(tenantId=${tenant.id},user=${member.id})}">
-                                <input type="hidden" name="_method" value="delete">
-                                <button type="submit"><img th:src="@{/image/delete.svg}" alt=""></button>
-                            </form>
+                    <li class="member-item" th:each="membership : ${memberships}">
+                        <img th:src="${membership.user.pictureUrl}" alt="user picture">
+                        <p class="member-name" th:text="${membership.user.name}"></p>
+                        <p class="member-name" th:text="${membership.user.email}"></p>
+                        <p th:text="${membership.role}"></p>
+                        <div class="member-actions-placeholder">
+                            <div th:unless="${membership.user.id} == ${user.id}" class="member-actions" th:if="${@tenantUserService.isAdmin(user.id, tenant.id)}">
+                                <form th:if="${@tenantUserService.isStrongerMember(tenant.id, user.id, membership.user.id)}" method="post" th:action="@{/tenants/{tenantId}/members/{user}(tenantId=${tenant.id},user=${membership.user.id})}">
+                                    <input type="hidden" name="_method" value="delete">
+                                    <button type="submit"><img th:src="@{/image/delete.svg}" alt=""></button>
+                                </form>
+                                <form th:unless="${membership.role} == 'admin'" method="post" th:action="@{/tenants/{tenantId}/members/{user}/promote(tenantId=${tenant.id},user=${membership.user.id})}">
+                                    <button type="submit">PROMOTE</button>
+                                </form>
+                            </div>
                         </div>
                     </li>
                 </ul>
@@ -30,7 +35,7 @@
                         <img th:src="${invitation.user.pictureUrl}" alt="user picture">
                         <p class="member-name" th:text="${invitation.user.name}"></p>
                         <p class="member-name" th:text="${invitation.user.email}"></p>
-                        <div class="member-actions" th:if="${@tenantService.isAdmin(user.id, tenant.id)}">
+                        <div class="member-actions" th:if="${@tenantUserService.isAdmin(user.id, tenant.id)}">
                             <form th:action="@{/invitations/{invitationId}(invitationId=${invitation.id})}" method="post">
                                 <input type="hidden" name="_method" value="delete">
                                 <button type="submit"><img th:src="@{/image/delete.svg}" alt="cancel-invitation"></button>
@@ -40,7 +45,7 @@
                 </ul>
             </section>
 
-            <section th:if="${@tenantService.isAdmin(user.id, tenant.id)}" class="main-section form-box">
+            <section th:if="${@tenantUserService.isAdmin(user.id, tenant.id)}" class="main-section form-box">
                 <h2>📨 Invite a New User</h2>
                 <form method="post" th:action="@{/tenants/{tenantId}/invitations(tenantId=${tenant.id})}">
                     <div class="text-input">
@@ -50,7 +55,7 @@
                     <input type="submit" value="Invite!">
                 </form>                    
             </section>
-            <section th:if="${@tenantService.isAdmin(user.id, tenant.id)}" class="main-section danger-zone">
+            <section th:if="${@tenantUserService.isMostSenior(user.id, tenant.id)}" class="main-section danger-zone">
                 <h2>⚠️ Delete Tenant</h2>
                 <form method="post" th:action="@{/tenants/{tenantId}(tenantId=${tenant.id})}">
                     <input type="hidden" name="_method" value="delete">

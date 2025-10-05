@@ -16,8 +16,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.example.business.exception.UserNotFoundException;
 import com.example.business.model.Product;
-import com.example.business.service.TenantService;
+import com.example.business.service.TenantUserService;
 import com.example.helpers.TenantContext;
 
 //import com.example.business.model.Product;
@@ -29,7 +30,7 @@ import com.example.business.service.UserService;
 public class HomeController {
     
     @Autowired
-    TenantService tenantService;
+    TenantUserService tenantUserService;
 
     @Autowired
     UserService userService;
@@ -38,9 +39,9 @@ public class HomeController {
     ProductService productService;
 
     @ModelAttribute("user")
-    public void addUserToModel(Model model, @AuthenticationPrincipal Object user) {
+    public void addUserToModel(Model model, @AuthenticationPrincipal Object user) throws UserNotFoundException {
         OAuth2User oauth2User = (OAuth2User)user;
-        model.addAttribute("user", userService.getUserById(oauth2User.getAttribute("sub")).get());
+        model.addAttribute("user", userService.getUserById(oauth2User.getAttribute("sub")));
     }
 
     @RequestMapping("/")
@@ -72,7 +73,7 @@ public class HomeController {
     @GetMapping("/my-tenants")
     public String getTenants(Model model, @AuthenticationPrincipal Object user) {
         OAuth2User oauth2User = (OAuth2User)user;
-        model.addAttribute("tenants", tenantService.getAllTenantsForUser(oauth2User.getAttribute("sub")));
+        model.addAttribute("tenantMemberships", tenantUserService.getAllTenantsForUser(oauth2User.getAttribute("sub")));
         model.addAttribute("invitations", userService.getAllInvitationsForUser(oauth2User.getAttribute("sub")));
         
 

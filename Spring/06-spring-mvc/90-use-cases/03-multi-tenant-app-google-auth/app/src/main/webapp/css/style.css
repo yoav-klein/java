@@ -383,8 +383,12 @@ li {
     flex: 1;
 }
 
-.member-actions {
+.member-actions-placeholder {
     width: 20%;
+    height: 100%;
+}
+
+.member-actions {
     height: 100%;
     display: flex;
     align-items: center;

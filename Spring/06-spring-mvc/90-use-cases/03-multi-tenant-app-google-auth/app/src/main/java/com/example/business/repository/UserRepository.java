@@ -19,11 +19,9 @@ public class UserRepository {
     private final String GET_USER_BY_ID = "SELECT * FROM tenant_system.users WHERE id = ?";
     private final String ADD_USER = "INSERT INTO tenant_system.users VALUES(?, ?, ?, ?)";
 
-    private DataSource dataSource;
     private JdbcTemplate jdbcTemplate;
 
     public UserRepository(DataSource dataSource) {
-        this.dataSource = dataSource;
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
@@ -37,7 +35,7 @@ public class UserRepository {
         return user;
     };
 
-    public Optional<User> findByEmail(String email) {
+    public Optional<User> findUserByEmail(String email) {
         User user;
         try {
             user = this.jdbcTemplate.queryForObject(GET_USER_BY_EMAIL, userRowMapper, email);
@@ -47,7 +45,7 @@ public class UserRepository {
         return Optional.of(user);
     }
 
-    public Optional<User> getUserById(String id) {
+    public Optional<User> findUserById(String id) {
         User user;
         try {
             user = this.jdbcTemplate.queryForObject(GET_USER_BY_ID, userRowMapper, id);
