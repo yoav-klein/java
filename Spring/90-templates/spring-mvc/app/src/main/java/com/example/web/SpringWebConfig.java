@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.beans.BeansException;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationContext;
@@ -31,6 +32,14 @@ public class SpringWebConfig implements WebMvcConfigurer, ApplicationContextAwar
         this.applicationContext = applicationContext;
     }
 
+    /* resource handler for images, css, js and fonts */
+    @Override
+    public void addResourceHandlers(final ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/images/**").addResourceLocations("/images/");
+        registry.addResourceHandler("/css/**").addResourceLocations("/css/");
+        registry.addResourceHandler("/js/**").addResourceLocations("/js/");
+        registry.addResourceHandler("/fonts/**").addResourceLocations("/fonts/");
+    }
 
     @Bean    
     public SpringResourceTemplateResolver templateResolver(){
