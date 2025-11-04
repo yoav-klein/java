@@ -6,7 +6,7 @@ const list = document.querySelector('ul');
 
 
 function populateList() {
-    const promise = fetch("users");
+    const promise = fetch(document.baseURI + "/users");
     list.innerHTML = '';
     promise.then(response => response.json()).then(data =>  data.forEach(user => {
         const item = document.createElement('li');
@@ -16,7 +16,7 @@ function populateList() {
 }
 
 sumbitButton.addEventListener('click', () => {
-    const promise = fetch("user", {
+    const promise = fetch(document.baseURI + "/user", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

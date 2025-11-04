@@ -22,13 +22,13 @@ import com.example.business.User;
 public class HomeController {
     List<User> users = new ArrayList<>();
 
-    @RequestMapping("/")
+    @RequestMapping("/home")
     public String sayHello(Model model) {
         model.addAttribute("name", "Yaffa");
         return "index"; // This corresponds to the view name
     }
 
-    @PostMapping(path = "/user", consumes = "application/json")
+    @PostMapping(path = "/home/user", consumes = "application/json")
     public ResponseEntity createUser(@RequestBody User user) {
         // Simulate saving the user to the database
         System.out.println("SAVING USER:");
@@ -38,7 +38,7 @@ public class HomeController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @GetMapping("/users")
+    @GetMapping("/home/users")
     @ResponseBody
     public List<User> getUsers() {
         return users;
