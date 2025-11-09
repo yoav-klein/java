@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
     <title>Document</title>
 </head>
 <body>
     <h1>Hello <span th:text="${name}">David</span></h1>
     <ul id="list"></ul>
-    <form method="post" th:action="@{/chat}">
+    <form>
         <label for="message"></label>
         <input type="text" id="message" name="message">
         <input type="submit">

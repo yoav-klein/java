@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import com.example.business.Role;
+import com.example.business.User;
+
 @Controller
 public class HomeController {
+    int counter = 0;
     private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
 
     @RequestMapping("/")
@@ -27,28 +33,39 @@ public class HomeController {
     }
 
     @PostMapping("/chat")
-    public String message(@RequestParam("message") String message) {
-        //publisher.putMessage(message);
+    public ResponseEntity message(@RequestParam("message") String message) {
+        System.out.println("RECEIVED MESSAGE");
         List<SseEmitter> deadEmitters = new ArrayList<>();
+        System.out.println(emitters.size() + " Number of emitters");
+        counter++;
         emitters.forEach(emitter -> {
             try {
-                emitter.send(SseEmitter.event().name("CHAT").data(message));
+                User user = new User();
+                user.setId("1a2b3c");
+                user.setName("Zohran");
+                user.setAge(30);
+                user.setRole(Role.ADMIN);
+                emitter.send(SseEmitter.event().id(String.format("%d", counter)).name("CHAT").data(user));
+                /* emitter.complete(); */
             } catch (Exception e) {
-                deadEmitters.add(emitter);
+                System.out.println(e.getCause());
+                System.out.println(e.toString());
+                /* deadEmitters.add(emitter); */
             }
         });
         emitters.removeAll(deadEmitters);
 
-        return "index";
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @GetMapping(path="/chat", produces=MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter chatRegister() {
+        System.out.println("NEW EMITTER");
         SseEmitter emitter = new SseEmitter();
         emitters.add(emitter);
-        emitter.onCompletion(() -> emitters.remove(emitter));
+        emitter.onCompletion(() -> { emitters.remove(emitter); System.out.println("COMPLETED"); } );
         emitter.onTimeout(() -> emitters.remove(emitter));
-        emitter.onError((e) -> emitters.remove(emitter));
+        emitter.onError((e) ->  { System.out.println("ERROR: " + e);  emitters.remove(emitter); });
 
         return emitter;
     }
