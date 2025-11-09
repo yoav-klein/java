@@ -1,1 +1,1 @@
-See in the `javascript` repo in `advance`.
+See in the `javascript` repo in `fetch-api/advance`.
