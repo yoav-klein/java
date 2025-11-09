@@ -9,8 +9,15 @@
     <h1>Hello <span th:text="${name}">David</span></h1>
     <ul id="list"></ul>
     <form>
-        <label for="message"></label>
-        <input type="text" id="message" name="message">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name">
+        <label for="age">Age</label>
+        <input type="text" id="age" name="age">
+        <select name="role" id="role">
+            <option value="ADMIN">Admin</option>
+            <option value="REGULAR">Regular</option>
+            <option value="POWER">Power User</option>
+        </select>
         <input type="submit">
     </form>
     <script th:src="@{/js/main.js}"></script>

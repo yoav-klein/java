@@ -3,6 +3,8 @@
  */
 package com.example.web.controllers;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -14,11 +16,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import com.example.business.Role;
 import com.example.business.User;
 
 @Controller
@@ -32,25 +33,28 @@ public class HomeController {
         return "index"; // This corresponds to the view name
     }
 
-    @PostMapping("/chat")
-    public ResponseEntity message(@RequestParam("message") String message) {
-        System.out.println("RECEIVED MESSAGE");
+    @PostMapping("/user")
+    public ResponseEntity newUser(@RequestBody UserDto userDto) {
+        String counterLocal = String.valueOf(++counter);
+        
+        User user = new User();
+        user.setId(counterLocal);
+        user.setName(userDto.getName());
+        user.setAge(userDto.getAge());
+        user.setJoinTime(LocalDateTime.now());
+        user.setRole(userDto.getRole());
+
         List<SseEmitter> deadEmitters = new ArrayList<>();
+        
         System.out.println(emitters.size() + " Number of emitters");
-        counter++;
         emitters.forEach(emitter -> {
             try {
-                User user = new User();
-                user.setId("1a2b3c");
-                user.setName("Zohran");
-                user.setAge(30);
-                user.setRole(Role.ADMIN);
-                emitter.send(SseEmitter.event().id(String.format("%d", counter)).name("CHAT").data(user));
-                /* emitter.complete(); */
+                emitter.send(SseEmitter.event().id(counterLocal).name("USER").data(user));
             } catch (Exception e) {
+                System.out.println("=== ERROR SENDING TO EMITTER");
                 System.out.println(e.getCause());
                 System.out.println(e.toString());
-                /* deadEmitters.add(emitter); */
+                deadEmitters.add(emitter);
             }
         });
         emitters.removeAll(deadEmitters);
@@ -58,14 +62,15 @@ public class HomeController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @GetMapping(path="/chat", produces=MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter chatRegister() {
+    @GetMapping(path="/userStream", produces=MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter userStreamSseEmitter() throws IOException {
         System.out.println("NEW EMITTER");
         SseEmitter emitter = new SseEmitter();
+        emitter.send(SseEmitter.event().comment("Houdy"));
         emitters.add(emitter);
-        emitter.onCompletion(() -> { emitters.remove(emitter); System.out.println("COMPLETED"); } );
-        emitter.onTimeout(() -> emitters.remove(emitter));
-        emitter.onError((e) ->  { System.out.println("ERROR: " + e);  emitters.remove(emitter); });
+        emitter.onCompletion(() -> { emitters.remove(emitter); System.out.println("COMPLETED CALLBACK"); } );
+        emitter.onTimeout   (() -> { emitters.remove(emitter); System.out.println("TIMEOUT CALLBACK"); });
+        emitter.onError     ((e) ->  {  emitters.remove(emitter); System.out.println("ERROR CALLBACK: " + e); });
 
         return emitter;
     }

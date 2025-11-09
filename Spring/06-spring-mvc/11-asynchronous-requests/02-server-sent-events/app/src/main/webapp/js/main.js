@@ -1,9 +1,9 @@
 
-const evtSource = new EventSource("chat");
+const evtSource = new EventSource("userStream");
 const formEl = document.querySelector("form");
 
 
-evtSource.addEventListener("CHAT", (event) => {  
+evtSource.addEventListener("USER", (event) => {  
   const newElement = document.createElement("li");
   const eventList = document.getElementById("list");
 
@@ -19,11 +19,11 @@ formEl.addEventListener("submit", (event) => {
     const data = Object.fromEntries(formData.entries()); // convert to plain object
 
     const headers = new Headers();
-    headers.append("Content-Type", "application/x-www-form-urlencoded");
-    const responsePromise = fetch("chat", {
+    headers.append("Content-Type", "application/json");
+    const responsePromise = fetch("user", {
         method: "POST",
         headers: headers,
-        body: `message=${data['message']}`
+        body: JSON.stringify(data)
     });
     responsePromise.then(resp => console.log(`OK: ${resp.ok}`)).catch(e => console.log(`error: ${e}`));
 
