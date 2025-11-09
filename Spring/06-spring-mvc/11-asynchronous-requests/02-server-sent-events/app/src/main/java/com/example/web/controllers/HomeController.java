@@ -66,7 +66,9 @@ public class HomeController {
     public SseEmitter userStreamSseEmitter() throws IOException {
         System.out.println("NEW EMITTER");
         SseEmitter emitter = new SseEmitter();
-        emitter.send(SseEmitter.event().comment("Houdy"));
+        // this is important, as if we won't send this and there will be no message sent within the timeout,
+        // the HTTP reseponse will be 503, and the client won't re-connect
+        emitter.send(SseEmitter.event().comment("Welcome"));
         emitters.add(emitter);
         emitter.onCompletion(() -> { emitters.remove(emitter); System.out.println("COMPLETED CALLBACK"); } );
         emitter.onTimeout   (() -> { emitters.remove(emitter); System.out.println("TIMEOUT CALLBACK"); });
