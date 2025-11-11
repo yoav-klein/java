@@ -3,14 +3,13 @@
  */
 package org.example;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import io.micrometer.observation.ObservationRegistry;
@@ -49,6 +48,34 @@ public class MyApplication {
 		System.out.println(response);
 
 		return response;
+	}
+
+	// just to play with the excpetions that RestTemplate throws
+	@RequestMapping("clientError")
+	String clientError() {
+		try {
+			String response = restTemplate.getForObject("http://localhost:8082/doesnt-exist", String.class);
+		} catch(HttpClientErrorException e) {
+			return "Client Error it is";
+		}
+
+		return "client-error-success";
+	}
+
+	@RequestMapping("serverError")
+	String serverError() {
+		try {
+			String response = restTemplate.getForObject("http://localhost:8082/theRealServerError", String.class);
+		} catch(HttpServerErrorException e) {
+			return "Server Error it is";
+		}
+
+		return "Server-error-success";
+	}
+
+	@RequestMapping("theRealServerError")
+	String realServerError()  throws Exception {
+		throw new Exception("my bad");
 	}
 
 	@RequestMapping("/delay")
