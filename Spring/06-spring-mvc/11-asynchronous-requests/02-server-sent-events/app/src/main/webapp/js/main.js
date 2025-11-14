@@ -3,11 +3,12 @@ const evtSource = new EventSource("userStream");
 const formEl = document.querySelector("form");
 
 
-evtSource.addEventListener("USER", (event) => {  
+evtSource.addEventListener("USER", (event) => {
+  console.log("GOT USER");
   const newElement = document.createElement("li");
   const eventList = document.getElementById("list");
 
-  newElement.textContent = `message: ${event.data}`;
+  newElement.textContent = `message: ${event.lastEventId} ${event.data}`;
   eventList.appendChild(newElement);
 });
 

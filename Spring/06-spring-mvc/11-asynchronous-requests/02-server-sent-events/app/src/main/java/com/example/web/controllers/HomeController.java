@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,15 +18,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.example.business.User;
+import com.example.business.events.*;
 
 @Controller
 public class HomeController {
-    int counter = 0;
+    
     private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
+    private final AtomicInteger idCounter = new AtomicInteger();
+    EventManager eventManager = new EventManager();
 
     @RequestMapping("/")
     public String sayHello(Model model) {
@@ -35,45 +40,25 @@ public class HomeController {
 
     @PostMapping("/user")
     public ResponseEntity newUser(@RequestBody UserDto userDto) {
-        String counterLocal = String.valueOf(++counter);
+        int id = idCounter.getAndIncrement();
         
         User user = new User();
-        user.setId(counterLocal);
         user.setName(userDto.getName());
         user.setAge(userDto.getAge());
         user.setJoinTime(LocalDateTime.now());
         user.setRole(userDto.getRole());
-
-        List<SseEmitter> deadEmitters = new ArrayList<>();
         
-        System.out.println(emitters.size() + " Number of emitters");
-        emitters.forEach(emitter -> {
-            try {
-                emitter.send(SseEmitter.event().id(counterLocal).name("USER").data(user));
-            } catch (Exception e) {
-                System.out.println("=== ERROR SENDING TO EMITTER");
-                System.out.println(e.getCause());
-                System.out.println(e.toString());
-                deadEmitters.add(emitter);
-            }
-        });
-        emitters.removeAll(deadEmitters);
-
+        eventManager.addEvent(new Event<User>(id, user));
+        
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @GetMapping(path="/userStream", produces=MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter userStreamSseEmitter() throws IOException {
-        System.out.println("NEW EMITTER");
+    public SseEmitter userStreamSseEmitter(@RequestHeader(value="Last-Event-ID", required=false) String lastEventId) throws IOException {
+        System.out.println("LAST EVENT ID: " + lastEventId);
         SseEmitter emitter = new SseEmitter();
-        // this is important, as if we won't send this and there will be no message sent within the timeout,
-        // the HTTP reseponse will be 503, and the client won't re-connect
-        emitter.send(SseEmitter.event().comment("Welcome"));
-        emitters.add(emitter);
-        emitter.onCompletion(() -> { emitters.remove(emitter); System.out.println("COMPLETED CALLBACK"); } );
-        emitter.onTimeout   (() -> { emitters.remove(emitter); System.out.println("TIMEOUT CALLBACK"); });
-        emitter.onError     ((e) ->  {  emitters.remove(emitter); System.out.println("ERROR CALLBACK: " + e); });
-
+        eventManager.registerEmitter(emitter, lastEventId);
+        
         return emitter;
     }
 }
