@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.business.User;
 import com.example.business.events.*;
@@ -29,12 +31,12 @@ import com.example.business.events.*;
 public class HomeController {
     
     private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
-    private final AtomicInteger idCounter = new AtomicInteger();
-    EventManager eventManager = new EventManager();
+    private final AtomicInteger idCounter = new AtomicInteger(0);
+    private final UserEventManager eventManager = new UserEventManager();
 
     @RequestMapping("/")
     public String sayHello(Model model) {
-        model.addAttribute("name", "Yaffa");
+        model.addAttribute("lastEventId", idCounter.get());
         return "index"; // This corresponds to the view name
     }
 
@@ -53,11 +55,20 @@ public class HomeController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    // lastEventId is either sent by the EventSource object in a reconnect in the header, or in the first connection as a parameter (code the javascript)
     @GetMapping(path="/userStream", produces=MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter userStreamSseEmitter(@RequestHeader(value="Last-Event-ID", required=false) String lastEventId) throws IOException {
+    public SseEmitter userStreamSseEmitter(@RequestHeader(value="Last-Event-ID", required=false) String lastEventIdHeader, @RequestParam(value = "lastEventId", required=false) String lastEventIdParam) throws IOException {
+        String lastEventId = lastEventIdHeader == null ? lastEventIdParam : lastEventIdHeader;
+        
         System.out.println("LAST EVENT ID: " + lastEventId);
-        SseEmitter emitter = new SseEmitter();
-        eventManager.registerEmitter(emitter, lastEventId);
+        SseEmitter emitter
+
+        try {
+            emitter = eventManager.registerEmitter(emitter, lastEventId);
+        } catch(Exception e) {
+            System.out.println("Failed to register emitter");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         
         return emitter;
     }

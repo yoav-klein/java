@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_lastEventId" th:content="${lastEventId}"/>
     <title>Document</title>
 </head>
 <body>
-    <h1>Hello <span th:text="${name}">David</span></h1>
+    <h1>Users</h1>
     <ul id="list"></ul>
     <form>
         <label for="name">Name</label>

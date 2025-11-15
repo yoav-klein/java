@@ -1,7 +1,8 @@
 
-const evtSource = new EventSource("userStream");
-const formEl = document.querySelector("form");
+const lastEventId = document.querySelector("meta[name='_lastEventId']").content;
 
+const evtSource = new EventSource(`userStream?lastEventId=${lastEventId}`);
+const formEl = document.querySelector("form");
 
 evtSource.addEventListener("USER", (event) => {
   console.log("GOT USER");
