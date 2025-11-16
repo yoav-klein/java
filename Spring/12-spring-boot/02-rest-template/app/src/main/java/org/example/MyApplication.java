@@ -62,6 +62,18 @@ public class MyApplication {
 		return "client-error-success";
 	}
 
+	// just to play with the excpetions that RestTemplate throws
+	@RequestMapping("clientErrorUncaught")
+	String clientErrorUncaught() {
+		try{
+			String response = restTemplate.getForObject("http://localhost:8082/doesnt-exist", String.class);
+		} catch(HttpClientErrorException e) {
+			throw e;
+		}
+
+		return "client-error-success";
+	}
+
 	@RequestMapping("serverError")
 	String serverError() {
 		try {
