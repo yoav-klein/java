@@ -61,10 +61,10 @@ public class HomeController {
         String lastEventId = lastEventIdHeader == null ? lastEventIdParam : lastEventIdHeader;
         
         System.out.println("LAST EVENT ID: " + lastEventId);
-        SseEmitter emitter
+        SseEmitter emitter;
 
         try {
-            emitter = eventManager.registerEmitter(emitter, lastEventId);
+            emitter = eventManager.registerEmitter(lastEventId);
         } catch(Exception e) {
             System.out.println("Failed to register emitter");
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
