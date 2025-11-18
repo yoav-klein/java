@@ -1,10 +1,8 @@
-# Observation API
+# Observability - Tracing integration
 ---
 
-This project is an example of using the Micrometer Observation API.
+In this demo we demonstrate how to create traces using the Observation API.
+We configure a OpenTelemetry instance, and hook it into the Micrometer registry.
+In the HTTP server handler, we create an observation, which will create a span.
 
-Observation is an object that you use to wrap a piece of code that you want to observe. You then use `ObservationHandlers` to 
-specify exactly what to extract out of the observation - logs, metrics, traces.
-
-In this example, we create a custom `ObservationHandler` that doesn't do much, and register it against the `ObservationRegistry`.
-We also register the `DefaultMeterObservationHandler` to get metrics out.
+In this example we use the Console Span Processor - outputs spans to the console.
