@@ -8,6 +8,7 @@ import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
 import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporter;
+import io.opentelemetry.sdk.resources.Resource;
 
 /**
  * All SDK management takes place here, away from the instrumentation code, which should only access
@@ -29,10 +30,11 @@ class Otel {
             .build())
             .build();
   
-
+        Resource myApp = Resource.getDefault().toBuilder().put("service.name", "client").build();
         SdkTracerProvider sdkTracerProvider =
         SdkTracerProvider.builder()
             .addSpanProcessor(spanProcessor)
+            .setResource(myApp)
             .build();
 
     OpenTelemetrySdk sdk =
