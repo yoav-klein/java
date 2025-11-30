@@ -52,8 +52,7 @@ public class ObservabilityAutoConfiguration {
         
         String resolvedEndpoint = otlpEndpoint;
         if (resolvedEndpoint == null || resolvedEndpoint.isEmpty()) {
-            /* resolvedEndpoint = System.getenv("OTEL_EXPORTER_OTLP_TRACES_ENDPOINT"); */
-            resolvedEndpoint = "http://jaeger";
+            resolvedEndpoint = System.getenv("OTEL_EXPORTER_OTLP_TRACES_ENDPOINT");
         }
 
         System.out.println("SERVICE NAME :" + resolvedServiceName);
