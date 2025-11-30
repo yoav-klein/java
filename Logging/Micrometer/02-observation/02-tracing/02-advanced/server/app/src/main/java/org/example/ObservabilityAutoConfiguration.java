@@ -22,7 +22,6 @@ import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
-import io.opentelemetry.exporter.logging.LoggingSpanExporter;
 import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporter;
 
 
@@ -44,8 +43,7 @@ public class ObservabilityAutoConfiguration {
     
     @Bean
     @ConditionalOnMissingBean
-    public ObservationHandler<? extends Observation.Context> tracingObservationHandler(
-            OpenTelemetryFactory factory) {
+    public ObservationHandler<? extends Observation.Context> tracingObservationHandler() {
             
         String resolvedServiceName = serviceName;
         if (resolvedServiceName == null || resolvedServiceName.isEmpty()) {
@@ -54,8 +52,11 @@ public class ObservabilityAutoConfiguration {
         
         String resolvedEndpoint = otlpEndpoint;
         if (resolvedEndpoint == null || resolvedEndpoint.isEmpty()) {
-            resolvedEndpoint = System.getenv("OTEL_EXPORTER_OTLP_TRACES_ENDPOINT");
+            /* resolvedEndpoint = System.getenv("OTEL_EXPORTER_OTLP_TRACES_ENDPOINT"); */
+            resolvedEndpoint = "http://jaeger";
         }
+
+        System.out.println("SERVICE NAME :" + resolvedServiceName);
         
         SimpleSpanProcessor spanProcessor = SimpleSpanProcessor.builder(
             OtlpHttpSpanExporter.builder()
