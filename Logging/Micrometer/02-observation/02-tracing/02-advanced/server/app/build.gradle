@@ -25,7 +25,8 @@ dependencies {
     implementation 'io.opentelemetry:opentelemetry-exporter-otlp:1.45.0'
 
     // OpenTelemetry SDK (implementation)
-    //implementation 'io.opentelemetry:opentelemetry-exporter-logging:1.45.0'
+    implementation 'io.opentelemetry:opentelemetry-exporter-logging:1.45.0'
+    
 }
 
 java {

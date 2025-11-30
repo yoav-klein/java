@@ -8,25 +8,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 
-import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
-import io.micrometer.observation.ObservationHandler;
-
-import io.micrometer.tracing.handler.DefaultTracingObservationHandler;
-import io.micrometer.tracing.handler.PropagatingSenderTracingObservationHandler;
-import io.micrometer.tracing.handler.PropagatingReceiverTracingObservationHandler;
-import io.micrometer.tracing.otel.bridge.OtelCurrentTraceContext;
-import io.micrometer.tracing.otel.bridge.OtelTracer;
-import io.micrometer.tracing.otel.bridge.OtelPropagator;
-
-
-import io.opentelemetry.api.OpenTelemetry;
-import io.opentelemetry.api.trace.Tracer;
 
 
 @RestController
@@ -43,23 +28,6 @@ public class MyApplication {
         this.restTemplate = new RestTemplate();
 		
         this.restTemplate.setObservationRegistry(observationRegistry);
-
-        OpenTelemetry otel = Otel.initOpenTelemetry();
-        Tracer otelTracer = otel.getTracer("my-tracer");
-
-        OtelCurrentTraceContext otelCurrentTraceContext = new OtelCurrentTraceContext();
-
-        OtelTracer tracer = new OtelTracer(otelTracer, otelCurrentTraceContext, event -> {});
-
-        OtelPropagator propagator = new OtelPropagator(otel.getPropagators() ,otelTracer);
-
-        // adding the SimpleObservationHandler to the registry
-        registry.observationConfig().observationHandler(new ObservationHandler.FirstMatchingCompositeObservationHandler(
-            new PropagatingSenderTracingObservationHandler<>(tracer, propagator),
-            new PropagatingReceiverTracingObservationHandler<>(tracer, propagator),
-            new DefaultTracingObservationHandler(tracer)));
-
-
 	}
 
 	@RequestMapping("/delay")
