@@ -17,28 +17,22 @@ public class OpenTelemetryFactory {
     
     public OpenTelemetry createOpenTelemetry(String serviceName, String endpoint) {
         
-        /* SimpleSpanProcessor spanProcessor = SimpleSpanProcessor.builder(
+        SimpleSpanProcessor spanProcessor = SimpleSpanProcessor.builder(
             OtlpHttpSpanExporter.builder()
                 .setEndpoint(endpoint)
                 .build())
-            .build(); */
+            .build();
         
         Resource resource = Resource.getDefault()
             .toBuilder()
             .put("service.name", serviceName)
             .build();
             
-        /* SdkTracerProvider sdkTracerProvider = SdkTracerProvider.builder()
+        SdkTracerProvider sdkTracerProvider = SdkTracerProvider.builder()
             .addSpanProcessor(spanProcessor)
             .setResource(resource)
-            .build(); */
+            .build();
         
-        SdkTracerProvider sdkTracerProvider =
-          SdkTracerProvider.builder()
-          .addSpanProcessor(SimpleSpanProcessor.create(new LoggingSpanExporter()))
-          .setResource(resource)
-          .build();
-
         OpenTelemetrySdk sdk = OpenTelemetrySdk.builder()
             .setTracerProvider(sdkTracerProvider)
             .setPropagators(ContextPropagators.create(W3CTraceContextPropagator.getInstance()))

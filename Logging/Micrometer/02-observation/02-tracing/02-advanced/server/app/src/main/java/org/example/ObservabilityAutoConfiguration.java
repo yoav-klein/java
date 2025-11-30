@@ -23,6 +23,7 @@ import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
 import io.opentelemetry.exporter.logging.LoggingSpanExporter;
+import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporter;
 
 
 @Configuration
@@ -56,17 +57,21 @@ public class ObservabilityAutoConfiguration {
             resolvedEndpoint = System.getenv("OTEL_EXPORTER_OTLP_TRACES_ENDPOINT");
         }
         
+        SimpleSpanProcessor spanProcessor = SimpleSpanProcessor.builder(
+            OtlpHttpSpanExporter.builder()
+                .setEndpoint(resolvedEndpoint)
+                .build())
+            .build();
         
         Resource resource = Resource.getDefault()
             .toBuilder()
-            .put("service.name", serviceName)
+            .put("service.name", resolvedServiceName)
             .build();
             
-        SdkTracerProvider sdkTracerProvider =
-          SdkTracerProvider.builder()
-          .addSpanProcessor(SimpleSpanProcessor.create(new LoggingSpanExporter()))
-          .setResource(resource)
-          .build();
+        SdkTracerProvider sdkTracerProvider = SdkTracerProvider.builder()
+            .addSpanProcessor(spanProcessor)
+            .setResource(resource)
+            .build();
 
         OpenTelemetry openTelemetry = OpenTelemetrySdk.builder()
             .setTracerProvider(sdkTracerProvider)
