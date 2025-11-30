@@ -55,8 +55,6 @@ public class ObservabilityAutoConfiguration {
             resolvedEndpoint = System.getenv("OTEL_EXPORTER_OTLP_TRACES_ENDPOINT");
         }
 
-        System.out.println("SERVICE NAME :" + resolvedServiceName);
-        
         SimpleSpanProcessor spanProcessor = SimpleSpanProcessor.builder(
             OtlpHttpSpanExporter.builder()
                 .setEndpoint(resolvedEndpoint)
