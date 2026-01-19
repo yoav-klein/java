@@ -6,7 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <h1 th:text="'Hello ' + #{name}"></h1>
     <h2>Person Form</h2>
     
     <form th:object="${personForm}" th:action="@{/person}" method="post">
@@ -63,7 +63,7 @@
                 headers: headers,
                 body: body
             });
-            responsePromise.then(resp => resp.text()).then(t => console.log(t));
+            responsePromise.then(resp => resp.text()).then(t => console.log(t)).catch(e => e.text().then(err => console.log(err)));
         })
     </script>
 </body>
