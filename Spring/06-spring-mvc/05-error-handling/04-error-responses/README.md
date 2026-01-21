@@ -12,3 +12,5 @@ So it works like this:
 4. This causes the container to return a RFC9457-compatible response.
 
 NOTE: We also do `i18n` of the error response. See in the link above about it.
+
+NOTE: We are also customizing the validation error messages, see https://docs.spring.io/spring-framework/reference/core/validation/beanvalidation.html#validation-beanvalidation-spring-method-i18n

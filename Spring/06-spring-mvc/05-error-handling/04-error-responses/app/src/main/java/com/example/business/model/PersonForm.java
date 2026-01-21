@@ -7,8 +7,7 @@ import jakarta.validation.constraints.Size;
 public class PersonForm {
 
 	@NotNull
-	@Size(max=64)
-	@Size(min=2)
+	@Size(min = 2, max = 64)
 	private String name;
 
 	@Min(0)
