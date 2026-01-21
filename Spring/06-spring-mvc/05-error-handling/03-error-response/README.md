@@ -1,16 +1,18 @@
-# Validating REST API requests
+# Error Response
 ---
 
-In this example we demonstrate how it works when you want to validate objects that are received in API requests.
+See https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-ann-rest-exceptions.html and what we wrote about it in our Google Docs.
 
-See https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-ann-rest-exceptions.html
+How are errors handled when we're dealing with API requests? For this, we have RFC9457 which is a standard of structure of
+error responses from servers to clients.
 
-So it works like this:
-1. We send an API request with bad arguments
-2. A `MethodArgumentNotValidException` exception is raised
-3. Since we extend the `ResponseEntityExceptionHandler` class in a `@ControllerAdvice`, the exception is handled by a handler that returns a `ProblemDetail` instance
-4. This causes the container to return a RFC9457-compatible response.
+The flow is as such:
+1. Your backend receives a request
+2. The requests causes an exception to be raised (Any Exception that implements `ErrorResponse`)
+3. You now want this to be translated to a RFC 9347 response.
 
-NOTE: We also do `i18n` of the error response. See in the link above about it.
+There are several ways to do this and that's exactly what we're here for. 
 
-NOTE: We are also customizing the validation error messages, see https://docs.spring.io/spring-framework/reference/core/validation/beanvalidation.html#validation-beanvalidation-spring-method-i18n
+We'll also see how customization and i18n of errors happen.
+
+Let's start with the basic example and build on that.
