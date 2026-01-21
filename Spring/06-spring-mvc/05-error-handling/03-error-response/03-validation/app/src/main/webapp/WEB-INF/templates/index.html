@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>We're gonna fail today!</h1>
+    <button>FAIL HERE</button>
+
+    <script>
+        const buttonEl = document.querySelector("button");
+
+        buttonEl.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            const responsePromise = fetch(document.baseURI + "failing", {
+                method: "GET",
+            });
+            responsePromise.then(resp => resp.text()).then(t => console.log(t)).catch(e => e.text().then(err => console.log("ERROR" + err)));
+        })
+    </script>
+</body>
+</html>
