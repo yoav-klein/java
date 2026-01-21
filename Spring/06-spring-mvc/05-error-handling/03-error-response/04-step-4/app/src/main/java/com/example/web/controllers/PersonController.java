@@ -1,17 +1,15 @@
 package com.example.web.controllers;
 
-
-import org.springframework.http.ProblemDetail;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.server.ServerErrorException;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.example.business.model.PersonForm;
 
 @Controller
-public class PersonController {
+public class PersonController extends ResponseEntityExceptionHandler {
 
     @GetMapping("/") 
     public String showForm(Model model) {
@@ -26,15 +24,5 @@ public class PersonController {
 
         return "index";
     }
-
-    @ExceptionHandler
-    public ProblemDetail handleServerError(ServerErrorException e) {
-        ProblemDetail ret = e.getBody();
-
-        ret.setProperty("error", "wtf?!");
-        
-        return ret;
-
-    } 
 
 }
