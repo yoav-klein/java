@@ -1,10 +1,8 @@
-# Customization and i18n of ProblemDetail fields
+# Add custom fields to the ProblemDetail
 ---
 
-See https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-ann-rest-exceptions.html#mvc-ann-rest-exceptions-i18n
+You can add custom fields to the `ProblemDetail` object, which end up in the RFC 9457 JSON.
 
-Each `ErrorResponse` (like `ServerErrorException`) exposes message codes for `type`, `title` and `detail`. `ResponseEntityExceptionHandler ` resolves these through a `MessageSource` and updates the corresponding `ProblemDetail` fields accordingly.
-
-See the link above.
-
-In this example we demonstrate this capability.
+There are several ways doing this, but here we demonstrate how to hook in the middle of the process of the `ResponseEntityExceptionHandler`.
+The `handleExceptionInternal` takes care of calling MessageSource to localize the body, so we want to get that benefit from it.
+So we override the specific method that handles our specific exception that we want to take care of.
