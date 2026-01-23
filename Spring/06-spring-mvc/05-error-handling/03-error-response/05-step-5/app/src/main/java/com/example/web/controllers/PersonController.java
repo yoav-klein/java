@@ -3,7 +3,6 @@ package com.example.web.controllers;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -24,12 +23,6 @@ import com.example.business.model.PersonForm;
 
 @Controller
 public class PersonController extends ResponseEntityExceptionHandler {
-
-    private MessageSource messageSource;
-
-    public void setMessageSource(MessageSource ms) {
-        this.messageSource = ms;
-    }
 
     @GetMapping("/") 
     public String showForm(Model model) {
@@ -58,7 +51,7 @@ public class PersonController extends ResponseEntityExceptionHandler {
             .map(error -> Map.of(
                 "field", error.getField(),
                 // Manual translation for the 'reason' using the key from the error
-                "reason", this.messageSource.getMessage(error, request.getLocale())
+                "reason", this.getMessageSource().getMessage(error, request.getLocale()) // getMessage is from ResponseEntityExceptionHandler
             ))
             .toList();
 
