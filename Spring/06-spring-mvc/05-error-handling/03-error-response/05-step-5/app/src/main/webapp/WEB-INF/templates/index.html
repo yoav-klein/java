@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1 th:text="'Hello ' + #{name}"></h1>
+    <h2>Person Form</h2>
+    
+
+    <form id="form">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <br>
+        <label for="age">Age:</label>
+        <input type="text" id="age" name="age" required>
+        <button id="submit">Submit</button>
+    </form>
+
+    <script>
+        const formEl = document.querySelector('#form');
+        const buttonEl = document.querySelector("#submit");
+        buttonEl.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            const fields = new FormData(formEl);
+            const data = Object.fromEntries(fields.entries());
+            formEl.reset();
+            const headers = new Headers();
+
+            headers.append("Content-Type", "application/json");
+            const body = JSON.stringify(data);
+            const responsePromise = fetch(document.baseURI + "personRest", {
+                method: "POST",
+                headers: headers,
+                body: body
+            });
+            responsePromise.then(resp => resp.text()).then(t => console.log(t)).catch(e => e.text().then(err => console.log(err)));
+        })
+    </script>
+</body>
+</html>
