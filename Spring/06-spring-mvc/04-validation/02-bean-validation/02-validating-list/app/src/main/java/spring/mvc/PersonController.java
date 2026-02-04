@@ -18,7 +18,7 @@ import org.springframework.web.method.annotation.HandlerMethodValidationExceptio
 import jakarta.validation.Valid;
 
 @Controller
-@Validated
+// @Validated
 public class PersonController {
 
     @GetMapping("/") 
@@ -26,12 +26,27 @@ public class PersonController {
         return "index";
     }
 
-    @PostMapping("/people")
-    public ResponseEntity createPeople(@Valid @RequestBody ArrayList<Person> people) {
+    /*
+        I couldn't make validation work by taking a List<Person> directly
+    */
+
+    /* @PostMapping("/people")
+    public ResponseEntity createPeople(@RequestBody @Valid List<Person> people) {
 
         System.out.println("PEOPLE");
 
         people.forEach(person -> System.out.println(person.getName() + " " + person.getAge()));
+        
+        return new ResponseEntity(HttpStatus.OK);
+    } */
+
+    @PostMapping("/people")
+    public ResponseEntity createPeople(@RequestBody @Valid PersonListDTO people) {
+
+        System.out.println("PEOPLE");
+
+        people.getPeople().forEach(person -> System.out.println(person.getName() + " " + person.getAge()));
+
         
         return new ResponseEntity(HttpStatus.OK);
     }

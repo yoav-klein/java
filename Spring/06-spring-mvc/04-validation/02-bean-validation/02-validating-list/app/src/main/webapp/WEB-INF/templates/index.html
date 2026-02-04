@@ -35,13 +35,15 @@
 
         function sendPeople() {
             const people = [
-                {name: 'Yoav', age: -1},
+                {name: 'Yoav', age: 1},
                 {name: 'Dikla', age: 333},
-                {name: 'Tamar', age:22},
+                {name: 'Tamar', age:-22},
                 {name: 'Roni', age: 4}
             ]
+
+            const dto = {people: people};
         
-            const body = JSON.stringify(people);
+            const body = JSON.stringify(dto);
             const headers = new Headers();
             headers.append("Content-Type", "application/json");
 
@@ -61,6 +63,8 @@
             .then(text => console.log(text))
             .catch(e => console.log(e));
         }
+
+        
 
 
 
