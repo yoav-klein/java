@@ -18,6 +18,7 @@ public class SimpleTest {
     @Test(dataProvider = "test1")
     public void verifyData1(String n1, Integer n2) {
         System.out.println(n1 + " " + n2);
+        assert(1 == 2);
     }
 
 }
