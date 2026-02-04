@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Person Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .fieldError {
+            border: 1px solid red;
+        }
+        
+        input, label {
+            margin-bottom: 5px;
+        }
+        form {
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Person Form</h2>
+    <form th:action="@{person}" method="post" th:object="${personForm}">
+        <ul th:if="${#fields.hasErrors('*')}">
+            <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>
+        </ul>
+        <label for="firstName">Name</label>
+        <input type="text" th:field="*{name}" th:class="${#fields.hasErrors('name')}? fieldError">
+        <br>
+        <label for="age">Age</label>
+        <input type="text" th:field="*{age}" th:class="${#fields.hasErrors('age')}? fieldError">
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+    <hr>
+    <form th:action="@{person1}" method="post" th:object="${personForm}">
+        <label for="name">Name:</label>
+        <input type="text" th:field="*{name}" required>
+        <br>
+        <label for="age">Age:</label>
+        <input type="text" th:field="*{age}" required>
+        <button type="submit">Submit</button>
+    </form>
+    <hr>
+    <form th:action="@{person2?id=20}" method="post" th:object="${personForm}">
+        <label for="name">Name:</label>
+        <input type="text" th:field="*{name}" required>
+        <br>
+        <label for="age">Age:</label>
+        <input type="text" th:field="*{age}" required>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Person Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .fieldError {
+            border: 1px solid red;
+        }
+        
+        input, label {
+            margin-bottom: 5px;
+        }
+        form {
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Person Form</h2>
+
+    <button id="peopleButton">SEND PEOPLE</button>
+    <button id="personButton">SEND PERSON</button>
+    <script>
+        
+
+        document.getElementById('peopleButton').addEventListener('click', sendPeople);
+        document.getElementById('personButton').addEventListener('click', sendPerson);
+
+        function sendPeople() {
+            const people = [
+                {name: 'Yoav', age: -1},
+                {name: 'Dikla', age: 333},
+                {name: 'Tamar', age:22},
+                {name: 'Roni', age: 4}
+            ]
+        
+            const body = JSON.stringify(people);
+            const headers = new Headers();
+            headers.append("Content-Type", "application/json");
+
+            fetch(document.baseURI + 'people', {
+                method: 'POST',
+                body: body,
+                headers: headers
+            })
+            .then(resp => { 
+                if(!resp.ok) {
+                    console.log("HTTP ERROR: " + resp.status);
+                    resp.text().then(t => console.log(t));
+                    throw Error("HTTP error"); 
+                }
+                return resp.text();
+            })
+            .then(text => console.log(text))
+            .catch(e => console.log(e));
+        }
+
+
+
+        function sendPerson() {
+            const person =  {name: 'Yoav', age: 21};
+        
+            const body = JSON.stringify(person);
+            const headers = new Headers();
+            headers.append("Content-Type", "application/json");
+            
+            fetch(document.baseURI + 'person', {
+                method: 'POST',
+                body: body,
+                headers: headers
+            })
+            .then(resp => { 
+                if(!resp.ok) {
+                    console.log("HTTP ERROR: " + resp.status);
+                    resp.text().then(t => console.log(t));
+                    throw Error("HTTP error"); 
+                }
+                return resp.text();
+            })
+            .then(text => console.log(text))
+            .catch(e => console.log(e));
+        }
+    </script>
+</body>
+</html>

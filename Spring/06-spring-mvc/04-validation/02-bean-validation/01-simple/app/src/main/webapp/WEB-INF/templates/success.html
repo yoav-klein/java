@@ -1,0 +1,12 @@
+<html>
+<head>
+    <title>Success Page</title>
+</head>
+<body>
+    <h2>Success!</h2>
+    <p>Your Person has been successfully submitted.</p>
+    <p>Name: <span th:text="${person.name}"></span></p>
+    <p>Age: <span th:text="${person.age}"></span></p>
+    <a th:href="@{/}">Go back to Person Form</a>
+</body>
+</html>
