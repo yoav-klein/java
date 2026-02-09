@@ -1,0 +1,2 @@
+2026-02-09 22:27:45,992 DEBUG [main] o.e.c.Foo [Foo.java:10] -- This is a debug message
+2026-02-09 22:27:45,998 INFO [main] o.e.c.Bar [Bar.java:10] -- This is info level message
