@@ -1,11 +1,6 @@
-# Configuring Spring Security - Java Annotations
+# Configuring Spring Security - Java Annotations 2
 ---
 
-This does pretty much what the previous example did, but this time using Java annotations.
+Here we take it a step forward. Instead of declaring the `DelegatingFilterProxy` as a filter in the `web.xml`, we have the `SpringConfig` class inherit from `AbstractSecurityWebApplicationInitializer`. This makes the `DelegatingFilterProxy` be registered against the Servlet container wired to the `FilterChainProxy`.
 
-In the `app-context.xml` file we just include the `<context:annotation-config />` and `<context:component-scan base-package="beans" />` elements.
-From there the `SpringConfig` class will take control.
-
-The `@EnableWebSecurity` does the heavy lifting of conifguring important beans like the `HttpSecurity` and probably also `FilterChainProxy`.
-Inside, we create a `SecurityFilterChain` bean which will be used by `FilterChainProxy`.
-
+Additionally, we don't need to load the ApplicationContext in the `web.xml`, since the `AbstractSecurityWebApplicationInitializer` can take a `Configuration` class and initialize the WebApplicationContext by itself.

@@ -7,6 +7,6 @@ public class SpringSecurityInitializer extends  AbstractSecurityWebApplicationIn
     
     @Override
     public String getDispatcherWebApplicationContextSuffix() {
-		return "dispatcher";
-	}
+      return "dispatcher";
+    }
 }

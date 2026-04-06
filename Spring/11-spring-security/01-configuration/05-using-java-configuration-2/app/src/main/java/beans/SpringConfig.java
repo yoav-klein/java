@@ -18,8 +18,12 @@ import org.springframework.security.web.context.AbstractSecurityWebApplicationIn
 import jakarta.servlet.Filter;
 
 @Configuration
-@EnableWebSecurity // EnableWebSecurity injects the HttpSecurity bean and probably other beans as well
+@EnableWebSecurity
 public class SpringConfig extends AbstractSecurityWebApplicationInitializer {
+
+    public SpringConfig() {
+        super(SpringConfig.class);
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
