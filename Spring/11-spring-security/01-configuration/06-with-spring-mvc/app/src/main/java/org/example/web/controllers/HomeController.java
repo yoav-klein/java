@@ -1,0 +1,15 @@
+package org.example.web.controllers;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class HomeController {
+    @RequestMapping("/")
+    public String sayHello(Model model) {
+        model.addAttribute("name", "Yaffa");
+        return "index"; // This corresponds to the view name
+    }
+   
+}
