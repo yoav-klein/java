@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Tenant Management</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Tenant Management - <span th:text="${tenant.name}">Tenant Name</span></h1>
+
+    <!-- Users List -->
+    <section class="card">
+      <h2>👥 Users in Tenant</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="user : ${users}">
+            <td th:text="${user.name}">John Doe</td>
+            <td th:text="${user.email}">john@example.com</td>
+            <td th:text="${user.role}">Admin</td>
+            <td><form th:action="@{/tenant/removeUser}" method="post">
+              <input type="hidden" th:name="userId" th:value="${user.id}" />
+              <button type="submit">Remove</button>
+            </form></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Invite User -->
+    <section class="card">
+      <h2>📨 Invite a New User</h2>
+      <form th:action="@{/tenant/invite}" method="post">
+        <label>Email:
+          <input type="email" name="email" required />
+        </label>
+        <label>Role:
+          <select name="role">
+            <option value="USER">User</option>
+            <option value="ADMIN">Admin</option>
+          </select>
+        </label>
+        <button type="submit">Send Invitation</button>
+      </form>
+    </section>
+
+    <!-- Pending Invitations -->
+    <section class="card">
+      <h2>⌛ Pending Invitations</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Invited On</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="inv : ${pendingInvitations}">
+            <td th:text="${inv.email}">example@domain.com</td>
+            <td th:text="${inv.date}">2025-05-01</td>
+            <td th:text="${inv.status}">Sent</td>
+            <td>
+              <form th:action="@{/tenant/cancelInvitation}" method="post" style="display:inline">
+                <input type="hidden" th:name="invitationId" th:value="${inv.id}" />
+                <button type="submit">Cancel</button>
+              </form>
+              <form th:action="@{/tenant/resendInvitation}" method="post" style="display:inline">
+                <input type="hidden" th:name="invitationId" th:value="${inv.id}" />
+                <button type="submit">Resend</button>
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card add-tenant">
+        <h2>👤➕ Add New Tenant</h2>
+        <form th:action="@{/tenant/add}" method="post">
+          <label>
+            Tenant Name:
+            <input type="text" name="tenantName" required placeholder="e.g. Acme Corp" />
+          </label>
+          
+          <label>
+            Description:
+            <textarea name="description" rows="3" placeholder="Optional description..."></textarea>
+          </label>
+      
+          <button type="submit"><i class="fas fa-plus"></i> Create Tenant</button>
+        </form>
+      </section>
+
+    <!-- Danger Zone -->
+    <section class="danger-zone card">
+      <h2>⚠️ Delete Tenant</h2>
+      <p>Deleting this tenant will remove all users and data. This action cannot be undone.</p>
+      <form th:action="@{/tenant/delete}" method="post">
+        <button type="submit" class="danger">Delete Tenant</button>
+      </form>
+    </section>
+  </div>
+</body>
+</html>
