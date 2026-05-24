@@ -11,12 +11,17 @@ public class AppUser {
     public AppUser() {
     }
 
-    public AppUser(String id, String email, String firstName, String lastName, String pictureUrl) {
+    public AppUser(String id, String email, String firstName, String lastName, String displayName, String pictureUrl) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.displayName = displayName;
         this.pictureUrl = pictureUrl;
+    }
+
+    public AppUser(String id, String email, String firstName, String lastName, String pictureUrl) {
+        this(id, email, firstName, lastName, firstName + " " + lastName, pictureUrl);
     }
 
     public String getDisplayName() {

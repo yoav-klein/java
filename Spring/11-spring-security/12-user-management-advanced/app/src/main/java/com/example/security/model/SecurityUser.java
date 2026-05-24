@@ -10,10 +10,12 @@ import java.util.Map;
 
 import com.example.business.model.AppUser;
 
-public class SecurityUser extends AppUser implements OidcUser {
+public class SecurityUser implements OidcUser {
+    private AppUser appUser;
     private OidcUser oidcUser;
 
     public SecurityUser(AppUser appUser, OidcUser oidcUser) {
+        this.appUser = appUser;
         this.oidcUser = oidcUser;
     }
 
@@ -29,7 +31,7 @@ public class SecurityUser extends AppUser implements OidcUser {
 
     @Override
     public String getName() {
-        return super.getId();
+        return appUser.getId();
     }
 
     @Override

@@ -16,7 +16,9 @@ public class DaoTests extends BusinessTestBase {
     private UserRepository userRepository;
 
     private void saveUser(String id, String email) {
-        userRepository.saveUser(id, "Yoav Klein", "Yoav", "Klein", email, null);
+        AppUser user = new AppUser(id, email, "Yoav", "Klein", null);
+
+        userRepository.saveUser(user);
     }
 
     @Test
@@ -48,6 +50,18 @@ public class DaoTests extends BusinessTestBase {
     @Test
     public void testFindUserByEmail() {
         saveUser("Yoav", "yoavklein25@gmail.com");
-        Assert.assertEquals(true, userRepository.findUserByEmail("yoavklein25@gmail.com").isPresent());
+        Assert.assertEquals(userRepository.findUserByEmail("yoavklein25@gmail.com").isPresent(), true);
+    }
+
+    @Test
+    public void testSaveUserProvider() {
+        saveUser("yoav", "yoavklein25@gmail.com");
+        userRepository.saveUserProvider("google", "abc123", "yoav");
+        Assert.assertEquals(userRepository.findByProviderAndSubject("google", "abc123").isPresent(), true);
+    }
+
+    @Test
+    public void testFindByUserProvider() {
+        Assert.assertEquals(userRepository.findByProviderAndSubject("google", "1233").isPresent(), false);
     }
 }

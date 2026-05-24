@@ -33,8 +33,31 @@ public class UserRepository {
         return user;
     };
 
-    public void saveUser(String id, String displayName, String firstName, String lastName, String email, String pictureUrl) {
-        jdbcTemplate.update("INSERT INTO users(id, display_name, first_name, last_name, email, picture_url) VALUES(?, ?, ?, ?, ?, ?)", id, displayName, firstName, lastName, email, pictureUrl);
+    public void saveUser(AppUser user) {
+        jdbcTemplate.update("INSERT INTO users(id, display_name, first_name, last_name, email, picture_url) VALUES(?, ?, ?, ?, ?, ?)", 
+            user.getId(), 
+            user.getDisplayName(),
+            user.getFirstName(), 
+            user.getLastName(),
+            user.getEmail(),
+            user.getPictureUrl());
+    }
+
+    public Optional<AppUser> findByProviderAndSubject(String provider, String providerSubject) {
+        try {
+            AppUser user = this.jdbcTemplate.queryForObject("SELECT * FROM users WHERE id = (SELECT user_id FROM user_provider WHERE provider = ? AND provider_subject = ?)", UserRepository.userRowMapper, provider, providerSubject);
+            return Optional.of(user);
+        } catch(EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
+    public void saveUserProvider(String provider, String providerSubject, String userId) {
+        jdbcTemplate.update("INSERT INTO user_provider(provider, provider_subject, user_id) VALUES(?, ?, ?)",
+            provider,
+            providerSubject,
+            userId
+        );
     }
 
     public Optional<AppUser> findUserById(String userId) {
