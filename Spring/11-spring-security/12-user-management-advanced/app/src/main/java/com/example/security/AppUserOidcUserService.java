@@ -20,6 +20,7 @@ public class AppUserOidcUserService extends OidcUserService {
     
     @Override
     public OidcUser loadUser(OidcUserRequest request) {
+        // load the OidcUser from the UserInfo endoint
         OidcUser oidcUser = super.loadUser(request);
 
         String provider = request.getClientRegistration().getRegistrationId();

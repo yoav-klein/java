@@ -72,5 +72,17 @@ public class AppUser {
         this.pictureUrl = pictureUrl;
     }
 
+    @Override
+    public String toString() {
+        return "AppUser{" +
+                "id='" + id + '\'' +
+                ", email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", displayName='" + displayName + '\'' +
+                ", pictureUrl='" + pictureUrl + '\'' +
+                '}';
+    }
+
 
 }

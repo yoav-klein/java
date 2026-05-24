@@ -19,6 +19,12 @@ public class SecurityUser implements OidcUser {
         this.oidcUser = oidcUser;
     }
 
+    public SecurityUser() {}
+
+    public AppUser getAppUser() {
+        return this.appUser;
+    }
+
     @Override
     public Map<String, Object> getAttributes() {
         return this.oidcUser.getAttributes();

@@ -1,15 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">	
 	<head>
-		<title>Please Log In</title>
+		<title>Hello World</title>
 	</head>
 	<body>
-		<h1>Homepage</h1>
-		<a th:href="@{/management}">Management</a>
-		<br>
-		<a th:href="@{/usersonly}">Users only</a>
-		<form th:action="@{/logout}" method="post">
-			<button type="submit">LOGOUT</button>
-		</form>
+		<h1>Welcome</h1>
+		<p>Hello <span th:text="${user.displayName}"></span></p>
 	</body>
 </html>
