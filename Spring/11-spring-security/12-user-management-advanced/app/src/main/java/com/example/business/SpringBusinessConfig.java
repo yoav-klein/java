@@ -1,19 +1,22 @@
 package com.example.business;
 
+import javax.sql.DataSource;
+
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.context.annotation.Profile;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import javax.sql.DataSource;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
 import com.mysql.cj.jdbc.MysqlDataSource;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Profile;
 
 
 @Configuration
 @ComponentScan
+@EnableTransactionManagement
 public class SpringBusinessConfig implements WebMvcConfigurer {
     public SpringBusinessConfig() {
         super();
@@ -21,8 +24,8 @@ public class SpringBusinessConfig implements WebMvcConfigurer {
 
     
     @Bean
-    public PlatformTransactionManager txManager() {
-        return new DataSourceTransactionManager(dataSource());
+    public PlatformTransactionManager txManager(DataSource ds) {
+        return new DataSourceTransactionManager(ds);
     }
     
     @Bean
@@ -46,6 +49,7 @@ public class SpringBusinessConfig implements WebMvcConfigurer {
     }
 
     @Bean
+    @Profile("default")
     public DataSource dataSource() {
         String dbUser = "yoav";
         String dbPassword = "yoav";

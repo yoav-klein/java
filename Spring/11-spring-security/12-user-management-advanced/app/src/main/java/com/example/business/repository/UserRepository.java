@@ -33,7 +33,7 @@ public class UserRepository {
         return user;
     };
 
-    public void saveUser(AppUser user) {
+    public void save(AppUser user) {
         jdbcTemplate.update("INSERT INTO users(id, display_name, first_name, last_name, email, picture_url) VALUES(?, ?, ?, ?, ?, ?)", 
             user.getId(), 
             user.getDisplayName(),
@@ -52,15 +52,7 @@ public class UserRepository {
         }
     }
 
-    public void saveUserProvider(String provider, String providerSubject, String userId) {
-        jdbcTemplate.update("INSERT INTO user_provider(provider, provider_subject, user_id) VALUES(?, ?, ?)",
-            provider,
-            providerSubject,
-            userId
-        );
-    }
-
-    public Optional<AppUser> findUserById(String userId) {
+    public Optional<AppUser> findById(String userId) {
         try {
             AppUser user = this.jdbcTemplate.queryForObject("SELECT * FROM users WHERE id = ?", userRowMapper, userId);
             return Optional.ofNullable(user);
@@ -69,7 +61,7 @@ public class UserRepository {
         }
     }
 
-    public Optional<AppUser> findUserByEmail(String email) {
+    public Optional<AppUser> findByEmail(String email) {
         try {
             AppUser user = this.jdbcTemplate.queryForObject("SELECT * FROM users WHERE email = ?", userRowMapper, email);
             return Optional.ofNullable(user);
