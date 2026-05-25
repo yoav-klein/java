@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <h1>Person Details</h1>
+    <div th:object="${person}">
+        <p>First Name: <span th:text="*{firstName}">Dudi</span><br> Last Name: <span th:text="*{lastName}"></span> <br> Age: <span th:text="*{age}"></span> </p>
+    </div>
+</body>
+</html>
