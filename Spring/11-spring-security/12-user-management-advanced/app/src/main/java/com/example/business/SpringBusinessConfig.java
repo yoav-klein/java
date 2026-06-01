@@ -10,6 +10,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
 
@@ -17,6 +18,7 @@ import com.mysql.cj.jdbc.MysqlDataSource;
 @Configuration
 @ComponentScan
 @EnableTransactionManagement
+@EnableMethodSecurity
 public class SpringBusinessConfig implements WebMvcConfigurer {
     public SpringBusinessConfig() {
         super();
