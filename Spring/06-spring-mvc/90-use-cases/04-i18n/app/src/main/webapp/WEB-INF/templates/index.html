@@ -9,5 +9,12 @@
 <body>
     <h1><span th:text="#{hello} + ' '"></span><span th:text="${name}">David</span></h1>
     
+    <a th:href="@{/?lang=en}">English</a>
+    <br>
+    <a th:href="@{/?lang=he}">עברית</a>
+
+    <button id="generate-message">Generate message</button>
+    <p id="message"></p>
+    <script th:src="@{/js/main.js}"></script>
 </body>
 </html>
