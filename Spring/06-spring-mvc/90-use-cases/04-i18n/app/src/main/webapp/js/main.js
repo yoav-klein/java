@@ -8,4 +8,4 @@ const pEl = document.getElementById('message');
 document.getElementById('generate-message').addEventListener('click', () => {
     console.log('click');
     pEl.innerText = messages['hello'];
-})
+});

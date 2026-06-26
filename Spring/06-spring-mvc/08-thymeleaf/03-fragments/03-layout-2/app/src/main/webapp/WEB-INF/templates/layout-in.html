@@ -1,15 +1,12 @@
 <!DOCTYPE html>
-<html>
-<head th:fragment="head(title)">
-    <title th:replace="${title}">Layout Title</title>
+<html th:fragment="layout(content)" th:replace="~{layout-out :: layout(${content})}">
+<head>
+    <title>Layout In Title</title>
 </head>
-<body th:fragment="body(content)">
+<body>
     <h1>Layout H1</h1>
-    <div th:replace="${content}">
-        <p>Layout content</p>
-    </div>
-    <footer>
-        Layout footer
-    </footer>
+    <main>
+        <div>HELLO WORLD</div>
+    </main>
 </body>
 </html>

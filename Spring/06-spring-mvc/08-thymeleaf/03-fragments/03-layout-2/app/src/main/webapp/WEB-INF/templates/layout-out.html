@@ -1,5 +1,12 @@
 <!DOCTYPE html>
-<html th:fragment="layout (head, body)" xmlns:th="http://www.thymeleaf.org" th:attr="dir=${#locale.language == 'he' ? 'rtl' : 'ltr'}">
-    <head th:replace="${head}"></head>
-    <body th:replace="${body}"></head>
+<html th:fragment="layout (content)" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Layout Out Title</title>
+    </head>
+    <body>
+        <header>
+            <h1>This header will always appear</h1>
+        </header>
+        <div th:replace="${content}"></div>
+    </body>
 </html>

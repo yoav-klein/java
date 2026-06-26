@@ -1,12 +1,6 @@
 <!DOCTYPE html>
-<html th:replace="~{layout-out :: layout(~{::head}, ~{::body})}">
-    <head th:replace="~{layout-in :: head(~{::title})}">
-        <title>Page Title</title>
-    </head>
-    <body th:replace="~{layout-in :: body(~{::section})}">
-        <section>
-            <p>Page content</p>
-            <div>Included on page</div>
-        </section>
-    </body>
+<html th:replace="~{layout-in :: layout(~{::main})}">
+    <main>
+        <div>KAPARA!!</div>
+    </main>
 </html>
