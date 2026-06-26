@@ -1,12 +1,36 @@
 <!DOCTYPE html>
-<html th:fragment="layout (content)" xmlns:th="http://www.thymeleaf.org">
+<html th:fragment="layout (content, scripto)" xmlns:th="http://www.thymeleaf.org">
     <head>
         <title>Layout Out Title</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            html, body {
+                height: 100%;
+            }
+
+            body {
+                display: flex;
+                flex-direction: column;
+            }
+
+            header {
+                height: 150px;
+                background-color: aqua;
+            }
+
+        </style>
     </head>
     <body>
         <header>
-            <h1>This header will always appear</h1>
+            <h1>Top bar layout</h1>
         </header>
         <div th:replace="${content}"></div>
+        <script th:src="@{/js/layout-out.js}"></script>
+        <script th:replace="${scripto}"></script>
     </body>
 </html>

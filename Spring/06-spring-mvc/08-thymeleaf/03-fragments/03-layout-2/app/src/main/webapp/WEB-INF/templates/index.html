@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html th:replace="~{layout-in :: layout(~{::main})}">
+<html th:replace="~{layout-in :: layout(~{::main}, ~{::script})}">
     <main>
         <div>KAPARA!!</div>
     </main>
+    <script th:src="@{/js/bobo.js}"></script>
 </html>

@@ -1,12 +1,16 @@
 <!DOCTYPE html>
-<html th:fragment="layout(content)" th:replace="~{layout-out :: layout(${content})}">
+<html th:fragment="layout (content_in, js)" th:replace="~{layout-out :: layout(~{::#page}, ~{::script})}">
 <head>
     <title>Layout In Title</title>
 </head>
 <body>
-    <h1>Layout H1</h1>
-    <main>
-        <div>HELLO WORLD</div>
-    </main>
+    <div id="page">
+        <h1>Generic H1</h1>
+        <main>
+            <div th:replace="${content_in}">HELLO WORLD</div>
+        </main>
+    </div>
+    <script th:src="@{/js/layout-in.js}"></script>
+    <script th:replace="${js}"></script>
 </body>
 </html>
